@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
 using System.IO.Compression;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -39,35 +41,42 @@ var pages = diagrams
 
 void AddLinks(string svgFile)
 {
-    /*
-<foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
-          <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 250px; margin-left: 348px;">
-            <div style="box-sizing: border-box; font-size: 0px; text-align: center;" onclick="window.hook.navigate('Orchestrator')">
-              <div style="display: inline-block; font-size: 12px; font-family: Helvetica;cursor: pointer;  color: blue; text-decoration:underline; line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Orchestrator</div>
-            </div>
-          </div>
-        </foreignObject>    
-    */
-    var clickable = XElement.Load(svgFile)
+    var doc = XElement.Load(svgFile);
+
+    var clickable = doc
         .Descendants()
-        .Where(x => x.Name.LocalName == "div")
-        .Select(x => (x, name: Regex.Replace(x.Value, @"\s+", "")))
+        .Where(x => x.Name.LocalName == "div" && !x.Elements().Any())
+        .Select(x => (xml: x, name: Regex.Replace(x.Value, @"\s+", "")))
         .Where(x => pages.Any(p => p.name.Equals(x.name, StringComparison.OrdinalIgnoreCase)))
         .ToList();
+
     foreach (var element in clickable)
     {
-        Console.WriteLine(element);
+        element.xml.Add(new XAttribute("onclick", $"window.hook.navigate('{element.name}')"));
+
+        var attrs = element.xml.Attribute("style").Value.Split(";")
+            .Where(x => !string.IsNullOrEmpty(x))
+            .Select(x => x.Split(':')
+                .Select(x => x.Trim())
+                .Where(x => !string.IsNullOrEmpty(x)))
+            .ToDictionary(x => x.First(), x => x.Last());
+        attrs["color"] = "blue";
+        attrs["text-decoration"] = "underline";
+        attrs["cursor"] = "pointer";
+        element.xml.Attribute("style").Value = string.Join(":", attrs.Select(x => x.Key + ": " + x.Value));
     }
+
+    //File.WriteAllText(svgFile, doc.ToString());
 }
 
 for (int i = 0; i < pages.Count; ++i)
 {
     var svgFile = Path.Combine("src", "browser", "src", "assets", pages[i].name + ".svg");
 
-    // Process.Start(
-    //     Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "draw.io", "draw.io.exe"),
-    //     $"-x {drawIOFile} -o {svgFile} -p {i}"
-    // ).WaitForExit();
+    Process.Start(
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "draw.io", "draw.io.exe"),
+        $"-x {drawIOFile} -o {svgFile} -p {i}"
+    ).WaitForExit();
 
     AddLinks(svgFile);
 }
