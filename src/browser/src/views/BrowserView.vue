@@ -14,7 +14,7 @@
 
     <br />
 
-    <div class="svg-container box content">
+    <div class="svg-container box content" ref="svgContainer">
       <transition name="scale" mode="out-in">
         <SvgPanZoom
           :key="svg"
@@ -23,7 +23,6 @@
           :controlIconsEnabled="false"
           :fit="true"
           :center="true"
-          :zoomScaleSensitivity="0.1"
           :minZoom="0.25"
         >
           <div v-html="svg"></div>
@@ -42,27 +41,37 @@ export default {
     return {
       current: null,
       history: [],
-      pages: null
-    }
-  },
-  computed: {
-    svg() {
-      const page = this.pages.find((x) => x.id === this.current)
-      console.log(this.current)
-      return page.content
+      pages: null,
+      svg: null
     }
   },
   methods: {
     goTo(step) {
       while ((this.current = this.history.pop()) !== step);
+      this.updateSvg()
+    },
+    updateSvg() {
+      const page = this.pages.find((x) => x.id === this.current)
+
+      const parser = new DOMParser()
+      const svgDoc = parser.parseFromString(page.content, 'image/svg+xml')
+      const svgElement = svgDoc.documentElement
+      svgElement.setAttribute(
+        'height',
+        this.$refs.svgContainer.offsetHeight - 30
+      )
+
+      this.svg = svgElement.outerHTML
     },
     navigate(id) {
       this.history.push(this.current)
       this.current = id.toLowerCase()
+      this.updateSvg()
     }
   },
   mounted() {
     window.hook = this
+    this.updateSvg()
   },
   created() {
     const files = require.context('@/assets/', false, /\.svg$/)
