@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="box">
     <div style="text-align: left; margin-left: 50">
       <b>Navigation: </b>
       <span v-for="(step, idx) in history" :key="step">
@@ -14,7 +14,7 @@
 
     <br />
 
-    <div class="svg-container">
+    <div class="svg-container box content">
       <transition name="scale" mode="out-in">
         <SvgPanZoom
           :key="svg"
@@ -23,6 +23,8 @@
           :controlIconsEnabled="false"
           :fit="true"
           :center="true"
+          :zoomScaleSensitivity="0.1"
+          :minZoom="0.25"
         >
           <div v-html="svg"></div>
         </SvgPanZoom>
@@ -77,12 +79,10 @@ export default {
 
 <style>
 .svg-container {
-  margin: auto;
-  width: 95%;
-  height: 100%;
   padding: 10px;
   border: 1px solid black;
 }
+
 .scale-enter-active,
 .scale-leave-active {
   transition: all 0.25s ease;

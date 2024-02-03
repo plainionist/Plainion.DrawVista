@@ -1,10 +1,10 @@
 <template>
-  <nav>
+  <nav class="row header">
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
   </nav>
-  <div style="padding: 10px">
-    <router-view />
+  <div style="padding: 10px" class="row content">
+    <router-view/>
   </div>
 </template>
 
@@ -18,7 +18,7 @@
 }
 
 nav {
-  padding: 30px;
+  padding-top: 20px;
 }
 
 nav a {
@@ -29,9 +29,29 @@ nav a {
 nav a.router-link-exact-active {
   color: #42b983;
 }
+
 html,
 body {
+  width: 100%;
   height: 100%;
   margin: 0px;
+}
+
+.box {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.box .row.header {
+  flex: 0 1 auto;
+}
+
+.box .row.content {
+  flex: 1 1 auto;
+}
+
+.box .row.footer {
+  flex: 0 1 40px;
 }
 </style>

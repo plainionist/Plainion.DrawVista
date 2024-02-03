@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1052px" height="643px" viewBox="-0.5 -0.5 1052 643">
+<svg xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="100%" height="643" viewBox="0 0 1052 643">
   <defs />
   <g>
     <path d="M 87 250 L 130.63 250" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="stroke" />
@@ -40,7 +41,8 @@
         <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
           <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 108px; height: 1px; padding-top: 513px; margin-left: 353px;">
             <div style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">DropLocation<br />Cache DB</div>
+              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">DropLocation<br />
+Cache DB</div>
             </div>
           </div>
         </foreignObject>
@@ -89,7 +91,8 @@
         <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
           <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 370px; margin-left: 348px;">
             <div style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">DropLocation<br />Scanner</div>
+              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">DropLocation<br />
+Scanner</div>
             </div>
           </div>
         </foreignObject>
@@ -103,7 +106,8 @@
         <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
           <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 58px; height: 1px; padding-top: 393px; margin-left: 168px;">
             <div style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Drop<br />Location</div>
+              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Drop<br />
+Location</div>
             </div>
           </div>
         </foreignObject>
@@ -119,7 +123,8 @@
         <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
           <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 406px; margin-left: 578px;">
             <div style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <div style="display: inline-block; font-size: 11px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">Read<br />Failures</div>
+              <div style="display: inline-block; font-size: 11px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">Read<br />
+Failures</div>
             </div>
           </div>
         </foreignObject>
@@ -150,7 +155,8 @@
         <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
           <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 250px; margin-left: 548px;">
             <div style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Readyness<br />Checker</div>
+              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Readyness<br />
+Checker</div>
             </div>
           </div>
         </foreignObject>
@@ -193,7 +199,8 @@
         <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
           <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 180px; margin-left: 838px;">
             <div style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">InfraFailure<br />Analyzer</div>
+              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">InfraFailure<br />
+Analyzer</div>
             </div>
           </div>
         </foreignObject>
@@ -236,7 +243,8 @@
         <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
           <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 300px; margin-left: 838px;">
             <div style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <div style="display: inline-block;font-size: 12px;font-family: Helvetica;color: blue;line-height: 1.2;pointer-events: all;white-space: normal;overflow-wrap: normal;text-decoration: underline;cursor: pointer" onclick="window.hook.navigate('testfailureanalyzer')">TestFailure<br />Analyzer</div>
+              <div style="display: inline-block;font-size: 12px;font-family: Helvetica;color: blue;line-height: 1.2;pointer-events: all;white-space: normal;overflow-wrap: normal;text-decoration: underline;cursor: pointer" onclick="window.hook.navigate('testfailureanalyzer')">TestFailure<br />
+Analyzer</div>
             </div>
           </div>
         </foreignObject>
@@ -250,7 +258,8 @@
         <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
           <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 58px; height: 1px; padding-top: 473px; margin-left: 928px;">
             <div style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Cluster<br />DB</div>
+              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Cluster<br />
+DB</div>
             </div>
           </div>
         </foreignObject>
@@ -264,7 +273,8 @@
         <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
           <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 58px; height: 1px; padding-top: 53px; margin-left: 898px;">
             <div style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Cluster<br />DB</div>
+              <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Cluster<br />
+DB</div>
             </div>
           </div>
         </foreignObject>
