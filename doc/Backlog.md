@@ -1,7 +1,6 @@
 
 # Next
 
-- ignore links to the page itself
 - provide asp.net with minimal API
   - repackage draw.io?
 

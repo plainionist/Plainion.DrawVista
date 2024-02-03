@@ -1,12 +1,9 @@
 ﻿using System.Diagnostics;
 using System.IO.Compression;
-using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.XPath;
 
 var drawIOFile = args[0];
 
@@ -39,21 +36,22 @@ var pages = diagrams
     .Select(x => (name: x.Attribute("name").Value, xml: ReadGraphModel(x.Value)))
     .ToList();
 
-void AddLinks(string svgFile)
+void AddLinks(string page, string svgFile)
 {
     var doc = XElement.Load(svgFile);
 
     string GetName(string value) =>
         Regex.Replace(value, @"\s+", "").ToLower().Replace("<br/>", "");
 
-    bool PageExists(string name) =>
-        pages.Any(p => p.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+    bool IsOtherPage(string name) =>
+        !name.Equals(page, StringComparison.OrdinalIgnoreCase)
+            && pages.Any(p => p.name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
     var clickable = doc
         .Descendants()
         .Where(x => x.Name.LocalName == "div" && !x.Elements().Any(x => x.Name.LocalName == "div"))
         .Select(x => (xml: x, name: GetName(x.Value)))
-        .Where(x => PageExists(x.name))
+        .Where(x => IsOtherPage(x.name))
         .ToList();
 
     foreach (var element in clickable)
@@ -86,7 +84,7 @@ for (int i = 0; i < pages.Count; ++i)
         $"-x {drawIOFile} -o {svgFile} -p {i}"
     ).WaitForExit();
 
-    AddLinks(svgFile);
+    AddLinks(pages[i].name, svgFile);
 }
 
 
