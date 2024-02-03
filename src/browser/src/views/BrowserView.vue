@@ -16,15 +16,26 @@
 
     <div class="svg-container">
       <transition name="scale" mode="out-in">
-        <div style="vertical-align: middle;" :key="svg" v-html="svg"></div>
+        <SvgPanZoom
+          :key="svg"
+          style="width: 100%; height: 100%"
+          :zoomEnabled="true"
+          :controlIconsEnabled="false"
+          :fit="true"
+          :center="true"
+        >
+          <div v-html="svg"></div>
+        </SvgPanZoom>
       </transition>
     </div>
   </div>
 </template>
 
 <script>
+import { SvgPanZoom } from 'vue-svg-pan-zoom'
 export default {
   name: 'BrowserView',
+  components: { SvgPanZoom },
   data() {
     return {
       current: null,
@@ -70,6 +81,7 @@ export default {
   width: 95%;
   height: 100%;
   padding: 10px;
+  border: 1px solid black;
 }
 .scale-enter-active,
 .scale-leave-active {

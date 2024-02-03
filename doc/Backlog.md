@@ -1,7 +1,6 @@
 
 # Next
 
-- zoom pan without zooming browser
 - automatically import from *.drawIO
 - provide asp.net with minimal API
   - repackage draw.io?

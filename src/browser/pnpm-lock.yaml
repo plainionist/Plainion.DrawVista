@@ -14,6 +14,9 @@ dependencies:
   vue-router:
     specifier: ^4.0.3
     version: 4.2.5(vue@3.4.15)
+  vue-svg-pan-zoom:
+    specifier: ^2.1.0
+    version: 2.1.0
 
 devDependencies:
   '@babel/core':
@@ -52,9 +55,6 @@ devDependencies:
   eslint-plugin-vue:
     specifier: ^8.0.3
     version: 8.7.1(eslint@7.32.0)
-  html-loader:
-    specifier: ^5.0.0
-    version: 5.0.0(webpack@5.90.1)
   raw-loader:
     specifier: ^4.0.2
     version: 4.0.2(webpack@5.90.1)
@@ -2989,11 +2989,6 @@ packages:
     resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
     dev: true
 
-  /commander@10.0.1:
-    resolution: {integrity: sha512-y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug==}
-    engines: {node: '>=14'}
-    dev: true
-
   /commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
     dev: true
@@ -4644,17 +4639,6 @@ packages:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
     dev: true
 
-  /html-loader@5.0.0(webpack@5.90.1):
-    resolution: {integrity: sha512-puaGKdjdVVIFRtgIC2n5dt5bt0N5j6heXlAQZ4Do1MLjHmOT1gCE1Ogg7XZNeJlnOVHHsrZKGs5dfh+XwZ3XPw==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      webpack: ^5.0.0
-    dependencies:
-      html-minifier-terser: 7.2.0
-      parse5: 7.1.2
-      webpack: 5.90.1
-    dev: true
-
   /html-minifier-terser@6.1.0:
     resolution: {integrity: sha512-YXxSlJBZTP7RS3tWnQw74ooKa6L9b9i9QYXY21eUEvhZ3u9XLfv6OnFsQq6RxkhHygsaUMvYsZRV5rU/OVNZxw==}
     engines: {node: '>=12'}
@@ -4664,20 +4648,6 @@ packages:
       clean-css: 5.3.3
       commander: 8.3.0
       he: 1.2.0
-      param-case: 3.0.4
-      relateurl: 0.2.7
-      terser: 5.27.0
-    dev: true
-
-  /html-minifier-terser@7.2.0:
-    resolution: {integrity: sha512-tXgn3QfqPIpGl9o+K5tpcj3/MN4SfLtsx2GWwBC3SSd0tXQGyF3gsSqad8loJgKZGM3ZxbYDd5yhiBIdWpmvLA==}
-    engines: {node: ^14.13.1 || >=16.0.0}
-    hasBin: true
-    dependencies:
-      camel-case: 4.1.2
-      clean-css: 5.3.3
-      commander: 10.0.1
-      entities: 4.5.0
       param-case: 3.0.4
       relateurl: 0.2.7
       terser: 5.27.0
@@ -5803,12 +5773,6 @@ packages:
 
   /parse5@6.0.1:
     resolution: {integrity: sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==}
-    dev: true
-
-  /parse5@7.1.2:
-    resolution: {integrity: sha512-Czj1WaSVpaoj0wbhMzLmWD69anp2WH7FXMB9n1Sy8/ZFF9jolSQVMu1Ij5WIyGmcBmhk7EOndpO4mIpihVqAXw==}
-    dependencies:
-      entities: 4.5.0
     dev: true
 
   /parseurl@1.3.3:
@@ -7024,6 +6988,10 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
+  /svg-pan-zoom@3.6.0:
+    resolution: {integrity: sha512-ZBEL2z/n/W2fLLFzn3NTQgd+7QEfbrKvKmu29U3qvMflmJgLaWkwKbOzWJYESFidTiGYMHkijAKmY6m64moyYg==}
+    dev: false
+
   /svg-tags@1.0.0:
     resolution: {integrity: sha512-ovssysQTa+luh7A5Weu3Rta6FJlFBBbInjOh722LIt6klpU2/HtdUbszju/G4devcvk8PGt7FCLv5wftu3THUA==}
     dev: true
@@ -7474,6 +7442,12 @@ packages:
       hash-sum: 1.0.2
       loader-utils: 1.4.2
     dev: true
+
+  /vue-svg-pan-zoom@2.1.0:
+    resolution: {integrity: sha512-S7xCfNVs+Bt0xMxA0ZYI3o80WFJssdMDlb0kLfk+1L6HQr/JOQBM6E48EjITckoq0/jfOZUp6iVUN/4+L6+Kvg==}
+    dependencies:
+      svg-pan-zoom: 3.6.0
+    dev: false
 
   /vue-template-es2015-compiler@1.9.1:
     resolution: {integrity: sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==}
