@@ -57,7 +57,7 @@ Cache-DB
       <switch>
         <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
           <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 250px; margin-left: 138px;">
-            <div style="box-sizing: border-box; font-size: 0px; text-align: center;" onclick="onClick()">
+            <div style="box-sizing: border-box; font-size: 0px; text-align: center;" onclick="window.hook.navigate('/JobCreator.svg')">
               <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: blue; text-decoration: underline; cursor: pointer; line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal; ">JobCreator</div>
             </div>
           </div>

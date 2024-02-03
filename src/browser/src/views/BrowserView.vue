@@ -12,6 +12,14 @@ export default {
       svg: null
     }
   },
+  methods: {
+    navigate(url) {
+      alert(`Navigating to ${url}`)
+    }
+  },
+  mounted() {
+    window.hook = this
+  },
   created() {
     const files = require.context('@/assets/', false, /\.svg$/)
     const db = files.keys().map((f) => {
