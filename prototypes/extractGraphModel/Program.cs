@@ -72,6 +72,8 @@ void AddLinks(string page, string svgFile)
         element.xml.Attribute("style").Value = string.Join(";", attrs.Select(x => x.Key + ": " + x.Value));
     }
 
+    doc.Attribute("width").Value="100%";
+    
     File.WriteAllText(svgFile, doc.ToString());
 }
 
