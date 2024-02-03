@@ -3,12 +3,12 @@
     <div style="text-align: left; margin-left: 50">
       <b>Navigation: </b>
       <span v-for="(step, idx) in history" :key="step">
+        <span v-if="idx > 0">/</span>
         <span
           style="color: blue; text-decoration: underline; cursor: pointer"
-          @click="back"
+          @click="goTo(step)"
           >{{ step }}</span
         >
-        <span v-if="idx > 0">/</span>
       </span>
     </div>
 
@@ -51,8 +51,8 @@ export default {
     }
   },
   methods: {
-    back() {
-      this.current = this.history.pop()
+    goTo(step) {
+      while ((this.current = this.history.pop()) !== step);
     },
     navigate(id) {
       this.history.push(this.current)
