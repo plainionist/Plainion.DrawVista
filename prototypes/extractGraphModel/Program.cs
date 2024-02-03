@@ -66,7 +66,7 @@ void AddLinks(string svgFile)
         element.xml.Attribute("style").Value = string.Join(":", attrs.Select(x => x.Key + ": " + x.Value));
     }
 
-    //File.WriteAllText(svgFile, doc.ToString());
+    File.WriteAllText(svgFile, doc.ToString());
 }
 
 for (int i = 0; i < pages.Count; ++i)
