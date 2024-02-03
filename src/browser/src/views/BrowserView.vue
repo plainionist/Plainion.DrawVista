@@ -1,7 +1,6 @@
 <template>
   <div>
     <div v-html="svg"></div>
-    <div v-html="require('!html-loader!../assets/orchestrator.svg')"></div>
   </div>
 </template>
 
@@ -18,13 +17,13 @@ export default {
     const db = files.keys().map((f) => {
       return {
         id: f,
-        content: files(f)
+        content: files(f).default
       }
     })
     console.log(db)
 
     const name = 'overview'
-    this.svg = require(`@/assets/${name}.svg`)
+    this.svg = require(`@/assets/${name}.svg`).default
   }
 }
 </script>

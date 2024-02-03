@@ -9,10 +9,9 @@ module.exports = defineConfig({
       rules: [
         {
           test: /\.svg$/,
-          include: [
-            path.resolve(__dirname, "src/assets")
-          ],
-          loader: 'html-loader'
+          include: [path.resolve(__dirname, 'src/assets')],
+          loader: 'raw-loader',
+          type: 'javascript/auto'
         }
       ]
     }
