@@ -1,7 +1,8 @@
 <template>
   <div>
-    <div>
-      <span v-for="(step,idx) in history" :key="step">
+    <div style="text-align: left; margin-left: 50">
+      <b>Navigation: </b>
+      <span v-for="(step, idx) in history" :key="step">
         <span
           style="color: blue; text-decoration: underline; cursor: pointer"
           @click="back"
@@ -13,7 +14,11 @@
 
     <br />
 
-    <div v-html="svg"></div>
+    <div class="svg-container">
+      <transition name="scale" mode="out-in">
+        <div style="vertical-align: middle;" :key="svg" v-html="svg"></div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -58,3 +63,22 @@ export default {
   }
 }
 </script>
+
+<style>
+.svg-container {
+  margin: auto;
+  width: 95%;
+  height: 100%;
+  padding: 10px;
+}
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.25s ease;
+}
+
+.scale-enter-from,
+.scale-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
+</style>

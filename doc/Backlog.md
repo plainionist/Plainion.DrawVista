@@ -1,9 +1,6 @@
 
 # Next
 
-- navigate
-- navigation transition
-- support back stack with bread-crump navigation
 - zoom pan without zooming browser
 - automatically import from *.drawIO
 - provide asp.net with minimal API
@@ -18,8 +15,8 @@
   - https://developer.mozilla.org/en-US/docs/Web/SVG/Element/a
 - VUE router transitions
   - https://router.vuejs.org/guide/advanced/transitions
-  - !! https://learnvue.co/articles/vue-router-transitions
-  - !! https://markus.oberlehner.net/blog/vue-router-page-transitions/ (zoom section)
+  - https://learnvue.co/articles/vue-router-transitions
+  - https://markus.oberlehner.net/blog/vue-router-page-transitions/ (zoom section)
 - zoom and pan
   - https://github.com/thecodealer/vue-panzoom?tab=readme-ov-file
   - https://www.npmjs.com/package/vue-svg-pan-zoom
