@@ -43,15 +43,23 @@ void AddLinks(string svgFile)
 {
     var doc = XElement.Load(svgFile);
 
+    string GetName(string value) =>
+        Regex.Replace(value, @"\s+", "").ToLower().Replace("<br/>", "");
+
+    bool PageExists(string name) =>
+        pages.Any(p => p.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
     var clickable = doc
         .Descendants()
-        .Where(x => x.Name.LocalName == "div" && !x.Elements().Any())
-        .Select(x => (xml: x, name: Regex.Replace(x.Value, @"\s+", "")))
-        .Where(x => pages.Any(p => p.name.Equals(x.name, StringComparison.OrdinalIgnoreCase)))
+        .Where(x => x.Name.LocalName == "div" && !x.Elements().Any(x => x.Name.LocalName == "div"))
+        .Select(x => (xml: x, name: GetName(x.Value)))
+        .Where(x => PageExists(x.name))
         .ToList();
 
     foreach (var element in clickable)
     {
+        Console.WriteLine("Creating link for: " + element.name);
+
         element.xml.Add(new XAttribute("onclick", $"window.hook.navigate('{element.name}')"));
 
         var attrs = element.xml.Attribute("style").Value.Split(";")
@@ -63,7 +71,7 @@ void AddLinks(string svgFile)
         attrs["color"] = "blue";
         attrs["text-decoration"] = "underline";
         attrs["cursor"] = "pointer";
-        element.xml.Attribute("style").Value = string.Join(":", attrs.Select(x => x.Key + ": " + x.Value));
+        element.xml.Attribute("style").Value = string.Join(";", attrs.Select(x => x.Key + ": " + x.Value));
     }
 
     File.WriteAllText(svgFile, doc.ToString());
