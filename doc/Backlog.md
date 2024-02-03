@@ -1,4 +1,13 @@
 
+# Next
+
+- navigate
+- navigation transition
+- support back stack with bread-crump navigation
+- zoom pan without zooming browser
+- automatically import from *.drawIO
+- provide asp.net with minimal API
+  - repackage draw.io?
 
 # Resources
 

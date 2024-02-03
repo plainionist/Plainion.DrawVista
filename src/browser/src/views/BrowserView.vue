@@ -1,5 +1,14 @@
 <template>
   <div>
+    <div>
+      <span
+        style="color: blue; text-decoration: underline; cursor: pointer"
+        @click="back"
+        v-if="current !== 'index'"
+        >back</span
+      >
+    </div>
+    <br />
     <div v-html="svg"></div>
   </div>
 </template>
@@ -9,12 +18,22 @@ export default {
   name: 'BrowserView',
   data() {
     return {
-      svg: null
+      current: null,
+      pages: null
+    }
+  },
+  computed: {
+    svg() {
+      const page = this.pages.find((x) => x.id === this.current)
+      return page.content
     }
   },
   methods: {
-    navigate(url) {
-      alert(`Navigating to ${url}`)
+    back() {
+      this.navigate('index')
+    },
+    navigate(id) {
+      this.current = id.toLowerCase()
     }
   },
   mounted() {
@@ -22,16 +41,13 @@ export default {
   },
   created() {
     const files = require.context('@/assets/', false, /\.svg$/)
-    const db = files.keys().map((f) => {
+    this.pages = files.keys().map((f) => {
       return {
-        id: f,
+        id: f.replace(/^\.\//, '').replace(/.svg$/, '').toLowerCase(),
         content: files(f).default
       }
     })
-    console.log(db)
-
-    const name = 'overview'
-    this.svg = require(`@/assets/${name}.svg`).default
+    this.navigate('index')
   }
 }
 </script>
