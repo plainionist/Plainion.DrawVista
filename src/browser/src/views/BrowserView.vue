@@ -1,14 +1,18 @@
 <template>
   <div>
     <div>
-      <span
-        style="color: blue; text-decoration: underline; cursor: pointer"
-        @click="back"
-        v-if="current !== 'index'"
-        >back</span
-      >
+      <span v-for="(step,idx) in history" :key="step">
+        <span
+          style="color: blue; text-decoration: underline; cursor: pointer"
+          @click="back"
+          >{{ step }}</span
+        >
+        <span v-if="idx > 0">/</span>
+      </span>
     </div>
+
     <br />
+
     <div v-html="svg"></div>
   </div>
 </template>
@@ -19,20 +23,23 @@ export default {
   data() {
     return {
       current: null,
+      history: [],
       pages: null
     }
   },
   computed: {
     svg() {
       const page = this.pages.find((x) => x.id === this.current)
+      console.log(this.current)
       return page.content
     }
   },
   methods: {
     back() {
-      this.navigate('index')
+      this.current = this.history.pop()
     },
     navigate(id) {
+      this.history.push(this.current)
       this.current = id.toLowerCase()
     }
   },
@@ -47,7 +54,7 @@ export default {
         content: files(f).default
       }
     })
-    this.navigate('index')
+    this.current = 'index'
   }
 }
 </script>
