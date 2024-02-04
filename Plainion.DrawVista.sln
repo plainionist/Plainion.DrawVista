@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{79C18B61-6AB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportSVG", "src\ExportSvg\ExportSVG.csproj", "{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportSvg.Tests", "src\ExportSvg.Tests\ExportSvg.Tests.csproj", "{4DA066DA-7EDB-4E06-97F1-01BCF7376D65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +19,17 @@ Global
 		{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DA066DA-7EDB-4E06-97F1-01BCF7376D65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DA066DA-7EDB-4E06-97F1-01BCF7376D65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DA066DA-7EDB-4E06-97F1-01BCF7376D65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DA066DA-7EDB-4E06-97F1-01BCF7376D65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6} = {79C18B61-6AB6-4454-8E44-E5C85EBB092C}
+		{4DA066DA-7EDB-4E06-97F1-01BCF7376D65} = {79C18B61-6AB6-4454-8E44-E5C85EBB092C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F03FE0BB-4F29-40B7-BD91-7974644BF852}
