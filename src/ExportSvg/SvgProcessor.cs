@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
-internal class SvgProcessor
+public class SvgProcessor
 {
     private readonly IReadOnlyList<string> myPages;
 
