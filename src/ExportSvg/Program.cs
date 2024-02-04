@@ -2,6 +2,8 @@
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
+string DrawIoExecutable = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "draw.io", "draw.io.exe");
+
 var drawIOFile = args[0];
 
 Console.WriteLine($"Analyzing file: {drawIOFile}");
@@ -45,7 +47,7 @@ void AddLinks(string pageName, string svgFile)
         attrs["color"] = "blue";
         attrs["text-decoration"] = "underline";
         attrs["cursor"] = "pointer";
-        
+
         xml.Attribute("style").Value = string.Join(";", attrs.Select(x => x.Key + ": " + x.Value));
     }
 
@@ -58,10 +60,8 @@ for (int i = 0; i < pages.Count; ++i)
 {
     var svgFile = Path.Combine("src", "browser", "src", "assets", pages[i] + ".svg");
 
-    Process.Start(
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "draw.io", "draw.io.exe"),
-        $"-x {drawIOFile} -o {svgFile} -p {i}"
-    ).WaitForExit();
+    Process.Start(DrawIoExecutable, $"-x {drawIOFile} -o {svgFile} -p {i}")
+        .WaitForExit();
 
     AddLinks(pages[i], svgFile);
 }
