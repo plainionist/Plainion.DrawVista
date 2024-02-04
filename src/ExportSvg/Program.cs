@@ -2,7 +2,9 @@
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
-string DrawIoExecutable = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "draw.io", "draw.io.exe");
+string DrawIoExecutable = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+     "draw.io", "draw.io.exe");
 
 var drawIOFile = args[0];
 
@@ -13,12 +15,13 @@ var pages = XElement.Load(drawIOFile)
     .Select(x => x.Attribute("name").Value)
     .ToList();
 
-string GetName(string value) =>
-    Regex.Replace(value, @"\s+", "").ToLower().Replace("<br/>", "");
+string GetRawText(string value) =>
+    Regex.Replace(value, @"\s+", "")
+        .ToLower()
+        .Replace("<br/>", "");
 
-bool IsOtherPage(string page, string name) =>
-    !name.Equals(page, StringComparison.OrdinalIgnoreCase)
-        && pages.Any(p => p.Equals(name, StringComparison.OrdinalIgnoreCase));
+bool IsPageReference(string name) =>
+    pages.Any(p => p.Equals(name, StringComparison.OrdinalIgnoreCase));
 
 void AddLinks(string pageName, string svgFile)
 {
@@ -27,8 +30,10 @@ void AddLinks(string pageName, string svgFile)
     var elementsReferencingPages = doc
         .Descendants()
         .Where(x => x.Name.LocalName == "div" && !x.Elements().Any(x => x.Name.LocalName == "div"))
-        .Select(x => (xml: x, name: GetName(x.Value)))
-        .Where(x => IsOtherPage(pageName, x.name))
+        .Select(x => (xml: x, name: GetRawText(x.Value)))
+        .Where(x => IsPageReference(x.name))
+        // skip self-references
+        .Where(x => !x.name.Equals(pageName, StringComparison.OrdinalIgnoreCase))
         .ToList();
 
     foreach (var (xml, name) in elementsReferencingPages)
