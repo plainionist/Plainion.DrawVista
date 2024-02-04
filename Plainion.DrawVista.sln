@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prototypes", "prototypes", "{914BEF4C-7878-4CDB-968D-26F4BDB4B9A0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{79C18B61-6AB6-4454-8E44-E5C85EBB092C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extract", "prototypes\extractGraphModel\Extract.csproj", "{3C28D3CF-D189-47E0-92F5-067CA26B8EAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportSVG", "src\ExportSvg\ExportSVG.csproj", "{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +13,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3C28D3CF-D189-47E0-92F5-067CA26B8EAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C28D3CF-D189-47E0-92F5-067CA26B8EAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C28D3CF-D189-47E0-92F5-067CA26B8EAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C28D3CF-D189-47E0-92F5-067CA26B8EAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{3C28D3CF-D189-47E0-92F5-067CA26B8EAB} = {914BEF4C-7878-4CDB-968D-26F4BDB4B9A0}
+		{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6} = {79C18B61-6AB6-4454-8E44-E5C85EBB092C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F03FE0BB-4F29-40B7-BD91-7974644BF852}

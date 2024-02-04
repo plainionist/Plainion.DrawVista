@@ -1,2 +1,2 @@
 
-prototypes\extractGraphModel\bin\Debug\net6.0\Extract.exe prototypes\sample.drawio
+src\ExportSvg\bin\Debug\net8.0\ExportSVG.exe prototypes\sample.drawio
