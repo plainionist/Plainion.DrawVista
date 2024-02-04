@@ -15,7 +15,7 @@ var pages = XElement.Load(drawIOFile)
     .Select(x => x.Attribute("name").Value)
     .ToList();
 
-string GetRawText(string value) =>
+string GetDisplayText(string value) =>
     Regex.Replace(value, @"\s+", "")
         .ToLower()
         .Replace("<br/>", "");
@@ -30,7 +30,7 @@ void AddLinks(string pageName, string svgFile)
     var elementsReferencingPages = doc
         .Descendants()
         .Where(x => x.Name.LocalName == "div" && !x.Elements().Any(x => x.Name.LocalName == "div"))
-        .Select(x => (xml: x, name: GetRawText(x.Value)))
+        .Select(x => (xml: x, name: GetDisplayText(x.Value)))
         .Where(x => IsPageReference(x.name))
         // skip self-references
         .Where(x => !x.name.Equals(pageName, StringComparison.OrdinalIgnoreCase))
