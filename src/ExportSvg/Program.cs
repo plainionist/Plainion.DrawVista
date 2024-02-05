@@ -8,7 +8,7 @@ var pages = pageReader.ReadPages();
 var outputFolder = Path.Combine("src", "browser", "src", "assets");
 var svgExporter = new SvgExporter(drawIOFile, outputFolder);
 
-var svgProcessor = new SvgProcessor(pages);
+var svgProcessor = new SvgProcessor(pages, new SvgCaptionParser(), new SvgHyperlinkFormatter());
 
 for (int i = 0; i < pages.Count; ++i)
 {
