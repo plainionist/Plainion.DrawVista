@@ -3,8 +3,11 @@
 
 - apply DIP
 - apply ISP to have all IO in one class (DrawIoReader, SvgStore)
+
 - provide asp.net with minimal API
   - single file can be uploaded & gets processed
+  - LiteDB as storage?
+- also needs to deliver WebUI of course
 
 - support for individual PNG which drawio models
   - then by definition many files need to be uploaded
