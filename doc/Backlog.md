@@ -1,8 +1,15 @@
 
 # Next
 
+- apply DIP
+- apply ISP to have all IO in one class (DrawIoReader, SvgStore)
 - provide asp.net with minimal API
-  - repackage draw.io?
+  - single file can be uploaded & gets processed
+
+- support for individual PNG which drawio models
+  - then by definition many files need to be uploaded
+  - we should maybe consider "projects" for which files could be uploaded
+  - then the file name could be the page name or the page name is given on the UI
 
 # Resources
 
