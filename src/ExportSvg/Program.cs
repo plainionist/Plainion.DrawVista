@@ -2,6 +2,12 @@
 
 Console.WriteLine($"Analyzing file: {drawIOFile}");
 
+if (Path.GetExtension(drawIOFile).Equals(".png", StringComparison.OrdinalIgnoreCase))
+{
+    var converter = new PngToDrawIoConverter();
+    drawIOFile= converter.Convert(drawIOFile);
+}
+
 var pageReader = new PageReader(drawIOFile);
 var pages = pageReader.ReadPages();
 
