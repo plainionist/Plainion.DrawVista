@@ -67,7 +67,7 @@ public class SvgProcessorTests
     [Test]
     public void LinksShouldBeAddedForExistingPage()
     {
-        var svgProcessor = new SvgProcessor(["System", "Parser"]);
+        var svgProcessor = new SvgProcessor(["System", "Parser"], new SvgCaptionParser(), new SvgHyperlinkFormatter());
 
         var doc = new SvgDocument("System", XElement.Parse(SvgDocument));
         svgProcessor.AddLinks(doc);
