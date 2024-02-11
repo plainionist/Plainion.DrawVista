@@ -53,7 +53,7 @@ export default {
       this.updateSvg()
     },
     updateSvg() {
-      if (!this.pages) {
+      if (!this.pages || this.pages.length === 0) {
         return
       }
       const page = this.pages.find((x) => x.id === this.current)

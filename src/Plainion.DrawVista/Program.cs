@@ -20,7 +20,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
-app.UseCors(builder=>
+app.UseCors(builder =>
     builder.WithOrigins("http://localhost:8080")
     .AllowAnyHeader()
     .AllowAnyMethod()
@@ -32,20 +32,24 @@ if (!Directory.Exists(outputFolder))
     Directory.CreateDirectory(outputFolder);
 }
 
-var drawIOFile = Path.Combine(app.Environment.ContentRootPath, "samples", "sample.drawio");
-
-app.MapGet("/init", () =>
+app.MapPost("/upload", async (IFormFile file) =>
 {
-    var drawIoWorkbook = new DrawIOWorkbook(drawIOFile, outputFolder);
+    var tempFile = Path.GetTempFileName();
+    using (var stream = File.OpenWrite(tempFile))
+    {
+        await file.CopyToAsync(stream);
+    }
 
     var svgProcessor = new SvgProcessor(
         new SvgCaptionParser(),
         new SvgHyperlinkFormatter());
 
+    var drawIoWorkbook = new DrawIOWorkbook(tempFile, outputFolder);
     svgProcessor.Process(drawIoWorkbook);
 
     return "OK";
-});
+})
+.DisableAntiforgery();
 
 app.MapGet("/svg", async (HttpContext context, string pageName) =>
 {
@@ -57,7 +61,8 @@ app.MapGet("/svg", async (HttpContext context, string pageName) =>
 app.MapGet("/allFiles", () =>
 {
     return Directory.GetFiles(outputFolder, "*.svg")
-        .Select(file => new {
+        .Select(file => new
+        {
             id = Path.GetFileNameWithoutExtension(file).ToLower(),
             content = File.ReadAllText(file)
         })
