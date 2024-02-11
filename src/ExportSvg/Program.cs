@@ -17,9 +17,8 @@ public class ProgramFiles
 
         var svgProcessor = new SvgProcessor(
             new SvgCaptionParser(),
-            new SvgHyperlinkFormatter(),
-            drawIoWorkbook);
+            new SvgHyperlinkFormatter());
 
-        svgProcessor.Process();
+        svgProcessor.Process(drawIoWorkbook);
     }
 }

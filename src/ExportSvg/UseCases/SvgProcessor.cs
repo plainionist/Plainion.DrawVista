@@ -4,26 +4,20 @@ namespace ExportSVG.UseCases;
 
 public class SvgProcessor
 {
-    private readonly IReadOnlyList<string> myPages;
     private readonly ISvgCaptionParser myParser;
     private readonly ISvgHyperlinkFormatter myFormatter;
-    private readonly IDrawingWorkbook myWorkbook;
 
-    public SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter formatter,
-        IDrawingWorkbook workbook)
+    public SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter formatter)
     {
         myParser = parser;
         myFormatter = formatter;
-        myWorkbook = workbook;
-
-        myPages = workbook.ReadPages();
     }
 
-    private bool IsPageReference(string name) =>
-        myPages.Any(p => p.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-    public void AddLinks(SvgDocument doc)
+    private void AddLinks(IReadOnlyCollection<string> pages, SvgDocument doc)
     {
+        bool IsPageReference(string name) =>
+           pages.Any(p => p.Equals(name, StringComparison.OrdinalIgnoreCase));
+
         var elementsReferencingPages = doc.Content
             .Descendants()
             .Where(x => x.Name.LocalName == "div" && !x.Elements().Any(x => x.Name.LocalName == "div"))
@@ -45,15 +39,16 @@ public class SvgProcessor
         doc.Content.Attribute("width").Value = "100%";
     }
 
-    internal void Process()
+    public void Process(IDrawingWorkbook workbook)
     {
-        for (int i = 0; i < myPages.Count; ++i)
+        var pages = workbook.ReadPages();
+        for (int i = 0; i < pages.Count; ++i)
         {
-            var svgDocument = myWorkbook.Export(i, myPages[i]);
+            var svgDocument = workbook.Export(i, pages[i]);
 
-            AddLinks(svgDocument);
+            AddLinks(pages, svgDocument);
 
-            myWorkbook.Save(svgDocument);
+            workbook.Save(svgDocument);
         }
     }
 }

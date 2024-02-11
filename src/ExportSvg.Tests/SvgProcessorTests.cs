@@ -70,15 +70,16 @@ public class SvgProcessorTests
     {
         var workbook = new Mock<IDrawingWorkbook> { DefaultValue = DefaultValue.Mock };
         workbook.Setup(x => x.ReadPages()).Returns(["System", "Parser"]);
-        var svgProcessor = new SvgProcessor(
-            new SvgCaptionParser(),
-            new SvgHyperlinkFormatter(),
-            workbook.Object);
+        var systemPage = new SvgDocument("System", XElement.Parse(SvgDocument));
+        workbook.Setup(x => x.Export(0, It.IsAny<string>())).Returns(systemPage);
+        var parserPage = new SvgDocument("Parser", new XElement("doc"));
+        workbook.Setup(x => x.Export(1, It.IsAny<string>())).Returns(parserPage);
 
-        var doc = new SvgDocument("System", XElement.Parse(SvgDocument));
-        svgProcessor.AddLinks(doc);
+        var svgProcessor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter());
 
-        var parserElement = doc.Content.Descendants()
+        svgProcessor.Process(workbook.Object);
+
+        var parserElement = systemPage.Content.Descendants()
             .Single(x => x.Elements().Count() == 0 && x.Name.LocalName == "div" && x.Value == "Parser");
         Assert.That(parserElement.Attribute("onclick"), Is.Not.Null);
     }
