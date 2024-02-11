@@ -34,6 +34,8 @@
 
 <script>
 import { SvgPanZoom } from 'vue-svg-pan-zoom'
+import API from '@/api'
+
 export default {
   name: 'BrowserView',
   components: { SvgPanZoom },
@@ -51,6 +53,9 @@ export default {
       this.updateSvg()
     },
     updateSvg() {
+      if (!this.pages) {
+        return
+      }
       const page = this.pages.find((x) => x.id === this.current)
 
       const parser = new DOMParser()
@@ -73,15 +78,11 @@ export default {
     window.hook = this
     this.updateSvg()
   },
-  created() {
-    const files = require.context('@/assets/', false, /\.svg$/)
-    this.pages = files.keys().map((f) => {
-      return {
-        id: f.replace(/^\.\//, '').replace(/.svg$/, '').toLowerCase(),
-        content: files(f).default
-      }
-    })
+  async created() {
+    const response = await API.get('/allFiles')
+    this.pages = response.data
     this.current = 'index'
+    this.updateSvg()
   }
 }
 </script>
