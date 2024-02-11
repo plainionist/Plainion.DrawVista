@@ -5,8 +5,20 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
+
+  <Target Name="VueBuild" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' == 'Release'">
+    <!-- even if the build was successful npm/node returns -1 for unclear reason -->
+    <Exec Command="npm run build" IgnoreExitCode="true" WorkingDirectory="$(MSBuildProjectDirectory)\WebUI\" />
+  </Target>
+  <Target Name="VueCopyToOutput" AfterTargets="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
+      <WebUI Include="wwwroot\**" />
+    </ItemGroup>
+    <Copy SourceFiles="@(WebUI)" DestinationFolder="$(OutputPath)\wwwroot\%(RecursiveDir)" />
+  </Target>
 </Project>
