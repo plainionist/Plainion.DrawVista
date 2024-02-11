@@ -1,4 +1,7 @@
 using System.Xml.Linq;
+using ExportSVG.Adapters;
+
+namespace ExportSVG.UseCases;
 
 public class SvgProcessor
 {

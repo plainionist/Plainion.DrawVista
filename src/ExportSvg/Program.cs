@@ -1,20 +1,32 @@
-﻿var drawIOFile = args[0];
+﻿using ExportSVG.Adapters;
+using ExportSVG.IO;
+using ExportSVG.UseCases;
 
-Console.WriteLine($"Analyzing file: {drawIOFile}");
+namespace ExportSVG;
 
-var pageReader = new PageReader(drawIOFile);
-var pages = pageReader.ReadPages();
-
-var outputFolder = Path.Combine("src", "browser", "src", "assets");
-var svgExporter = new SvgExporter(drawIOFile, outputFolder);
-
-var svgProcessor = new SvgProcessor(pages, new SvgCaptionParser(), new SvgHyperlinkFormatter());
-
-for (int i = 0; i < pages.Count; ++i)
+public class ProgramFiles
 {
-    var svgDocument = svgExporter.Export(i, pages[i]);
+    public static void Main(string[] args)
+    {
+        var drawIOFile = args[0];
 
-    svgProcessor.AddLinks(svgDocument);
+        Console.WriteLine($"Analyzing file: {drawIOFile}");
 
-    svgExporter.Save(svgDocument);
+        var pageReader = new PageReader(drawIOFile);
+        var pages = pageReader.ReadPages();
+
+        var outputFolder = Path.Combine("src", "browser", "src", "assets");
+        var svgExporter = new SvgExporter(drawIOFile, outputFolder);
+
+        var svgProcessor = new SvgProcessor(pages, new SvgCaptionParser(), new SvgHyperlinkFormatter());
+
+        for (int i = 0; i < pages.Count; ++i)
+        {
+            var svgDocument = svgExporter.Export(i, pages[i]);
+
+            svgProcessor.AddLinks(svgDocument);
+
+            svgExporter.Save(svgDocument);
+        }
+    }
 }

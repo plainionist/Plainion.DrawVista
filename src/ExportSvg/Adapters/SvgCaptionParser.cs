@@ -1,6 +1,8 @@
 
 using System.Text.RegularExpressions;
 
+namespace ExportSVG.Adapters;
+
 public class SvgCaptionParser
 {
     public string GetDisplayText(string value) =>

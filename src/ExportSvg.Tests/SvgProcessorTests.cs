@@ -1,8 +1,11 @@
 using System.Linq;
 using System.Xml.Linq;
+using ExportSVG.Adapters;
+using ExportSVG.IO;
+using ExportSVG.UseCases;
 using NUnit.Framework;
 
-namespace ExportSvg.Tests;
+namespace ExportSVG.Tests;
 
 [TestFixture]
 public class SvgProcessorTests

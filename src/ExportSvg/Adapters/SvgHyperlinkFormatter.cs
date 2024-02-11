@@ -1,5 +1,7 @@
 using System.Xml.Linq;
 
+namespace ExportSVG.Adapters;
+
 public class SvgHyperlinkFormatter
 {
     internal void ApplyStyle(XElement xml)

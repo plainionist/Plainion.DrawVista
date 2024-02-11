@@ -1,6 +1,9 @@
 
 using System.Diagnostics;
 using System.Xml.Linq;
+using ExportSVG.UseCases;
+
+namespace ExportSVG.IO;
 
 internal class SvgExporter
 {
@@ -33,5 +36,3 @@ internal class SvgExporter
         File.WriteAllText(svgFile, document.Content.ToString());
     }
 }
-
-public record SvgDocument(string Name, XElement Content);

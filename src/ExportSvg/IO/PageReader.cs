@@ -1,6 +1,8 @@
 
 using System.Xml.Linq;
 
+namespace ExportSVG.IO;
+
 internal class PageReader
 {
     private readonly string myDrawIOFile;
