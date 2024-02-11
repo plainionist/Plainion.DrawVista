@@ -4,7 +4,7 @@ using Plainion.DrawVista.UseCases;
 
 namespace Plainion.DrawVista;
 
-public class ProgramFiles
+public class Program
 {
     public static void Main(string[] args)
     {
