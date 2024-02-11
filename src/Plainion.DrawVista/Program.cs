@@ -29,10 +29,8 @@ if (!Directory.Exists(outputFolder))
 
 var drawIOFile = Path.Combine(app.Environment.ContentRootPath, "samples", "sample.drawio");
 
-app.MapGet("/test", () =>
+app.MapGet("/init", () =>
 {
-    Console.WriteLine($"Analyzing file: {drawIOFile}");
-
     var drawIoWorkbook = new DrawIOWorkbook(drawIOFile, outputFolder);
 
     var svgProcessor = new SvgProcessor(
@@ -40,8 +38,15 @@ app.MapGet("/test", () =>
         new SvgHyperlinkFormatter());
 
     svgProcessor.Process(drawIoWorkbook);
-    
+
     return "OK";
+});
+
+app.MapGet("/svg", async (HttpContext context, string pageName) =>
+{
+    var fileName = Path.Combine(outputFolder, pageName + ".svg");
+    context.Response.ContentType = "image/svg+xml";
+    await context.Response.SendFileAsync(fileName);
 });
 
 app.Run();
