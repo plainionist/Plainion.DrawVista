@@ -20,6 +20,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 var outputFolder = Path.Combine(app.Environment.ContentRootPath, "store");
 if (!Directory.Exists(outputFolder))
