@@ -1,4 +1,4 @@
-namespace ExportSVG.UseCases;
+namespace Plainion.DrawVista.UseCases;
 
 public interface IDrawingWorkbook
 {

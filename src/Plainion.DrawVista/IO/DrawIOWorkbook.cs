@@ -1,9 +1,9 @@
 
 using System.Diagnostics;
 using System.Xml.Linq;
-using ExportSVG.UseCases;
+using Plainion.DrawVista.UseCases;
 
-namespace ExportSVG.IO;
+namespace Plainion.DrawVista.IO;
 
 public class DrawIOWorkbook : IDrawingWorkbook
 {

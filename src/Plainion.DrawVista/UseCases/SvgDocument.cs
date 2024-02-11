@@ -1,5 +1,5 @@
 using System.Xml.Linq;
 
-namespace ExportSVG.UseCases;
+namespace Plainion.DrawVista.UseCases;
 
 public record SvgDocument(string Name, XElement Content);

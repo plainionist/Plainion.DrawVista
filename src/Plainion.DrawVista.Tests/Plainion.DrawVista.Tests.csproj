@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExportSvg\ExportSvg.csproj" />
+    <ProjectReference Include="..\Plainion.DrawVista\Plainion.DrawVista.csproj" />
   </ItemGroup>
 
 </Project>

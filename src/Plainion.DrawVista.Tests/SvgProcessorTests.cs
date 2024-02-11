@@ -1,9 +1,9 @@
 using System.Xml.Linq;
-using ExportSVG.Adapters;
-using ExportSVG.UseCases;
+using Plainion.DrawVista.Adapters;
+using Plainion.DrawVista.UseCases;
 using Moq;
 
-namespace ExportSVG.Tests;
+namespace Plainion.DrawVista.Tests;
 
 [TestFixture]
 public class SvgProcessorTests

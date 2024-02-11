@@ -1,7 +1,7 @@
 using System.Xml.Linq;
-using ExportSVG.UseCases;
+using Plainion.DrawVista.UseCases;
 
-namespace ExportSVG.Adapters;
+namespace Plainion.DrawVista.Adapters;
 
 public class SvgHyperlinkFormatter : ISvgHyperlinkFormatter
 {

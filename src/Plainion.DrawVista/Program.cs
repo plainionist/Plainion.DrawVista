@@ -1,8 +1,8 @@
-﻿using ExportSVG.Adapters;
-using ExportSVG.IO;
-using ExportSVG.UseCases;
+﻿using Plainion.DrawVista.Adapters;
+using Plainion.DrawVista.IO;
+using Plainion.DrawVista.UseCases;
 
-namespace ExportSVG;
+namespace Plainion.DrawVista;
 
 public class ProgramFiles
 {

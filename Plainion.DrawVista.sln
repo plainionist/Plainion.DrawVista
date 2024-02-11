@@ -5,9 +5,9 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{79C18B61-6AB6-4454-8E44-E5C85EBB092C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportSVG", "src\ExportSvg\ExportSVG.csproj", "{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plainion.DrawVista", "src\Plainion.DrawVista\Plainion.DrawVista.csproj", "{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportSvg.Tests", "src\ExportSvg.Tests\ExportSvg.Tests.csproj", "{4DA066DA-7EDB-4E06-97F1-01BCF7376D65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plainion.DrawVista.Tests", "src\Plainion.DrawVista.Tests\Plainion.DrawVista.Tests.csproj", "{4DA066DA-7EDB-4E06-97F1-01BCF7376D65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

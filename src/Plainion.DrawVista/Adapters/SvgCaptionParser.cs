@@ -1,8 +1,8 @@
 
 using System.Text.RegularExpressions;
-using ExportSVG.UseCases;
+using Plainion.DrawVista.UseCases;
 
-namespace ExportSVG.Adapters;
+namespace Plainion.DrawVista.Adapters;
 
 public class SvgCaptionParser : ISvgCaptionParser
 {

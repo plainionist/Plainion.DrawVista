@@ -1,2 +1,2 @@
 
-src\ExportSvg\bin\Debug\net8.0\ExportSVG.exe prototypes\sample.drawio
+src\Plainion.DrawVista\bin\Debug\net8.0\Plainion.DrawVista.exe prototypes\sample.drawio
