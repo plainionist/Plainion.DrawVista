@@ -1,10 +1,11 @@
 using System.Xml.Linq;
+using ExportSVG.UseCases;
 
 namespace ExportSVG.Adapters;
 
-public class SvgHyperlinkFormatter
+public class SvgHyperlinkFormatter : ISvgHyperlinkFormatter
 {
-    internal void ApplyStyle(XElement xml)
+    public void ApplyStyle(XElement xml)
     {
         var attrs = xml.Attribute("style").Value.Split(";")
             .Where(x => !string.IsNullOrEmpty(x))

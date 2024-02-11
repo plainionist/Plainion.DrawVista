@@ -5,7 +5,7 @@ using ExportSVG.UseCases;
 
 namespace ExportSVG.IO;
 
-internal class SvgExporter
+public class DrawIOWorkbook : IDrawingWorkbook
 {
     private readonly string DrawIoExecutable = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
@@ -14,13 +14,21 @@ internal class SvgExporter
     private readonly string myDrawIOFile;
     private readonly string myOutputFolder;
 
-    public SvgExporter(string drawIOFile, string outputFolder)
+    public DrawIOWorkbook(string drawIOFile, string outputFolder)
     {
         myDrawIOFile = drawIOFile;
         myOutputFolder = outputFolder;
     }
 
-    internal SvgDocument Export(int pageIndex, string pageName)
+    public IReadOnlyList<string> ReadPages()
+    {
+        return XElement.Load(myDrawIOFile)
+            .Elements("diagram")
+            .Select(x => x.Attribute("name").Value)
+            .ToList();
+    }
+
+    public SvgDocument Export(int pageIndex, string pageName)
     {
         var svgFile = Path.Combine(myOutputFolder, pageName + ".svg");
 
@@ -30,7 +38,7 @@ internal class SvgExporter
         return new SvgDocument(pageName, XElement.Load(svgFile));
     }
 
-    internal void Save(SvgDocument document)
+    public void Save(SvgDocument document)
     {
         var svgFile = Path.Combine(myOutputFolder, document.Name + ".svg");
         File.WriteAllText(svgFile, document.Content.ToString());

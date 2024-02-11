@@ -1,9 +1,7 @@
-using System.Linq;
 using System.Xml.Linq;
 using ExportSVG.Adapters;
-using ExportSVG.IO;
 using ExportSVG.UseCases;
-using NUnit.Framework;
+using Moq;
 
 namespace ExportSVG.Tests;
 
@@ -70,7 +68,12 @@ public class SvgProcessorTests
     [Test]
     public void LinksShouldBeAddedForExistingPage()
     {
-        var svgProcessor = new SvgProcessor(["System", "Parser"], new SvgCaptionParser(), new SvgHyperlinkFormatter());
+        var workbook = new Mock<IDrawingWorkbook> { DefaultValue = DefaultValue.Mock };
+        workbook.Setup(x => x.ReadPages()).Returns(["System", "Parser"]);
+        var svgProcessor = new SvgProcessor(
+            new SvgCaptionParser(),
+            new SvgHyperlinkFormatter(),
+            workbook.Object);
 
         var doc = new SvgDocument("System", XElement.Parse(SvgDocument));
         svgProcessor.AddLinks(doc);

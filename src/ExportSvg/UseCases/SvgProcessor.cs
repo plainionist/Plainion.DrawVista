@@ -7,12 +7,16 @@ public class SvgProcessor
     private readonly IReadOnlyList<string> myPages;
     private readonly ISvgCaptionParser myParser;
     private readonly ISvgHyperlinkFormatter myFormatter;
+    private readonly IDrawingWorkbook myWorkbook;
 
-    public SvgProcessor(IReadOnlyList<string> pages, ISvgCaptionParser parser, ISvgHyperlinkFormatter formatter)
+    public SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter formatter,
+        IDrawingWorkbook workbook)
     {
-        myPages = pages;
         myParser = parser;
         myFormatter = formatter;
+        myWorkbook = workbook;
+
+        myPages = workbook.ReadPages();
     }
 
     private bool IsPageReference(string name) =>
@@ -39,5 +43,17 @@ public class SvgProcessor
         }
 
         doc.Content.Attribute("width").Value = "100%";
+    }
+
+    internal void Process()
+    {
+        for (int i = 0; i < myPages.Count; ++i)
+        {
+            var svgDocument = myWorkbook.Export(i, myPages[i]);
+
+            AddLinks(svgDocument);
+
+            myWorkbook.Save(svgDocument);
+        }
     }
 }
