@@ -1,15 +1,14 @@
 using System.Xml.Linq;
-using ExportSVG.Adapters;
 
 namespace ExportSVG.UseCases;
 
 public class SvgProcessor
 {
     private readonly IReadOnlyList<string> myPages;
-    private readonly SvgCaptionParser myParser;
-    private readonly SvgHyperlinkFormatter myFormatter;
+    private readonly ISvgCaptionParser myParser;
+    private readonly ISvgHyperlinkFormatter myFormatter;
 
-    public SvgProcessor(IReadOnlyList<string> pages, SvgCaptionParser parser, SvgHyperlinkFormatter formatter)
+    public SvgProcessor(IReadOnlyList<string> pages, ISvgCaptionParser parser, ISvgHyperlinkFormatter formatter)
     {
         myPages = pages;
         myParser = parser;
