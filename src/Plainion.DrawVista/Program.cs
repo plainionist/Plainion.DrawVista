@@ -32,20 +32,25 @@ if (!Directory.Exists(outputFolder))
     Directory.CreateDirectory(outputFolder);
 }
 
-app.MapPost("/upload", async (IFormFile file) =>
+app.MapPost("/upload", async (IFormFileCollection files) =>
 {
-    var tempFile = Path.GetTempFileName();
-    using (var stream = File.OpenWrite(tempFile))
+    foreach (var file in files)
     {
-        await file.CopyToAsync(stream);
+        Console.WriteLine($"IMPORT: {file.Name}");
+        
+        var tempFile = Path.GetTempFileName();
+        using (var stream = File.OpenWrite(tempFile))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        var svgProcessor = new SvgProcessor(
+            new SvgCaptionParser(),
+            new SvgHyperlinkFormatter());
+
+        var drawIoWorkbook = new DrawIOWorkbook(tempFile, outputFolder);
+        svgProcessor.Process(drawIoWorkbook);
     }
-
-    var svgProcessor = new SvgProcessor(
-        new SvgCaptionParser(),
-        new SvgHyperlinkFormatter());
-
-    var drawIoWorkbook = new DrawIOWorkbook(tempFile, outputFolder);
-    svgProcessor.Process(drawIoWorkbook);
 
     return "OK";
 })

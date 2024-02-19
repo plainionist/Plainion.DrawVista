@@ -28,7 +28,7 @@ export default {
       this.uploading = true
 
       const formData = new FormData()
-      this.items.forEach((item) => formData.append('file', item))
+      this.items.forEach((item) => formData.append(item.name, item))
       const headers = { 'Content-Type': 'multipart/form-data' }
 
       await API.post('/upload', formData, { headers })

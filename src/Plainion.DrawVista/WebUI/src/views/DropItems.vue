@@ -57,10 +57,10 @@ export default {
     onDragLeave() {
       this.isDragging = false
     },
-    onDrop(e) {
+    async onDrop(e) {
       e.preventDefault()
       this.isDragging = false
-      this.items = [...e.dataTransfer.files]
+      this.items = await this.getAllFiles(e.dataTransfer.items)
     },
     onChange() {
       this.items = [...this.$refs.file.files]
@@ -68,6 +68,32 @@ export default {
     remove(item) {
       const index = this.items.indexOf(item)
       this.items.splice(index, 1)
+    },
+    async getAllFiles(items) {
+      async function* iterateFiles(handle) {
+        if (handle.kind === 'file') {
+          yield await handle.getFile()
+        } else if (handle.kind === 'directory') {
+          for await (const [, value] of handle.entries()) {
+            yield* await iterateFiles(value)
+          }
+        }
+      }
+
+      const fileSystemEntries = await Promise.all(
+        [...items]
+          .filter((x) => x.kind === 'file')
+          .map(async (x) => await x.getAsFileSystemHandle())
+      )
+
+      const files = []
+
+      for (const entry of fileSystemEntries) {
+        for await (const file of iterateFiles(entry)) {
+          files.push(file)
+        }
+      }
+      return files
     }
   }
 }
