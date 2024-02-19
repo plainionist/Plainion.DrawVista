@@ -41,7 +41,6 @@ export default {
   },
   watch: {
     items() {
-      console.log(this.items)
       this.$emit('itemsSelected', this.items)
     }
   },

@@ -1,13 +1,11 @@
 <template>
   <div>
-    <button @click="submitFile">Upload</button>
+    <button @click="submit" :disabled="uploading">Upload</button>
     <br />
     <br />
-    <center>
-      <div style="width: 50%">
-        <drop-items @itemsSelected="onItemsSelected" />
-      </div>
-    </center>
+    <div class="center">
+      <drop-items @itemsSelected="onItemsSelected" />
+    </div>
   </div>
 </template>
 
@@ -17,16 +15,35 @@ import DropItems from './DropItems.vue'
 export default {
   name: 'UploadView',
   components: { DropItems },
+  data() {
+    return {
+      uploading: false
+    }
+  },
   methods: {
     onItemsSelected(items) {
       this.items = items
     },
-    submitFile() {
+    async submit() {
+      this.uploading = true
+
       const formData = new FormData()
-      this.items.forEach((file) => formData.append('file', file))
+      this.items.forEach((item) => formData.append('file', item))
       const headers = { 'Content-Type': 'multipart/form-data' }
-      API.post('/upload', formData, { headers })
+
+      await API.post('/upload', formData, { headers })
+
+      this.uploading = false
+
+      this.$router.push('/')
     }
   }
 }
 </script>
+
+<style scoped>
+.center {
+  margin: auto;
+  width: 50%;
+}
+</style>
