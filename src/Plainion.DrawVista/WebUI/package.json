@@ -42,7 +42,9 @@
       "parser": "@babel/eslint-parser"
     },
     "rules": {
-      "space-before-function-paren": "off"
+      "space-before-function-paren": "off",
+      "generator-star-spacing": "off",
+      "yield-star-spacing": "off"
     }
   },
   "prettier": {
