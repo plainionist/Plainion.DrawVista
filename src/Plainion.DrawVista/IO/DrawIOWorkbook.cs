@@ -11,36 +11,51 @@ public class DrawIOWorkbook : IDrawingWorkbook
         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
          "draw.io", "draw.io.exe");
 
-    private readonly string myDrawIOFile;
     private readonly string myOutputFolder;
 
-    public DrawIOWorkbook(string drawIOFile, string outputFolder)
+    public DrawIOWorkbook(string outputFolder)
     {
-        myDrawIOFile = drawIOFile;
         myOutputFolder = outputFolder;
     }
 
-    public IReadOnlyList<string> ReadPages()
+    private IReadOnlyList<string> ReadPages(string file)
     {
-        return XElement.Load(myDrawIOFile)
+        return XElement.Load(file)
             .Elements("diagram")
             .Select(x => x.Attribute("name").Value)
             .ToList();
     }
 
-    public SvgDocument Export(int pageIndex, string pageName)
+    private SvgDocument Export(string file, int pageIndex, string pageName)
     {
         var svgFile = Path.Combine(myOutputFolder, pageName + ".svg");
 
-        Process.Start(DrawIoExecutable, $"-x {myDrawIOFile} -o {svgFile} -p {pageIndex}")
+        Process.Start(DrawIoExecutable, $"-x {file} -o {svgFile} -p {pageIndex}")
             .WaitForExit();
 
         return new SvgDocument(pageName, XElement.Load(svgFile));
     }
 
-    public void Save(SvgDocument document)
+    public IReadOnlyCollection<SvgDocument> Load(Stream stream)
     {
-        var svgFile = Path.Combine(myOutputFolder, document.Name + ".svg");
-        File.WriteAllText(svgFile, document.Content.ToString());
+        var tempFile = Path.GetTempFileName();
+        try
+        {
+            using (var output = File.OpenWrite(tempFile))
+            {
+                stream.CopyTo(output);
+            }
+
+            return ReadPages(tempFile)
+                .Select((p, idx) => Export(tempFile, idx, p))
+                .ToList();
+        }
+        finally
+        {
+            if (File.Exists(tempFile))
+            {
+                File.Delete(tempFile);
+            }
+        }
     }
 }

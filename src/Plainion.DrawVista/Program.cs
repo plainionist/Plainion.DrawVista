@@ -8,8 +8,27 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
+var contentRootPath = Path.GetDirectoryName(typeof(SvgProcessor).Assembly.Location);
+
+var inputFolder = Path.Combine(contentRootPath, "input");
+if (!Directory.Exists(inputFolder))
+{
+    Directory.CreateDirectory(inputFolder);
+}
+
+var outputFolder = Path.Combine(contentRootPath, "store");
+if (!Directory.Exists(outputFolder))
+{
+    Directory.CreateDirectory(outputFolder);
+}
+
+builder.Services.AddSingleton<IDocumentStore>(new DocumentStore(outputFolder));
+builder.Services.AddSingleton<ISvgCaptionParser, SvgCaptionParser>();
+builder.Services.AddSingleton<ISvgHyperlinkFormatter, SvgHyperlinkFormatter>();
+builder.Services.AddSingleton<SvgProcessor>();
+
 var app = builder.Build();
-app.Environment.ContentRootPath = Path.GetDirectoryName(typeof(SvgProcessor).Assembly.Location);
+app.Environment.ContentRootPath = contentRootPath;
 
 if (app.Environment.IsDevelopment())
 {
@@ -26,60 +45,36 @@ app.UseCors(builder =>
     .AllowAnyMethod()
     .AllowCredentials());
 
-var outputFolder = Path.Combine(app.Environment.ContentRootPath, "store");
-if (!Directory.Exists(outputFolder))
-{
-    Directory.CreateDirectory(outputFolder);
-}
-
-app.MapPost("/upload", async (IFormFileCollection files) =>
+app.MapPost("/upload", (SvgProcessor processor, IFormFileCollection files) =>
 {
     foreach (var file in files)
     {
         Console.WriteLine($"IMPORT: {file.Name}");
 
-        var tempFile = Path.GetTempFileName();
-        try
-        {
-            using (var stream = File.OpenWrite(tempFile))
-            {
-                await file.CopyToAsync(stream);
-            }
+        var workbook = new DrawIOWorkbook(inputFolder);
 
-            var svgProcessor = new SvgProcessor(
-                new SvgCaptionParser(),
-                new SvgHyperlinkFormatter());
-
-            var drawIoWorkbook = new DrawIOWorkbook(tempFile, outputFolder);
-            svgProcessor.Process(drawIoWorkbook);
-        }
-        finally
-        {
-            if (File.Exists(tempFile))
-            {
-                File.Delete(tempFile);
-            }
-        }
+        using var stream = file.OpenReadStream();
+        var documents = workbook.Load(stream);
+        processor.Process(documents);
     }
 
     return "OK";
 })
 .DisableAntiforgery();
 
-app.MapGet("/svg", async (HttpContext context, string pageName) =>
+app.MapGet("/svg", async (HttpContext context, IDocumentStore store, string pageName) =>
 {
-    var fileName = Path.Combine(outputFolder, pageName + ".svg");
     context.Response.ContentType = "image/svg+xml";
-    await context.Response.SendFileAsync(fileName);
+    await context.Response.SendFileAsync(store.GetFileName(pageName));
 });
 
-app.MapGet("/allFiles", () =>
+app.MapGet("/allFiles", (IDocumentStore store) =>
 {
-    return Directory.GetFiles(outputFolder, "*.svg")
-        .Select(file => new
+    return store.GetAllFiles()
+        .Select(doc => new
         {
-            id = Path.GetFileNameWithoutExtension(file).ToLower(),
-            content = File.ReadAllText(file)
+            id = doc.Name.ToLower(),
+            content = doc.Content
         })
         .ToList();
 });
