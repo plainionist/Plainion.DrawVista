@@ -6,7 +6,7 @@ public class DocumentStore(string RootFolder) : IDocumentStore
 {
     public IReadOnlyCollection<RawDocument> GetAllFiles() =>
         Directory.GetFiles(RootFolder, "*.svg")
-            .Select(f=>new RawDocument(Path.GetFileNameWithoutExtension(f), File.ReadAllText(f)))
+            .Select(f => new RawDocument(Path.GetFileNameWithoutExtension(f), File.ReadAllText(f)))
             .ToList();
 
     public string GetFileName(string pageName) =>
@@ -16,5 +16,13 @@ public class DocumentStore(string RootFolder) : IDocumentStore
     {
         var svgFile = Path.Combine(RootFolder, document.Name + ".svg");
         File.WriteAllText(svgFile, document.Content.ToString());
+    }
+
+    public void Clear()
+    {
+        foreach (var file in Directory.GetFiles(RootFolder))
+        {
+            File.Delete(file);
+        }
     }
 }

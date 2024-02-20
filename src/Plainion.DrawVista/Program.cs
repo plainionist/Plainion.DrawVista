@@ -81,4 +81,11 @@ app.MapGet("/allFiles", (IDocumentStore store) =>
         .ToList();
 });
 
+app.MapPost("/clear", (IDocumentStore store) =>
+{
+    store.Clear();
+
+    return "OK";
+});
+
 app.Run();

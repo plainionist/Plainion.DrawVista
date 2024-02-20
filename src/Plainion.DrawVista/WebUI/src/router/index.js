@@ -12,9 +12,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "upload" */ '../views/UploadView.vue')
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/clear',
+    name: 'clear',
+    component: () => import(/* webpackChunkName: "clear" */ '../views/ClearView.vue')
   }
 ]
 
