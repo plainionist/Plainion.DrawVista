@@ -5,18 +5,11 @@ using Plainion.DrawVista.UseCases;
 
 namespace Plainion.DrawVista.IO;
 
-public class DrawIOWorkbook : IDrawingWorkbook
+public class DrawIOWorkbook(string RootFolder, string Name) : IDrawingWorkbook
 {
     private readonly string DrawIoExecutable = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
          "draw.io", "draw.io.exe");
-
-    private readonly string myOutputFolder;
-
-    public DrawIOWorkbook(string outputFolder)
-    {
-        myOutputFolder = outputFolder;
-    }
 
     private IReadOnlyList<string> ReadPages(string file)
     {
@@ -28,7 +21,7 @@ public class DrawIOWorkbook : IDrawingWorkbook
 
     private SvgDocument Export(string file, int pageIndex, string pageName)
     {
-        var svgFile = Path.Combine(myOutputFolder, pageName + ".svg");
+        var svgFile = Path.Combine(RootFolder, pageName + ".svg");
 
         Process.Start(DrawIoExecutable, $"-x {file} -o {svgFile} -p {pageIndex}")
             .WaitForExit();
@@ -38,6 +31,8 @@ public class DrawIOWorkbook : IDrawingWorkbook
 
     public IReadOnlyCollection<SvgDocument> Load(Stream stream)
     {
+        Console.WriteLine($"DrawIOPngWorkbook.Load({Name})");
+
         var tempFile = Path.GetTempFileName();
         try
         {

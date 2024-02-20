@@ -23,6 +23,7 @@ if (!Directory.Exists(outputFolder))
 }
 
 builder.Services.AddSingleton<IDocumentStore>(new DocumentStore(outputFolder));
+builder.Services.AddSingleton(new DrawingWorkbookFactory(inputFolder));
 builder.Services.AddSingleton<ISvgCaptionParser, SvgCaptionParser>();
 builder.Services.AddSingleton<ISvgHyperlinkFormatter, SvgHyperlinkFormatter>();
 builder.Services.AddSingleton<SvgProcessor>();
@@ -45,18 +46,20 @@ app.UseCors(builder =>
     .AllowAnyMethod()
     .AllowCredentials());
 
-app.MapPost("/upload", (SvgProcessor processor, IFormFileCollection files) =>
+app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, IFormFileCollection files) =>
 {
+    var allDocuments = new List<SvgDocument>();
+
     foreach (var file in files)
     {
-        Console.WriteLine($"IMPORT: {file.Name}");
-
-        var workbook = new DrawIOWorkbook(inputFolder);
+        var workbook = factory.Create(file.Name);
 
         using var stream = file.OpenReadStream();
         var documents = workbook.Load(stream);
-        processor.Process(documents);
+        allDocuments.AddRange(documents);
     }
+
+    processor.Process(allDocuments);
 
     return "OK";
 })
