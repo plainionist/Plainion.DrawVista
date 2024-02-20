@@ -7,7 +7,7 @@ public class DrawIOWorkbook(string RootFolder, string Name) : IDrawingWorkbook
 {
     public IReadOnlyCollection<SvgDocument> Load(Stream stream)
     {
-        Console.WriteLine($"DrawIOPngWorkbook.Load({Name})");
+        Console.WriteLine($"DrawIOWorkbook.Load({Name})");
 
         var model = ExtractModel(stream);
 
