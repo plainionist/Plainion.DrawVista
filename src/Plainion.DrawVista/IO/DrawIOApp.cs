@@ -29,6 +29,7 @@ internal class DrawIOApp(DrawIOModel Model) : IDisposable
 
         // extension ".drawio" is important so that draw.io.exe detects file contents properly
         myFile = Path.GetTempFileName() + ".drawio";
+        
         Model.WriteTo(myFile);
     }
 

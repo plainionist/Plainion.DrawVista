@@ -66,6 +66,7 @@ app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, 
 })
 .DisableAntiforgery();
 
+// TODO: we should use IDocumentStore here in some later refactoring step
 app.MapGet("/svg", async (HttpContext context, string pageName) =>
 {
     var fileName = Path.Combine(outputFolder, pageName + ".svg");
@@ -73,6 +74,7 @@ app.MapGet("/svg", async (HttpContext context, string pageName) =>
     await context.Response.SendFileAsync(fileName);
 });
 
+// TODO: we should use IDocumentStore here in some later refactoring step
 app.MapGet("/allFiles", () =>
 {
     return Directory.GetFiles(outputFolder, "*.svg")
