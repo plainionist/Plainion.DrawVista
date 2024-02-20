@@ -8,14 +8,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
-var contentRootPath = Path.GetDirectoryName(typeof(SvgProcessor).Assembly.Location); ;
+var appData = Path.Combine(Environment.GetEnvironmentVariable("ALLUSERSPROFILE"), "Plainion.DrawVista");
 
-var inputFolder = Path.Combine(contentRootPath, "input");
+var inputFolder = Path.Combine(appData, "input");
 if (!Directory.Exists(inputFolder))
 {
     Directory.CreateDirectory(inputFolder);
 }
-var outputFolder = Path.Combine(contentRootPath, "store");
+
+var outputFolder = Path.Combine(appData, "store");
 if (!Directory.Exists(outputFolder))
 {
     Directory.CreateDirectory(outputFolder);
@@ -28,7 +29,7 @@ builder.Services.AddSingleton<ISvgHyperlinkFormatter, SvgHyperlinkFormatter>();
 builder.Services.AddSingleton<SvgProcessor>();
 
 var app = builder.Build();
-app.Environment.ContentRootPath = contentRootPath;
+app.Environment.ContentRootPath = Path.GetDirectoryName(typeof(SvgProcessor).Assembly.Location);
 
 if (app.Environment.IsDevelopment())
 {
@@ -45,7 +46,6 @@ app.UseCors(builder =>
     .AllowAnyMethod()
     .AllowCredentials());
 
-// concept: one upload considered as one scope so one workbook
 app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, IFormFileCollection files) =>
 {
     var allDocuments = new List<SvgDocument>();
@@ -55,7 +55,7 @@ app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, 
         using var stream = file.OpenReadStream();
 
         var workbook = factory.Create(file.Name);
-        var documents = workbook.Load(file.Name, stream);
+        var documents = workbook.Load( stream);
 
         allDocuments.AddRange(documents);
     }
@@ -66,24 +66,28 @@ app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, 
 })
 .DisableAntiforgery();
 
-// TODO: we should use IDocumentStore here in some later refactoring step
-app.MapGet("/svg", async (HttpContext context, string pageName) =>
+app.MapGet("/svg", async (HttpContext context, IDocumentStore store, string pageName) =>
 {
-    var fileName = Path.Combine(outputFolder, pageName + ".svg");
     context.Response.ContentType = "image/svg+xml";
-    await context.Response.SendFileAsync(fileName);
+    await context.Response.SendFileAsync(store.GetFileName(pageName));
 });
 
-// TODO: we should use IDocumentStore here in some later refactoring step
-app.MapGet("/allFiles", () =>
+app.MapGet("/allFiles", (IDocumentStore store) =>
 {
-    return Directory.GetFiles(outputFolder, "*.svg")
-        .Select(file => new
+    return store.GetAllFiles()
+        .Select(doc => new
         {
-            id = Path.GetFileNameWithoutExtension(file).ToLower(),
-            content = File.ReadAllText(file)
+            id = doc.Name.ToLower(),
+            content = doc.Content
         })
         .ToList();
+});
+
+app.MapPost("/clear", (IDocumentStore store) =>
+{
+    store.Clear();
+
+    return "OK";
 });
 
 app.Run();

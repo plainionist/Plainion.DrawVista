@@ -10,9 +10,9 @@ internal class DrawIOApp(DrawIOModel Model) : IDisposable
 
     private string myFile;
 
-    internal void ExtractSvg(int pageIndex, string svgFile)
+    public void ExtractSvg(int pageIndex, string svgFile)
     {
-        SafeModelOnDemand(Model);
+        SaveModelOnDemand();
 
         Console.WriteLine($"draw.io.exe -x {myFile} -o {svgFile} -p {pageIndex}");
 
@@ -20,7 +20,7 @@ internal class DrawIOApp(DrawIOModel Model) : IDisposable
             .WaitForExit();
     }
 
-    private void SafeModelOnDemand(DrawIOModel Model)
+    private void SaveModelOnDemand()
     {
         if (myFile != null)
         {

@@ -68,18 +68,14 @@ public class SvgProcessorTests
     [Test]
     public void LinksShouldBeAddedForExistingPage()
     {
-        var documentStore = new Mock<IDocumentStore> { DefaultValue = DefaultValue.Mock };
-        var svgProcessor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), documentStore.Object);
+        var systemPage = new SvgDocument("System", XElement.Parse(SvgDocument));
+        var parserPage = new SvgDocument("Parser", new XElement("doc", new XAttribute("width", "100%")));
 
-        var systemDocument = new SvgDocument("System", XElement.Parse(SvgDocument));
-        var documents = new List<SvgDocument> {
-            systemDocument,
-            new("Parser", new XElement("doc", new XAttribute("width","100%")))
-        };
+        var svgProcessor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), Mock.Of<IDocumentStore>());
 
-        svgProcessor.Process(documents);
+        svgProcessor.Process([systemPage, parserPage]);
 
-        var parserElement = systemDocument.Content.Descendants()
+        var parserElement = systemPage.Content.Descendants()
             .Single(x => x.Elements().Count() == 0 && x.Name.LocalName == "div" && x.Value == "Parser");
         Assert.That(parserElement.Attribute("onclick"), Is.Not.Null);
     }

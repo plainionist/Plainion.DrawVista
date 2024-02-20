@@ -4,15 +4,15 @@ using Plainion.DrawVista.UseCases;
 
 namespace Plainion.DrawVista.IO;
 
-public class DrawIOPngWorkbook(string RootFolder) : IDrawingWorkbook
+public class DrawIOPngWorkbook(string RootFolder, string Name) : IDrawingWorkbook
 {
-    public IReadOnlyCollection<SvgDocument> Load(string name, Stream stream)
+    public IReadOnlyCollection<SvgDocument> Load(Stream stream)
     {
-        Console.WriteLine($"DrawIOPngWorkbook.Load({name})");
+        Console.WriteLine($"DrawIOPngWorkbook.Load({Name})");
 
         var model = ExtractModel(stream);
 
-        return [ExportSvg(name, model)];
+        return [ExportSvg(Name, model)];
     }
 
     private static DrawIOModel ExtractModel(Stream stream)

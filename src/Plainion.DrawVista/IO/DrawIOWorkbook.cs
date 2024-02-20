@@ -3,11 +3,11 @@ using Plainion.DrawVista.UseCases;
 
 namespace Plainion.DrawVista.IO;
 
-public class DrawIOWorkbook(string RootFolder) : IDrawingWorkbook
+public class DrawIOWorkbook(string RootFolder, string Name) : IDrawingWorkbook
 {
-    public IReadOnlyCollection<SvgDocument> Load(string name, Stream stream)
+    public IReadOnlyCollection<SvgDocument> Load(Stream stream)
     {
-        Console.WriteLine($"DrawIOWorkbook.Load({name})");
+        Console.WriteLine($"DrawIOPngWorkbook.Load({Name})");
 
         var model = ExtractModel(stream);
 

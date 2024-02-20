@@ -2,7 +2,7 @@
   <nav class="row header">
     <router-link to="/">Home</router-link> |
     <router-link to="/upload">Upload</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/clear">Clear</router-link>
   </nav>
   <div style="padding: 10px" class="row content">
     <router-view/>

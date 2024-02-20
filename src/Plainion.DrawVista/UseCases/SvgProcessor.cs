@@ -7,7 +7,7 @@ public class SvgProcessor
     private readonly ISvgCaptionParser myParser;
     private readonly ISvgHyperlinkFormatter myFormatter;
     private readonly IDocumentStore myStore;
-    
+
     public SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter formatter, IDocumentStore store)
     {
         myParser = parser;
