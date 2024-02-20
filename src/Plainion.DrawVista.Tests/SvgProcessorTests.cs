@@ -68,18 +68,18 @@ public class SvgProcessorTests
     [Test]
     public void LinksShouldBeAddedForExistingPage()
     {
-        var workbook = new Mock<IDrawingWorkbook> { DefaultValue = DefaultValue.Mock };
-        workbook.Setup(x => x.ReadPages()).Returns(["System", "Parser"]);
-        var systemPage = new SvgDocument("System", XElement.Parse(SvgDocument));
-        workbook.Setup(x => x.Export(0, It.IsAny<string>())).Returns(systemPage);
-        var parserPage = new SvgDocument("Parser", new XElement("doc"));
-        workbook.Setup(x => x.Export(1, It.IsAny<string>())).Returns(parserPage);
+        var documentStore = new Mock<IDocumentStore> { DefaultValue = DefaultValue.Mock };
+        var svgProcessor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), documentStore.Object);
 
-        var svgProcessor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter());
+        var systemDocument = new SvgDocument("System", XElement.Parse(SvgDocument));
+        var documents = new List<SvgDocument> {
+            systemDocument,
+            new("Parser", new XElement("doc", new XAttribute("width","100%")))
+        };
 
-        svgProcessor.Process(workbook.Object);
+        svgProcessor.Process(documents);
 
-        var parserElement = systemPage.Content.Descendants()
+        var parserElement = systemDocument.Content.Descendants()
             .Single(x => x.Elements().Count() == 0 && x.Name.LocalName == "div" && x.Value == "Parser");
         Assert.That(parserElement.Attribute("onclick"), Is.Not.Null);
     }

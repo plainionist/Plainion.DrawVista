@@ -8,8 +8,27 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
+var contentRootPath = Path.GetDirectoryName(typeof(SvgProcessor).Assembly.Location); ;
+
+var inputFolder = Path.Combine(contentRootPath, "input");
+if (!Directory.Exists(inputFolder))
+{
+    Directory.CreateDirectory(inputFolder);
+}
+var outputFolder = Path.Combine(contentRootPath, "store");
+if (!Directory.Exists(outputFolder))
+{
+    Directory.CreateDirectory(outputFolder);
+}
+
+builder.Services.AddSingleton<IDocumentStore>(new DocumentStore(outputFolder));
+builder.Services.AddSingleton(new DrawingWorkbookFactory(inputFolder));
+builder.Services.AddSingleton<ISvgCaptionParser, SvgCaptionParser>();
+builder.Services.AddSingleton<ISvgHyperlinkFormatter, SvgHyperlinkFormatter>();
+builder.Services.AddSingleton<SvgProcessor>();
+
 var app = builder.Build();
-app.Environment.ContentRootPath = Path.GetDirectoryName(typeof(SvgProcessor).Assembly.Location);
+app.Environment.ContentRootPath = contentRootPath;
 
 if (app.Environment.IsDevelopment())
 {
@@ -26,31 +45,22 @@ app.UseCors(builder =>
     .AllowAnyMethod()
     .AllowCredentials());
 
-var outputFolder = Path.Combine(app.Environment.ContentRootPath, "store");
-if (!Directory.Exists(outputFolder))
+// concept: one upload considered as one scope so one workbook
+app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, IFormFileCollection files) =>
 {
-    Directory.CreateDirectory(outputFolder);
-}
+    var allDocuments = new List<SvgDocument>();
 
-app.MapPost("/upload", async (IFormFileCollection files) =>
-{
     foreach (var file in files)
     {
-        Console.WriteLine($"IMPORT: {file.Name}");
-        
-        var tempFile = Path.GetTempFileName();
-        using (var stream = File.OpenWrite(tempFile))
-        {
-            await file.CopyToAsync(stream);
-        }
+        using var stream = file.OpenReadStream();
 
-        var svgProcessor = new SvgProcessor(
-            new SvgCaptionParser(),
-            new SvgHyperlinkFormatter());
+        var workbook = factory.Create(file.Name);
+        var documents = workbook.Load(file.Name, stream);
 
-        var drawIoWorkbook = new DrawIOWorkbook(tempFile, outputFolder);
-        svgProcessor.Process(drawIoWorkbook);
+        allDocuments.AddRange(documents);
     }
+
+    processor.Process(allDocuments);
 
     return "OK";
 })

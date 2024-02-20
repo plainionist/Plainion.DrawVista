@@ -1,46 +1,51 @@
-
-using System.Diagnostics;
 using System.Xml.Linq;
 using Plainion.DrawVista.UseCases;
 
 namespace Plainion.DrawVista.IO;
 
-public class DrawIOWorkbook : IDrawingWorkbook
+public class DrawIOWorkbook(string RootFolder) : IDrawingWorkbook
 {
-    private readonly string DrawIoExecutable = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-         "draw.io", "draw.io.exe");
-
-    private readonly string myDrawIOFile;
-    private readonly string myOutputFolder;
-
-    public DrawIOWorkbook(string drawIOFile, string outputFolder)
+    public IReadOnlyCollection<SvgDocument> Load(string name, Stream stream)
     {
-        myDrawIOFile = drawIOFile;
-        myOutputFolder = outputFolder;
+        Console.WriteLine($"DrawIOWorkbook.Load({name})");
+
+        using var reader = new StreamReader(stream);
+
+        var content = reader.ReadToEnd();
+
+        // this file is needed temporarily only for the export of SVG
+        var file = Path.Combine(RootFolder, name);
+
+        try
+        {
+            File.WriteAllText(file, content);
+
+            return GetPageNames(content)
+                .Select((name, idx) => Export(file, idx, name))
+                .ToList();
+        }
+        finally
+        {
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
+        }
     }
 
-    public IReadOnlyList<string> ReadPages()
-    {
-        return XElement.Load(myDrawIOFile)
+    private static List<string> GetPageNames(string content) =>
+        XElement.Parse(content)
             .Elements("diagram")
             .Select(x => x.Attribute("name").Value)
             .ToList();
-    }
 
-    public SvgDocument Export(int pageIndex, string pageName)
+    private SvgDocument Export(string file, int idx, string name)
     {
-        var svgFile = Path.Combine(myOutputFolder, pageName + ".svg");
+        // we want to keep this file
+        var svgFile = Path.Combine(RootFolder, name + ".svg");
 
-        Process.Start(DrawIoExecutable, $"-x {myDrawIOFile} -o {svgFile} -p {pageIndex}")
-            .WaitForExit();
+        DrawIOApp.ExtractSvg(file, svgFile, idx);
 
-        return new SvgDocument(pageName, XElement.Load(svgFile));
-    }
-
-    public void Save(SvgDocument document)
-    {
-        var svgFile = Path.Combine(myOutputFolder, document.Name + ".svg");
-        File.WriteAllText(svgFile, document.Content.ToString());
+        return new SvgDocument(name, XElement.Load(svgFile));
     }
 }

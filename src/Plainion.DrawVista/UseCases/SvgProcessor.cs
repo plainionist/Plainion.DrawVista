@@ -6,11 +6,13 @@ public class SvgProcessor
 {
     private readonly ISvgCaptionParser myParser;
     private readonly ISvgHyperlinkFormatter myFormatter;
-
-    public SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter formatter)
+    private readonly IDocumentStore myStore;
+    
+    public SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter formatter, IDocumentStore store)
     {
         myParser = parser;
         myFormatter = formatter;
+        myStore = store;
     }
 
     private void AddLinks(IReadOnlyCollection<string> pages, SvgDocument doc)
@@ -39,16 +41,15 @@ public class SvgProcessor
         doc.Content.Attribute("width").Value = "100%";
     }
 
-    public void Process(IDrawingWorkbook workbook)
+    public void Process(IReadOnlyCollection<SvgDocument> documents)
     {
-        var pages = workbook.ReadPages();
-        for (int i = 0; i < pages.Count; ++i)
+        var pageNames = documents.Select(x => x.Name).ToList();
+
+        foreach (var doc in documents)
         {
-            var svgDocument = workbook.Export(i, pages[i]);
+            AddLinks(pageNames, doc);
 
-            AddLinks(pages, svgDocument);
-
-            workbook.Save(svgDocument);
+            myStore.Save(doc);
         }
     }
 }
