@@ -8,15 +8,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
-var contentRootPath = Path.GetDirectoryName(typeof(SvgProcessor).Assembly.Location);
-
-var inputFolder = Path.Combine(contentRootPath, "input");
+var appData = Path.Combine(Environment.GetEnvironmentVariable("ALLUSERSPROFILE"), "Plainion.DrawVista");
+var inputFolder = Path.Combine(appData, "input");
 if (!Directory.Exists(inputFolder))
 {
     Directory.CreateDirectory(inputFolder);
 }
 
-var outputFolder = Path.Combine(contentRootPath, "store");
+var outputFolder = Path.Combine(appData, "store");
 if (!Directory.Exists(outputFolder))
 {
     Directory.CreateDirectory(outputFolder);
@@ -29,7 +28,7 @@ builder.Services.AddSingleton<ISvgHyperlinkFormatter, SvgHyperlinkFormatter>();
 builder.Services.AddSingleton<SvgProcessor>();
 
 var app = builder.Build();
-app.Environment.ContentRootPath = contentRootPath;
+app.Environment.ContentRootPath = Path.GetDirectoryName(typeof(SvgProcessor).Assembly.Location);
 
 if (app.Environment.IsDevelopment())
 {
