@@ -2,15 +2,15 @@ namespace Plainion.DrawVista.IO;
 
 public class DrawingWorkbookFactory(string RootFolder)
 {
-    public IDrawingWorkbook Create(string fileName)
+    public IDrawingWorkbook Create(string name)
     {
-        if (Path.GetExtension(fileName).Equals(".png", StringComparison.OrdinalIgnoreCase))
+        if (Path.GetExtension(name).Equals(".png", StringComparison.OrdinalIgnoreCase))
         {
-            return new DrawIOPngWorkbook(RootFolder);
+            return new DrawIOPngWorkbook(RootFolder, name);
         }
         else
         {
-            return new DrawIOWorkbook(RootFolder);
+            return new DrawIOWorkbook(RootFolder, name);
         }
     }
 }

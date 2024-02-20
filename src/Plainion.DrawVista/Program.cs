@@ -55,7 +55,7 @@ app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, 
         using var stream = file.OpenReadStream();
 
         var workbook = factory.Create(file.Name);
-        var documents = workbook.Load(file.Name, stream);
+        var documents = workbook.Load(stream);
 
         allDocuments.AddRange(documents);
     }
