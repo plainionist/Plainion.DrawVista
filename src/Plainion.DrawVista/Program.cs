@@ -37,19 +37,29 @@ app.MapPost("/upload", async (IFormFileCollection files) =>
     foreach (var file in files)
     {
         Console.WriteLine($"IMPORT: {file.Name}");
-        
+
         var tempFile = Path.GetTempFileName();
-        using (var stream = File.OpenWrite(tempFile))
+        try
         {
-            await file.CopyToAsync(stream);
+            using (var stream = File.OpenWrite(tempFile))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var svgProcessor = new SvgProcessor(
+                new SvgCaptionParser(),
+                new SvgHyperlinkFormatter());
+
+            var drawIoWorkbook = new DrawIOWorkbook(tempFile, outputFolder);
+            svgProcessor.Process(drawIoWorkbook);
         }
-
-        var svgProcessor = new SvgProcessor(
-            new SvgCaptionParser(),
-            new SvgHyperlinkFormatter());
-
-        var drawIoWorkbook = new DrawIOWorkbook(tempFile, outputFolder);
-        svgProcessor.Process(drawIoWorkbook);
+        finally
+        {
+            if (File.Exists(tempFile))
+            {
+                File.Delete(tempFile);
+            }
+        }
     }
 
     return "OK";
