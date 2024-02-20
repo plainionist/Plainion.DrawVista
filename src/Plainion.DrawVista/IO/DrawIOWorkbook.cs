@@ -7,50 +7,31 @@ namespace Plainion.DrawVista.IO;
 
 public class DrawIOWorkbook(string RootFolder, string Name) : IDrawingWorkbook
 {
-    private readonly string DrawIoExecutable = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-         "draw.io", "draw.io.exe");
-
-    private IReadOnlyList<string> ReadPages(string file)
-    {
-        return XElement.Load(file)
-            .Elements("diagram")
-            .Select(x => x.Attribute("name").Value)
-            .ToList();
-    }
-
-    private SvgDocument Export(string file, int pageIndex, string pageName)
-    {
-        var svgFile = Path.Combine(RootFolder, pageName + ".svg");
-
-        Process.Start(DrawIoExecutable, $"-x {file} -o {svgFile} -p {pageIndex}")
-            .WaitForExit();
-
-        return new SvgDocument(pageName, XElement.Load(svgFile));
-    }
-
     public IReadOnlyCollection<SvgDocument> Load(Stream stream)
     {
         Console.WriteLine($"DrawIOPngWorkbook.Load({Name})");
 
-        var tempFile = Path.GetTempFileName();
-        try
-        {
-            using (var output = File.OpenWrite(tempFile))
-            {
-                stream.CopyTo(output);
-            }
+        var model = ExtractModel(stream);
 
-            return ReadPages(tempFile)
-                .Select((p, idx) => Export(tempFile, idx, p))
-                .ToList();
-        }
-        finally
-        {
-            if (File.Exists(tempFile))
-            {
-                File.Delete(tempFile);
-            }
-        }
+        using var app = new DrawIOApp(model);
+
+        return model.GetPageNames()
+            .Select((p, idx) => ExportSvg(app, idx, p))
+            .ToList();
+    }
+
+    private DrawIOModel ExtractModel(Stream stream)
+    {
+        using var reader = new StreamReader(stream);
+        return new DrawIOModel(reader.ReadToEnd());
+    }
+
+    private SvgDocument ExportSvg(DrawIOApp app, int pageIndex, string pageName)
+    {
+        var svgFile = Path.Combine(RootFolder, pageName + ".svg");
+
+        app.ExtractSvg(pageIndex,svgFile);
+
+        return new SvgDocument(pageName, XElement.Load(svgFile));
     }
 }
