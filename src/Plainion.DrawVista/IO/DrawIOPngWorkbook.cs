@@ -10,28 +10,23 @@ public class DrawIOPngWorkbook(string RootFolder) : IDrawingWorkbook
     {
         Console.WriteLine($"DrawIOPngWorkbook.Load({name})");
 
-        var content = ExtractModel(stream);
+        var model = ExtractModel(stream);
 
-        return [Export(name, content)];
+        return [ExportSvg(name, model)];
     }
 
-    private static string ExtractModel(Stream stream)
+    private static DrawIOModel ExtractModel(Stream stream)
     {
         var tag = MetadataExtractor.ImageMetadataReader.ReadMetadata(stream)
             .SelectMany(x => x.Tags)
             .Where(x => x.DirectoryName == "PNG-tEXt" && x.Name == "Textual Data")
             .SingleOrDefault();
 
-        return HttpUtility.UrlDecode(tag.Description).Substring("mxfile: ".Length);
+        var xml = HttpUtility.UrlDecode(tag.Description).Substring("mxfile: ".Length);
+        return new DrawIOModel(xml);
     }
 
-    private static List<string> GetPageNames(string content) =>
-        XElement.Parse(content)
-            .Elements("diagram")
-            .Select(x => x.Attribute("name").Value)
-            .ToList();
-
-    private SvgDocument Export(string name, string content)
+    private SvgDocument ExportSvg(string name, DrawIOModel model)
     {
         var pageName = Path.GetFileNameWithoutExtension(name);
         if (pageName.EndsWith(".drawio", StringComparison.OrdinalIgnoreCase))
@@ -39,33 +34,18 @@ public class DrawIOPngWorkbook(string RootFolder) : IDrawingWorkbook
             pageName = Path.GetFileNameWithoutExtension(pageName);
         }
 
-        // this file is needed temporarily only for the export of SVG
-        // extension ".drawio" is important so that draw.io.exe detects file contents properly
-        var file = Path.Combine(RootFolder, pageName + ".drawio");
-        try
+        var svgFile = Path.Combine(RootFolder, pageName + ".svg");
+
+        var pageIndex = model.GetPageNames().IndexOf(pageName);
+        if (pageIndex == -1)
         {
-            File.WriteAllText(file, content);
-
-            // we want to keep this file
-            var svgFile = Path.Combine(RootFolder, pageName + ".svg");
-
-            var pageIndex = GetPageNames(content).IndexOf(pageName);
-            if (pageIndex == -1)
-            {
-                // TODO: should rather inform the user
-                pageIndex = 0;
-            }
-
-            DrawIOApp.ExtractSvg(file, svgFile, pageIndex);
-
-            return new SvgDocument(pageName, XElement.Load(svgFile));
+            // TODO: should rather inform the user
+            pageIndex = 0;
         }
-        finally
-        {
-            if (File.Exists(file))
-            {
-                File.Delete(file);
-            }
-        }
+
+        using var app = new DrawIOApp(model);
+        app.ExtractSvg(pageIndex, svgFile);
+
+        return new SvgDocument(pageName, XElement.Load(svgFile));
     }
 }

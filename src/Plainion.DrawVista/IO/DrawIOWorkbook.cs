@@ -9,42 +9,26 @@ public class DrawIOWorkbook(string RootFolder) : IDrawingWorkbook
     {
         Console.WriteLine($"DrawIOWorkbook.Load({name})");
 
-        using var reader = new StreamReader(stream);
+        var model = ExtractModel(stream);
 
-        var content = reader.ReadToEnd();
+        using var app = new DrawIOApp(model);
 
-        // this file is needed temporarily only for the export of SVG
-        var file = Path.Combine(RootFolder, name);
-
-        try
-        {
-            File.WriteAllText(file, content);
-
-            return GetPageNames(content)
-                .Select((name, idx) => Export(file, idx, name))
-                .ToList();
-        }
-        finally
-        {
-            if (File.Exists(file))
-            {
-                File.Delete(file);
-            }
-        }
+        return model.GetPageNames()
+            .Select((name, idx) => ExportSvg(app, idx, name))
+            .ToList();
     }
 
-    private static List<string> GetPageNames(string content) =>
-        XElement.Parse(content)
-            .Elements("diagram")
-            .Select(x => x.Attribute("name").Value)
-            .ToList();
-
-    private SvgDocument Export(string file, int idx, string name)
+    private static DrawIOModel ExtractModel(Stream stream)
     {
-        // we want to keep this file
+        using var reader = new StreamReader(stream);
+        return new DrawIOModel(reader.ReadToEnd());
+    }
+
+    private SvgDocument ExportSvg(DrawIOApp app, int idx, string name)
+    {
         var svgFile = Path.Combine(RootFolder, name + ".svg");
 
-        DrawIOApp.ExtractSvg(file, svgFile, idx);
+        app.ExtractSvg(idx, svgFile);
 
         return new SvgDocument(name, XElement.Load(svgFile));
     }
