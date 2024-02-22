@@ -2,7 +2,17 @@
 using Plainion.DrawVista.IO;
 using Plainion.DrawVista.UseCases;
 
+var port = 8088;
+if (args.Length > 0)
+{
+    if (args[0] == "-p")
+    {
+        port = Convert.ToInt32(args[1]);
+    }
+}
+
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls($"http://localhost:{port}");
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -55,7 +65,7 @@ app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, 
         using var stream = file.OpenReadStream();
 
         var workbook = factory.Create(file.Name);
-        var documents = workbook.Load( stream);
+        var documents = workbook.Load(stream);
 
         allDocuments.AddRange(documents);
     }
