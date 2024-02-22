@@ -2,7 +2,7 @@
 using Plainion.DrawVista.IO;
 using Plainion.DrawVista.UseCases;
 
-var port = 8088;
+var port = 5236;
 if (args.Length > 0)
 {
     if (args[0] == "-p")
@@ -12,7 +12,7 @@ if (args.Length > 0)
 }
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls($"http://localhost:{port}");
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
