@@ -1,13 +1,21 @@
 <template>
   <div class="box">
     <div style="text-align: left; margin-left: 50">
-      <b>Navigation: </b>
-      <span v-for="(step, idx) in history" :key="step">
+      <span style="font-weight: bold;">Pages: </span>
+      <span style="text-align: right;">
+        <select @change="onPageSelected" v-model="current">
+          <option v-for="page in pages" :key="page.id" :value="page">
+            {{ page.id }}
+          </option>
+        </select>
+      </span>
+      <span style="margin-left: 50px;font-weight: bold;">Track: </span>
+      <span v-for="(step, idx) in history" :key="step" >
         <span v-if="idx > 0">/</span>
         <span
           style="color: blue; text-decoration: underline; cursor: pointer"
           @click="goTo(step)"
-          >{{ step }}</span
+          >{{ step.id }}</span
         >
       </span>
     </div>
@@ -48,6 +56,10 @@ export default {
     }
   },
   methods: {
+    onPageSelected() {
+      this.history = []
+      this.updateSvg()
+    },
     goTo(step) {
       while ((this.current = this.history.pop()) !== step);
       this.updateSvg()
@@ -56,7 +68,8 @@ export default {
       if (!this.pages || this.pages.length === 0) {
         return
       }
-      const page = this.pages.find((x) => x.id === this.current)
+
+      const page = this.pages.find((x) => x.id === this.current.id)
 
       const parser = new DOMParser()
       const svgDoc = parser.parseFromString(page.content, 'image/svg+xml')
@@ -70,7 +83,7 @@ export default {
     },
     navigate(id) {
       this.history.push(this.current)
-      this.current = id.toLowerCase()
+      this.current = this.pages.find((x) => x.id.toLowerCase() === id.toLowerCase())
       this.updateSvg()
     }
   },
@@ -81,7 +94,7 @@ export default {
   async created() {
     const response = await API.get('/allFiles')
     this.pages = response.data
-    this.current = 'index'
+    this.current = this.pages.find((x) => x.id.toLowerCase() === 'index')
     this.updateSvg()
   }
 }
