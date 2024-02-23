@@ -62,6 +62,8 @@ app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, 
 
     foreach (var file in files)
     {
+        Console.WriteLine($"Processing '{file.Name}' ...");
+
         using var stream = file.OpenReadStream();
 
         var workbook = factory.Create(file.Name);
