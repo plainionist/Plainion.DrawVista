@@ -1,19 +1,6 @@
 <template>
-  <div
-    :class="dropZoneStyle"
-    @dragover="onDragOver"
-    @dragleave="onDragLeave"
-    @drop="onDrop"
-  >
-    <input
-      type="file"
-      multiple
-      name="file"
-      id="input"
-      class="hide-content"
-      @change="onChange"
-      ref="file"
-    />
+  <div :class="dropZoneStyle" @dragover="onDragOver" @dragleave="onDragLeave" @drop="onDrop">
+    <input type="file" multiple name="file" id="input" class="hide-content" @change="onChange" ref="file" />
 
     <label for="input" class="label">
       <div>Drop or <u>Click</u> to Upload!</div>
@@ -33,42 +20,7 @@
 <script>
 export default {
   name: 'DropItems',
-  data() {
-    return {
-      isDragging: false,
-      items: []
-    }
-  },
-  watch: {
-    items() {
-      this.$emit('itemsSelected', this.items)
-    }
-  },
-  computed: {
-    dropZoneStyle() {
-      return ['dropzone', this.isDragging ? 'dropzone-active' : '']
-    }
-  },
   methods: {
-    onDragOver(e) {
-      e.preventDefault()
-      this.isDragging = true
-    },
-    onDragLeave() {
-      this.isDragging = false
-    },
-    async onDrop(e) {
-      e.preventDefault()
-      this.isDragging = false
-      this.items = await this.getAllFiles(e.dataTransfer.items)
-    },
-    onChange() {
-      this.items = [...this.$refs.file.files]
-    },
-    remove(item) {
-      const index = this.items.indexOf(item)
-      this.items.splice(index, 1)
-    },
     async getAllFiles(items) {
       async function* iterateFiles(handle) {
         if (handle.kind === 'file') {
