@@ -6,7 +6,7 @@
       <div>Drop or <u>Click</u> to Upload!</div>
     </label>
 
-    <div v-if="item && items.length > 0" class="items-container">
+    <div v-if="items && items.length > 0" class="items-container">
       <div v-for="item in items" :key="item.name" class="item">
         <div>
           <a href="#" @click="remove(item)" class="remove-button">[X]</a>
