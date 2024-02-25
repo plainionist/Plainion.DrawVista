@@ -1,16 +1,16 @@
 <template>
   <div class="box">
     <div style="text-align: left; margin-left: 50">
-      <span style="font-weight: bold;">Pages: </span>
-      <span style="text-align: right;">
+      <span style="font-weight: bold">Pages: </span>
+      <span style="text-align: right">
         <select @change="onPageSelected" v-model="current">
           <option v-for="page in pages" :key="page.id" :value="page">
             {{ page.id }}
           </option>
         </select>
       </span>
-      <span style="margin-left: 50px;font-weight: bold;">Track: </span>
-      <span v-for="(step, idx) in history" :key="step" >
+      <span style="margin-left: 50px; font-weight: bold">Track: </span>
+      <span v-for="(step, idx) in history" :key="step">
         <span v-if="idx > 0">/</span>
         <span
           style="color: blue; text-decoration: underline; cursor: pointer"
@@ -65,7 +65,7 @@ export default {
       this.updateSvg()
     },
     updateSvg() {
-      if (!this.pages || this.pages.length === 0) {
+      if (!this.pages || this.pages.length === 0 || !this.current) {
         return
       }
 
@@ -83,7 +83,9 @@ export default {
     },
     navigate(id) {
       this.history.push(this.current)
-      this.current = this.pages.find((x) => x.id.toLowerCase() === id.toLowerCase())
+      this.current = this.pages.find(
+        (x) => x.id.toLowerCase() === id.toLowerCase()
+      )
       this.updateSvg()
     }
   },
