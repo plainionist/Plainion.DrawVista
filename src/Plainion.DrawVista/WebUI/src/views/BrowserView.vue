@@ -31,8 +31,7 @@
           :controlIconsEnabled="false"
           :fit="true"
           :center="true"
-          :minZoom="0.25"
-        >
+          :minZoom="0.25">
           <div v-html="svg"></div>
         </SvgPanZoom>
       </transition>
@@ -74,18 +73,16 @@ export default {
       const parser = new DOMParser()
       const svgDoc = parser.parseFromString(page.content, 'image/svg+xml')
       const svgElement = svgDoc.documentElement
-      svgElement.setAttribute(
-        'height',
-        this.$refs.svgContainer.offsetHeight - 30
-      )
+      svgElement.setAttribute('height', this.$refs.svgContainer.offsetHeight - 30)
 
       this.svg = svgElement.outerHTML
     },
     navigate(id) {
-      this.history.push(this.current)
-      this.current = this.pages.find(
-        (x) => x.id.toLowerCase() === id.toLowerCase()
-      )
+      if (this.current) {
+        this.history.push(this.current)
+      }
+
+      this.current = this.pages.find((x) => x.id.toLowerCase() === id.toLowerCase())
       this.updateSvg()
     }
   },
@@ -96,8 +93,8 @@ export default {
   async created() {
     const response = await API.get('/allFiles')
     this.pages = response.data
-    this.current = this.pages.find((x) => x.id.toLowerCase() === 'index')
-    this.updateSvg()
+
+    this.navigate('index')
   }
 }
 </script>
