@@ -63,7 +63,7 @@ public class SvgProcessor
 
         foreach (var doc in existingFiles.Select(SvgDocument.Create))
         {
-            myStore.Save(doc);
+            AddLinks(pageNames, doc);
         }
     }
 }
