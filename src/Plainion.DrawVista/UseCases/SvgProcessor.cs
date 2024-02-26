@@ -33,7 +33,13 @@ public class SvgProcessor
         {
             Console.WriteLine("Creating link for: " + name);
 
-            xml.Add(new XAttribute("onclick", $"window.hook.navigate('{name}')"));
+            var onClickAttr = xml.Attribute("onclick");
+            if (onClickAttr == null)
+            {
+                onClickAttr = new XAttribute("onclick", string.Empty);
+                xml.Add(onClickAttr);
+            }
+            onClickAttr.Value = $"window.hook.navigate('{name}')";
 
             myFormatter.ApplyStyle(xml);
         }
