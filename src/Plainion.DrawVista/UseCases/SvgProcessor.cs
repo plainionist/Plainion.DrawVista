@@ -15,6 +15,27 @@ public class SvgProcessor
         myStore = store;
     }
 
+    /// <summary>
+    /// Processes existing and newly uploaded documents.
+    /// </summary>
+    public void Process(IReadOnlyCollection<SvgDocument> documents)
+    {
+        var existingFiles = myStore.GetAllFiles()
+            .Where(x => !documents.Any(y => y.Name.Equals(x.Name, StringComparison.OrdinalIgnoreCase)))
+            .Select(SvgDocument.Create)
+            .ToList();
+
+        var knownPageNames = documents.Select(x => x.Name)
+            .Concat(existingFiles.Select(x => x.Name))
+            .ToList();
+
+        foreach (var doc in documents.Concat(existingFiles))
+        {
+            AddLinks(knownPageNames, doc);
+            myStore.Save(doc);
+        }
+    }
+
     private void AddLinks(IReadOnlyCollection<string> pages, SvgDocument doc)
     {
         bool IsPageReference(string name) =>
@@ -45,31 +66,5 @@ public class SvgProcessor
         }
 
         doc.Content.Attribute("width").Value = "100%";
-    }
-
-    /// <summary>
-    /// Processes existing and newly uploaded documents.
-    /// </summary>
-    public void Process(IReadOnlyCollection<SvgDocument> documents)
-    {
-        var existingFiles = myStore.GetAllFiles()
-            .Where(x => !documents.Any(y => y.Name.Equals(x.Name, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
-
-        var pageNames = documents.Select(x => x.Name)
-            .Concat(existingFiles.Select(x => x.Name))
-            .ToList();
-
-        foreach (var doc in documents)
-        {
-            AddLinks(pageNames, doc);
-
-            myStore.Save(doc);
-        }
-
-        foreach (var doc in existingFiles.Select(SvgDocument.Create))
-        {
-            AddLinks(pageNames, doc);
-        }
     }
 }
