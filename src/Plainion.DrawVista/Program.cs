@@ -1,4 +1,5 @@
-﻿using Plainion.DrawVista.Adapters;
+﻿using System.Diagnostics;
+using Plainion.DrawVista.Adapters;
 using Plainion.DrawVista.IO;
 using Plainion.DrawVista.UseCases;
 
@@ -56,8 +57,11 @@ app.UseCors(builder =>
     .AllowAnyMethod()
     .AllowCredentials());
 
-app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, IFormFileCollection files) =>
+app.MapPost("/upload", async (DrawingWorkbookFactory factory, SvgProcessor processor, IFormFileCollection files) =>
 {
+    var watch = new Stopwatch();
+    watch.Start();
+
     var allDocuments = new List<SvgDocument>();
 
     foreach (var file in files)
@@ -67,12 +71,15 @@ app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, 
         var workbook = factory.TryCreate(file.Name);
         if (workbook != null)
         {
-            var documents = workbook.Load(stream);
+            var documents = await workbook.LoadAsync(stream);
             allDocuments.AddRange(documents);
         }
     }
 
     processor.Process(allDocuments);
+
+    watch.Start();
+    Console.WriteLine($"Elapsed: {watch.Elapsed}");
 
     return "OK";
 })
