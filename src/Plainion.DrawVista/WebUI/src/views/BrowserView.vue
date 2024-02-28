@@ -9,15 +9,6 @@
           </option>
         </select>
       </span>
-      <span style="margin-left: 50px; font-weight: bold">Track: </span>
-      <span v-for="(step, idx) in history" :key="step">
-        <span v-if="idx > 0">/</span>
-        <span
-          style="color: blue; text-decoration: underline; cursor: pointer"
-          @click="goTo(step)"
-          >{{ step }}</span
-        >
-      </span>
     </div>
 
     <br />
@@ -49,18 +40,12 @@ export default {
   data() {
     return {
       current: null,
-      history: [],
       pageNames: null,
       svg: null
     }
   },
   methods: {
     onPageSelected() {
-      this.history = []
-      this.updateSvg()
-    },
-    goTo(step) {
-      while ((this.current = this.history.pop()) !== step);
       this.updateSvg()
     },
     async fetchContent(pageName) {
@@ -84,10 +69,6 @@ export default {
       this.svg = svgElement.outerHTML
     },
     navigate(id) {
-      if (this.current) {
-        this.history.push(this.current)
-      }
-
       this.current = this.pageNames.find((x) => x === id.toLowerCase())
       this.updateSvg()
     }
