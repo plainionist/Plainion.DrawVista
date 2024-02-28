@@ -80,6 +80,11 @@ app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, 
 
 app.MapGet("/svg", (HttpContext context, IDocumentStore store, string pageName) =>
 {
+    if (string.IsNullOrEmpty(pageName))
+    {
+        throw new ArgumentException("pageName not specified");
+
+    }
     context.Response.ContentType = "image/svg+xml";
     return store.GetPage(pageName).Content;
 });
