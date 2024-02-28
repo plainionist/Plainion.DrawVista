@@ -7,17 +7,19 @@ public class SvgHyperlinkFormatter : ISvgHyperlinkFormatter
 {
     public void ApplyStyle(XElement xml)
     {
-        var attrs = xml.Attribute("style").Value.Split(";")
-            .Where(x => !string.IsNullOrEmpty(x))
-            .Select(x => x.Split(':')
-                .Select(x => x.Trim())
-                .Where(x => !string.IsNullOrEmpty(x)))
-            .ToDictionary(x => x.First(), x => x.Last());
+        var styleAddr = xml.Attribute("style");
+        if (styleAddr == null)
+        {
+            styleAddr = new XAttribute("style", "");
+            xml.Add(styleAddr);
+        }
 
-        attrs["color"] = "blue";
-        attrs["text-decoration"] = "underline";
-        attrs["cursor"] = "pointer";
+        var attr = new SvgStyleAttribute(styleAddr.Value);
 
-        xml.Attribute("style").Value = string.Join(";", attrs.Select(x => x.Key + ": " + x.Value));
+        attr["color"] = "blue";
+        attr["text-decoration"] = "underline";
+        attr["cursor"] = "pointer";
+
+        xml.Attribute("style").Value = attr.ToString();
     }
 }

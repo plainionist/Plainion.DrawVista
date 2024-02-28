@@ -12,6 +12,21 @@ public class SvgProcessorTests
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="204px" height="464px" viewBox="-0.5 -0.5 204 464">
         <defs />
         <g>
+            <a xlink:href="https://sdn.siemens-healthineers.com/Release/Products.Entrylevel/8.0.2107.2901/Modules.CIP/DOC/Features/Infrastructure/ApplicationFramework/PatternsAndPractices/Introduction.md" target="_blank">
+                <rect x="380" y="345" width="100" height="20" fill="none" stroke="none" pointer-events="all" />
+                <g transform="translate(-0.5 -0.5)">
+                    <switch>
+                    <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                        <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 98px; height: 1px; padding-top: 355px; margin-left: 381px;">
+                        <div style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">EventBroker</div>
+                        </div>
+                        </div>
+                    </foreignObject>
+                    <text x="430" y="359" fill="#000000" font-family="Helvetica" font-size="12px" text-anchor="middle">EventBroker</text>
+                    </switch>
+                </g>
+            </a>
             <path d="M 101 281 L 101 347.9" fill="none" stroke="#000000" stroke-width="3" stroke-miterlimit="10" pointer-events="stroke" />
             <path d="M 101 357.65 L 94.5 344.65 L 101 347.9 L 107.5 344.65 Z" fill="#000000" stroke="#000000" stroke-width="3" stroke-miterlimit="10" pointer-events="all" />
             <rect x="1" y="181" width="200" height="100" rx="15" ry="15" fill="#fff2cc" stroke="#d6b656" stroke-width="3" pointer-events="all" />
@@ -65,18 +80,47 @@ public class SvgProcessorTests
         </svg>
     """;
 
+    private Mock<IDocumentStore> myStore;
+
+    [SetUp]
+    public void SetUp()
+    {
+        myStore = new Mock<IDocumentStore> { DefaultValue = DefaultValue.Mock };
+        myStore.Setup(x => x.GetPageNames()).Returns([]);
+    }
+
     [Test]
     public void LinksShouldBeAddedForExistingPage()
     {
         var systemPage = new SvgDocument("System", XElement.Parse(SvgDocument));
         var parserPage = new SvgDocument("Parser", new XElement("doc", new XAttribute("width", "100%")));
 
-        var svgProcessor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), Mock.Of<IDocumentStore>());
+        var svgProcessor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), myStore.Object);
 
         svgProcessor.Process([systemPage, parserPage]);
 
         var parserElement = systemPage.Content.Descendants()
             .Single(x => x.Elements().Count() == 0 && x.Name.LocalName == "div" && x.Value == "Parser");
         Assert.That(parserElement.Attribute("onclick"), Is.Not.Null);
+    }
+
+    [Test]
+    public void ExistingLinksShouldBeStyled()
+    {
+        var systemPage = new SvgDocument("System", XElement.Parse(SvgDocument));
+
+        var svgProcessor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), myStore.Object);
+
+        svgProcessor.Process([systemPage]);
+
+        var linkElement = systemPage.Content.Descendants()
+            .Single(x => x.Name.LocalName == "a" &&
+                x.Attributes().Single(x => x.Name.LocalName == "href").Value.Contains("sdn.siemens-healthineers.com") == true);
+        Assert.That(linkElement.Attribute("style"), Is.Not.Null);
+
+        var attr = new SvgStyleAttribute(linkElement.Attribute("style").Value);
+
+        Assert.That(attr["color"], Is.EqualTo("blue"));
+        Assert.That(attr["text-decoration"], Is.EqualTo("underline"));
     }
 }

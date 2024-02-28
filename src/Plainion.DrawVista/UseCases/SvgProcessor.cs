@@ -32,9 +32,13 @@ public class SvgProcessor
         foreach (var doc in documents.Concat(existingFiles))
         {
             AddLinks(knownPageNames, doc);
+            ApplyStyleToExistingLinks(doc);
             myStore.Save(doc);
         }
     }
+
+    private static bool EqualsTagName(XElement element, string name) =>
+        element.Name.LocalName.Equals(name, StringComparison.OrdinalIgnoreCase);
 
     private void AddLinks(IReadOnlyCollection<string> pages, SvgDocument doc)
     {
@@ -43,7 +47,7 @@ public class SvgProcessor
 
         var elementsReferencingPages = doc.Content
             .Descendants()
-            .Where(x => x.Name.LocalName == "div" && !x.Elements().Any(x => x.Name.LocalName == "div"))
+            .Where(x => EqualsTagName(x, "div") && !x.Elements().Any(x => EqualsTagName(x, "div")))
             .Select(x => (xml: x, name: myParser.GetDisplayText(x.Value)))
             .Where(x => IsPageReference(x.name))
             // skip self-references
@@ -66,5 +70,20 @@ public class SvgProcessor
         }
 
         doc.Content.Attribute("width").Value = "100%";
+    }
+
+    // In DrawIO external links can be provided but those are neither in draw.io
+    // nor in SVG visualized as links (e.g. blue and underlined) - so let's apply some style
+    private void ApplyStyleToExistingLinks(SvgDocument doc)
+    {
+        var existingLinks = doc.Content
+            .Descendants()
+            .Where(x => EqualsTagName(x, "a"))
+            .ToList();
+
+        foreach (var link in existingLinks)
+        {
+            myFormatter.ApplyStyle(link);
+        }
     }
 }
