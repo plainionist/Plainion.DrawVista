@@ -4,5 +4,5 @@ namespace Plainion.DrawVista.UseCases;
 
 public interface ISvgHyperlinkFormatter
 {
-    void ApplyStyle(XElement xml);
+    void ApplyStyle(XElement xml, bool isExternal);
 }

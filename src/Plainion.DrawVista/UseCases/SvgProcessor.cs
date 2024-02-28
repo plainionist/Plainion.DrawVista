@@ -66,7 +66,7 @@ public class SvgProcessor
             }
             onClickAttr.Value = $"window.hook.navigate('{name}')";
 
-            myFormatter.ApplyStyle(xml);
+            myFormatter.ApplyStyle(xml, isExternal:false);
         }
 
         doc.Content.Attribute("width").Value = "100%";
@@ -79,11 +79,13 @@ public class SvgProcessor
         var existingLinks = doc.Content
             .Descendants()
             .Where(x => EqualsTagName(x, "a"))
-            .ToList();
+            .SelectMany(x => x.Descendants()
+                .Where(x => EqualsTagName(x, "div") && !x.Elements().Any(x => EqualsTagName(x, "div"))))
+           .ToList();
 
         foreach (var link in existingLinks)
         {
-            myFormatter.ApplyStyle(link);
+            myFormatter.ApplyStyle(link, isExternal:true);
         }
     }
 }

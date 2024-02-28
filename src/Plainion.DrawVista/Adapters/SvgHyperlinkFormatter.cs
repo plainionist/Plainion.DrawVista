@@ -5,7 +5,7 @@ namespace Plainion.DrawVista.Adapters;
 
 public class SvgHyperlinkFormatter : ISvgHyperlinkFormatter
 {
-    public void ApplyStyle(XElement xml)
+    public void ApplyStyle(XElement xml, bool isExternal)
     {
         var styleAddr = xml.Attribute("style");
         if (styleAddr == null)
@@ -18,6 +18,10 @@ public class SvgHyperlinkFormatter : ISvgHyperlinkFormatter
 
         attr["color"] = "blue";
         attr["text-decoration"] = "underline";
+        if (isExternal)
+        {
+            attr["text-decoration-style"] = "dotted";
+        }
         attr["cursor"] = "pointer";
 
         xml.Attribute("style").Value = attr.ToString();
