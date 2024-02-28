@@ -3,7 +3,7 @@
     <div style="text-align: left; margin-left: 50">
       <span style="font-weight: bold">Pages: </span>
       <span style="text-align: right">
-        <select @change="onPageSelected" v-model="current">
+        <select @change="onPageSelected" v-model="selectedPage">
           <option v-for="page in pageNames" :key="page" :value="page">
             {{ page }}
           </option>
@@ -22,7 +22,8 @@
           :controlIconsEnabled="false"
           :fit="true"
           :center="true"
-          :minZoom="0.25">
+          :minZoom="0.25"
+        >
           <div v-html="svg"></div>
         </SvgPanZoom>
       </transition>
@@ -39,47 +40,77 @@ export default {
   components: { SvgPanZoom },
   data() {
     return {
-      current: null,
+      selectedPage: null,
       pageNames: null,
       svg: null
     }
   },
   methods: {
     onPageSelected() {
-      this.updateSvg()
-    },
-    async fetchContent(pageName) {
-      const response = await API.get(`/svg?pageName=${pageName}`)
-      return response.data
+      this.navigate(this.selectedPage)
     },
     async updateSvg() {
-      if (!this.pageNames || this.pageNames.length === 0 || !this.current) {
+      const current = this.getUrlQueryParams().find(obj => obj.name === 'page')?.value
+      if (!current) {
         return
       }
 
-      const page = this.pageNames.find((x) => x === this.current.toLowerCase())
-
-      const pageContent = await this.fetchContent(page)
+      const response = await API.get(`/svg?pageName=${current}`)
+      const pageContent = response.data
 
       const parser = new DOMParser()
       const svgDoc = parser.parseFromString(pageContent, 'image/svg+xml')
       const svgElement = svgDoc.documentElement
-      svgElement.setAttribute('height', this.$refs.svgContainer.offsetHeight - 30)
+      svgElement.setAttribute(
+        'height',
+        this.$refs.svgContainer.offsetHeight - 30
+      )
 
       this.svg = svgElement.outerHTML
     },
     navigate(id) {
-      this.current = this.pageNames.find((x) => x === id.toLowerCase())
+      this.selectedPage = this.pageNames.find(
+        (x) => x.toLowerCase() === id.toLowerCase()
+      )
+
+      this.updateBrowserHistory(this.selectedPage)
+
       this.updateSvg()
+    },
+    updateBrowserHistory(pageName) {
+      history.pushState(
+        {
+          page: pageName
+        },
+        null,
+        `${window.location.pathname}?page=${pageName}`
+      )
+    },
+    getUrlQueryParams() {
+      return window.location.search
+        .replace('?', '')
+        .split('&')
+        .filter((v) => v)
+        .map((s) => {
+          s = s.replace('+', '%20')
+          s = s.split('=').map((s) => decodeURIComponent(s))
+          return {
+            name: s[0],
+            value: s[1]
+          }
+        })
     }
   },
   mounted() {
     window.hook = this
+    window.onpopstate = (e) => {
+      this.updateSvg()
+    }
     this.updateSvg()
   },
   async created() {
     const response = await API.get('/pageNames')
-    this.pageNames = response.data.map(x => x.toLowerCase())
+    this.pageNames = response.data
 
     this.navigate('index')
   }
