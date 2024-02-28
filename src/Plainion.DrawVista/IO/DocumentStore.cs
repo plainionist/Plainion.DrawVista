@@ -6,18 +6,23 @@ public class DocumentStore(string RootFolder) : IDocumentStore
 {
     private readonly object myLock = new object();
 
-    public IReadOnlyCollection<RawDocument> GetAllFiles()
+    public IReadOnlyCollection<string> GetPageNames()
     {
         lock (myLock)
         {
             return Directory.GetFiles(RootFolder, "*.svg")
-                .Select(f => new RawDocument(Path.GetFileNameWithoutExtension(f), File.ReadAllText(f)))
+                .Select(Path.GetFileNameWithoutExtension)
                 .ToList();
         }
     }
 
-    public string GetFileName(string pageName) =>
-        Path.Combine(RootFolder, pageName + ".svg");
+    public RawDocument GetPage(string pageName)
+    {
+        lock (myLock)
+        {
+            return new RawDocument(pageName, File.ReadAllText(Path.Combine(RootFolder, pageName + ".svg")));
+        }
+    }
 
     public void Save(SvgDocument document)
     {

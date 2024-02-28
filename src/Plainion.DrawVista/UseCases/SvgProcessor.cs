@@ -20,9 +20,9 @@ public class SvgProcessor
     /// </summary>
     public void Process(IReadOnlyCollection<SvgDocument> documents)
     {
-        var existingFiles = myStore.GetAllFiles()
-            .Where(x => !documents.Any(y => y.Name.Equals(x.Name, StringComparison.OrdinalIgnoreCase)))
-            .Select(SvgDocument.Create)
+        var existingFiles = myStore.GetPageNames()
+            .Where(x => !documents.Any(y => y.Name.Equals(x, StringComparison.OrdinalIgnoreCase)))
+            .Select(x => SvgDocument.Create(myStore.GetPage(x)))
             .ToList();
 
         var knownPageNames = documents.Select(x => x.Name)

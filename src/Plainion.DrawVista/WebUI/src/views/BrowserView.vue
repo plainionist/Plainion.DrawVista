@@ -4,8 +4,8 @@
       <span style="font-weight: bold">Pages: </span>
       <span style="text-align: right">
         <select @change="onPageSelected" v-model="current">
-          <option v-for="page in pages" :key="page.id" :value="page">
-            {{ page.id }}
+          <option v-for="page in pageNames" :key="page" :value="page">
+            {{ page }}
           </option>
         </select>
       </span>
@@ -15,7 +15,7 @@
         <span
           style="color: blue; text-decoration: underline; cursor: pointer"
           @click="goTo(step)"
-          >{{ step.id }}</span
+          >{{ step }}</span
         >
       </span>
     </div>
@@ -50,7 +50,7 @@ export default {
     return {
       current: null,
       history: [],
-      pages: null,
+      pageNames: null,
       svg: null
     }
   },
@@ -63,15 +63,21 @@ export default {
       while ((this.current = this.history.pop()) !== step);
       this.updateSvg()
     },
-    updateSvg() {
-      if (!this.pages || this.pages.length === 0 || !this.current) {
+    async fetchContent(pageName) {
+      const response = await API.get(`/svg?pageName=${pageName}`)
+      return response.data
+    },
+    async updateSvg() {
+      if (!this.pageNames || this.pageNames.length === 0 || !this.current) {
         return
       }
 
-      const page = this.pages.find((x) => x.id === this.current.id)
+      const page = this.pageNames.find((x) => x === this.current.toLowerCase())
+
+      const pageContent = await this.fetchContent(page)
 
       const parser = new DOMParser()
-      const svgDoc = parser.parseFromString(page.content, 'image/svg+xml')
+      const svgDoc = parser.parseFromString(pageContent, 'image/svg+xml')
       const svgElement = svgDoc.documentElement
       svgElement.setAttribute('height', this.$refs.svgContainer.offsetHeight - 30)
 
@@ -82,7 +88,7 @@ export default {
         this.history.push(this.current)
       }
 
-      this.current = this.pages.find((x) => x.id.toLowerCase() === id.toLowerCase())
+      this.current = this.pageNames.find((x) => x === id.toLowerCase())
       this.updateSvg()
     }
   },
@@ -91,8 +97,8 @@ export default {
     this.updateSvg()
   },
   async created() {
-    const response = await API.get('/allFiles')
-    this.pages = response.data
+    const response = await API.get('/pageNames')
+    this.pageNames = response.data.map(x => x.toLowerCase())
 
     this.navigate('index')
   }

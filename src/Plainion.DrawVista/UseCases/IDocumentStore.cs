@@ -2,8 +2,8 @@ namespace Plainion.DrawVista.UseCases;
 
 public interface IDocumentStore
 {
-    IReadOnlyCollection<RawDocument> GetAllFiles();
-    string GetFileName(string pageName);
+    IReadOnlyCollection<string> GetPageNames();
+    RawDocument GetPage(string pageName);
     void Save(SvgDocument document);
     void Clear();
 }

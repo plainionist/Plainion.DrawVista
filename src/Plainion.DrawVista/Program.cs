@@ -78,21 +78,15 @@ app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, 
 })
 .DisableAntiforgery();
 
-app.MapGet("/svg", async (HttpContext context, IDocumentStore store, string pageName) =>
+app.MapGet("/svg", (HttpContext context, IDocumentStore store, string pageName) =>
 {
     context.Response.ContentType = "image/svg+xml";
-    await context.Response.SendFileAsync(store.GetFileName(pageName));
+    return store.GetPage(pageName).Content;
 });
 
-app.MapGet("/allFiles", (IDocumentStore store) =>
+app.MapGet("/pageNames", (IDocumentStore store) =>
 {
-    return store.GetAllFiles()
-        .Select(doc => new
-        {
-            id = doc.Name,
-            content = doc.Content
-        })
-        .ToList();
+    return store.GetPageNames();
 });
 
 app.MapPost("/clear", (IDocumentStore store) =>
