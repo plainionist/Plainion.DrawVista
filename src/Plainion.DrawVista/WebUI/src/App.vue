@@ -1,6 +1,6 @@
 <template>
   <nav class="row header">
-    <router-link to="/">Home</router-link> |
+    <router-link to="/">Browse</router-link> |
     <router-link to="/upload">Upload</router-link> |
     <router-link to="/clear">Clear</router-link>
   </nav>
