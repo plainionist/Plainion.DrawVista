@@ -5,7 +5,7 @@
     <router-link to="/clear">Clear</router-link>
   </nav>
   <div style="padding: 10px" class="row content">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 

@@ -1,17 +1,16 @@
 <template>
   <div class="box">
-    <div style="text-align: left; margin-left: 50">
-      <span style="font-weight: bold">Pages: </span>
-      <span style="text-align: right">
-        <select @change="onPageSelected" v-model="selectedPage">
-          <option v-for="page in pageNames" :key="page" :value="page">
-            {{ page }}
-          </option>
-        </select>
-      </span>
+    <div style="text-align: center">
+      <select
+        @change="onPageSelected"
+        v-model="selectedPage"
+        class="page-selection"
+      >
+        <option v-for="page in pageNames" :key="page" :value="page">
+          {{ page }}
+        </option>
+      </select>
     </div>
-
-    <br />
 
     <div class="svg-container box content" ref="svgContainer">
       <transition name="scale" mode="out-in">
@@ -50,7 +49,9 @@ export default {
       this.navigate(this.selectedPage)
     },
     async updateSvg() {
-      const current = this.getUrlQueryParams().find(obj => obj.name === 'page')?.value
+      const current = this.getUrlQueryParams().find(
+        (obj) => obj.name === 'page'
+      )?.value
       if (!current) {
         return
       }
@@ -119,6 +120,7 @@ export default {
 
 <style>
 .svg-container {
+  margin-top: 10px;
   padding: 10px;
   border: 1px solid black;
 }
@@ -132,5 +134,9 @@ export default {
 .scale-leave-to {
   opacity: 0;
   transform: scale(0.9);
+}
+.page-selection {
+  font-size: medium;
+  min-width: 300px;
 }
 </style>
