@@ -8,6 +8,5 @@ public class SvgCaptionParser : ISvgCaptionParser
 {
     public string GetDisplayText(string value) =>
         Regex.Replace(value, @"\s+", "")
-            .ToLower()
             .Replace("<br/>", "");
 }

@@ -16,7 +16,8 @@ public class FullTextSearchTests
         var search = new FullTextSearch(store, new SvgCaptionParser());
         var results = search.Search("UserService");
 
-        Assert.That(results.Select(x => x.PageName), Is.EquivalentTo(new[] { "Page-1" }));
+        var expected = new[] { new SearchResult("Page-1", ["UserService"]) };
+        Assert.That(results.ToJson(), Is.EqualTo(expected.ToJson()));
     }
 
     [Test]
@@ -29,7 +30,11 @@ public class FullTextSearchTests
         var search = new FullTextSearch(store, new SvgCaptionParser());
         var results = search.Search("base");
 
-        Assert.That(results.Select(x => x.PageName), Is.EquivalentTo(new[] { "Page-1", "Page-2" }));
+        var expected = new[] {
+            new SearchResult("Page-1", ["Database"]),
+            new SearchResult("Page-2", ["Database"]),
+        };
+        Assert.That(results.ToJson(), Is.EqualTo(expected.ToJson()));
     }
 
     [Test]
@@ -42,7 +47,8 @@ public class FullTextSearchTests
         var search = new FullTextSearch(store, new SvgCaptionParser());
         var results = search.Search("reserv");
 
-        Assert.That(results.Select(x => x.PageName), Is.EquivalentTo(new[] { "Page-2" }));
+        var expected = new[] { new SearchResult("Page-2", ["ReservationService", "Reservation"]) };
+        Assert.That(results.ToJson(), Is.EqualTo(expected.ToJson()));
     }
 
     [Test]

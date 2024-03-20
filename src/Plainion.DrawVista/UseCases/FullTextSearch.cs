@@ -12,11 +12,11 @@ public class FullTextSearch(IDocumentStore store, ISvgCaptionParser parser)
     public IReadOnlyCollection<SearchResult> Search(string text) =>
         myStore.GetPageNames()
             .Select(myStore.GetPage)
-            .Where(x => ContainsMatchingCaption(x, text))
-            .Select(x => new SearchResult(x.Name, []))
+            .Select(x => Search(x, text))
+            .Where(x => x != null)
             .ToList();
 
-    private bool ContainsMatchingCaption(RawDocument document, string text)
+    private SearchResult Search(RawDocument document, string text)
     {
         static bool EqualsTagName(XElement element, string name) =>
             element.Name.LocalName.Equals(name, StringComparison.OrdinalIgnoreCase);
@@ -26,6 +26,10 @@ public class FullTextSearch(IDocumentStore store, ISvgCaptionParser parser)
             .Where(x => EqualsTagName(x, "div") && !x.Elements().Any(x => EqualsTagName(x, "div")))
             .Select(x => myParser.GetDisplayText(x.Value));
 
-        return captions.Any(x => x.Contains(text, StringComparison.OrdinalIgnoreCase));
+        var matchingCaptions = captions
+            .Where(x => x.Contains(text, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        return matchingCaptions.Any() ? new(document.Name, matchingCaptions) : null;
     }
 }
