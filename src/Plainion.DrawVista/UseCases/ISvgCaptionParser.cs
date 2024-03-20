@@ -1,6 +1,11 @@
+using System.Xml.Linq;
+
 namespace Plainion.DrawVista.UseCases;
 
 public interface ISvgCaptionParser
 {
-    string GetDisplayText(string value);
+    IReadOnlyCollection<Caption> Parse(XElement document);
 }
+
+public record Caption(XElement Element, string DisplayText);
+

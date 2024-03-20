@@ -30,45 +30,43 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
         }
     }
 
-    private static bool EqualsTagName(XElement element, string name) =>
-        element.Name.LocalName.Equals(name, StringComparison.OrdinalIgnoreCase);
 
-    private void AddLinks(IReadOnlyCollection<string> pages, SvgDocument doc)
+    private void AddLinks(IReadOnlyCollection<string> pages, SvgDocument document)
     {
         bool IsPageReference(string name) =>
            pages.Any(p => p.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-        var elementsReferencingPages = doc.Content
-            .Descendants()
-            .Where(x => EqualsTagName(x, "div") && !x.Elements().Any(x => EqualsTagName(x, "div")))
-            .Select(x => (xml: x, name: myParser.GetDisplayText(x.Value)))
-            .Where(x => IsPageReference(x.name))
+        var elementsReferencingPages = myParser.Parse(document.Content)
+            .Where(x => IsPageReference(x.DisplayText))
             // skip self-references
-            .Where(x => !x.name.Equals(doc.Name, StringComparison.OrdinalIgnoreCase))
+            .Where(x => !x.DisplayText.Equals(document.Name, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
-        foreach (var (xml, name) in elementsReferencingPages)
+        foreach (var caption in elementsReferencingPages)
         {
-            Console.WriteLine("Creating link for: " + name);
+            Console.WriteLine($"Creating link for: {caption.DisplayText}");
 
-            var onClickAttr = xml.Attribute("onclick");
+            var onClickAttr = caption.Element.Attribute("onclick");
             if (onClickAttr == null)
             {
                 onClickAttr = new XAttribute("onclick", string.Empty);
-                xml.Add(onClickAttr);
+                caption.Element.Add(onClickAttr);
             }
-            onClickAttr.Value = $"window.hook.navigate('{name}')";
+            onClickAttr.Value = $"window.hook.navigate('{caption.DisplayText}')";
 
-            myFormatter.ApplyStyle(xml, isExternal:false);
+            myFormatter.ApplyStyle(caption.Element, isExternal:false);
         }
 
-        doc.Content.Attribute("width").Value = "100%";
+        document.Content.Attribute("width").Value = "100%";
     }
 
     // In DrawIO external links can be provided but those are neither in draw.io
     // nor in SVG visualized as links (e.g. blue and underlined) - so let's apply some style
     private void ApplyStyleToExistingLinks(SvgDocument doc)
     {
+        static bool EqualsTagName(XElement element, string name) =>
+            element.Name.LocalName.Equals(name, StringComparison.OrdinalIgnoreCase);
+        
         var existingLinks = doc.Content
             .Descendants()
             .Where(x => EqualsTagName(x, "a"))

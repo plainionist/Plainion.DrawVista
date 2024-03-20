@@ -18,15 +18,10 @@ public class FullTextSearch(IDocumentStore store, ISvgCaptionParser parser)
 
     private SearchResult Search(RawDocument document, string text)
     {
-        static bool EqualsTagName(XElement element, string name) =>
-            element.Name.LocalName.Equals(name, StringComparison.OrdinalIgnoreCase);
-
-        var captions = XElement.Parse(document.Content)
-            .Descendants()
-            .Where(x => EqualsTagName(x, "div") && !x.Elements().Any(x => EqualsTagName(x, "div")))
-            .Select(x => myParser.GetDisplayText(x.Value));
+        var captions = myParser.Parse(XElement.Parse(document.Content));
 
         var matchingCaptions = captions
+            .Select(x => x.DisplayText)
             .Where(x => x.Contains(text, StringComparison.OrdinalIgnoreCase))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
