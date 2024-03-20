@@ -19,7 +19,8 @@
         <input
           type="text"
           v-model="searchText"
-          v-on:keyup.enter="onSearchEnter"
+          @keyup.enter="onSearchEnter"
+          @input="onSearchTextChanged($event.target.value)"
           class="search-input"
         />
       </span>
@@ -79,8 +80,20 @@ export default {
       this.navigate(this.selectedPage)
     },
     async onSearchEnter() {
-      const response = await API.get(`/search?text=${this.searchText}`)
-      this.searchResults = response.data
+      if (this.searchText && this.searchText !== '') {
+        const response = await API.get(`/search?text=${this.searchText}`)
+        this.searchResults = response.data
+      } else {
+        this.searchResults = []
+      }
+    },
+    onSearchTextChanged(value) {
+      const enteredValue = value
+      setTimeout(() => {
+        if (this.searchText === enteredValue) {
+          this.onSearchEnter()
+        }
+      }, 250)
     },
     onSearchResultSelected(page) {
       this.navigate(page)
