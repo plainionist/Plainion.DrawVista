@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Plainion.DrawVista.UseCases;
 
 namespace Plainion.DrawVista.IO;
@@ -16,20 +17,28 @@ public class DocumentStore(string RootFolder) : IDocumentStore
         }
     }
 
-    public RawDocument GetPage(string pageName)
+    public ProcessedDocument GetPage(string pageName)
     {
         lock (myLock)
         {
-            return new RawDocument(pageName, File.ReadAllText(Path.Combine(RootFolder, pageName + ".svg")));
+            var content = File.ReadAllText(ContentFile(pageName));
+            dynamic meta = JsonConvert.DeserializeObject<MetaContent>(File.ReadAllText(MetaFile(pageName)));
+            return new ProcessedDocument(pageName, content, meta.Captions);
         }
     }
+
+    private record MetaContent(List<string> Captions);
+
+    private string MetaFile(string pageName) => Path.Combine(RootFolder, pageName + ".svg.meta");
+    private string ContentFile(string pageName) => Path.Combine(RootFolder, pageName + ".svg");
 
     public void Save(ProcessedDocument document)
     {
         lock (myLock)
         {
-            var svgFile = Path.Combine(RootFolder, document.Name + ".svg");
-            File.WriteAllText(svgFile, document.Content);
+            File.WriteAllText(ContentFile(document.Name), document.Content);
+            var meta = new MetaContent(document.Captions.ToList());
+            File.WriteAllText(MetaFile(document.Name), JsonConvert.SerializeObject(meta));
         }
     }
 

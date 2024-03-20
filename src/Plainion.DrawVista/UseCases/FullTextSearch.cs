@@ -4,10 +4,9 @@ namespace Plainion.DrawVista.UseCases;
 
 public record SearchResult(string PageName, IReadOnlyCollection<string> Captions);
 
-public class FullTextSearch(IDocumentStore store, ISvgCaptionParser parser)
+public class FullTextSearch(IDocumentStore store)
 {
     private readonly IDocumentStore myStore = store;
-    private readonly ISvgCaptionParser myParser = parser;
 
     public IReadOnlyCollection<SearchResult> Search(string text) =>
         myStore.GetPageNames()
@@ -16,12 +15,9 @@ public class FullTextSearch(IDocumentStore store, ISvgCaptionParser parser)
             .Where(x => x != null)
             .ToList();
 
-    private SearchResult Search(RawDocument document, string text)
+    private SearchResult Search(ProcessedDocument document, string text)
     {
-        var captions = myParser.Parse(XElement.Parse(document.Content));
-
-        var matchingCaptions = captions
-            .Select(x => x.DisplayText)
+        var matchingCaptions = document.Captions
             .Where(x => x.Contains(text, StringComparison.OrdinalIgnoreCase))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();

@@ -4,15 +4,16 @@ namespace Plainion.DrawVista.Tests;
 
 internal class DocumentBuilder
 {
-    public static RawDocument Create(string pageName, params string[] elements) =>
+    public static ProcessedDocument Create(string pageName, params string[] captions) =>
         new(pageName,
             $"""
             <svg xmlns="http://www.w3.org/2000/svg">
             <g>
-                {string.Join(Environment.NewLine, elements.Select(CreateElement))}
+                {string.Join(Environment.NewLine, captions.Select(CreateElement))}
             </g>
             </svg>
-            """);
+            """,
+            captions);
 
     private static string CreateElement(string caption) =>
         $"""

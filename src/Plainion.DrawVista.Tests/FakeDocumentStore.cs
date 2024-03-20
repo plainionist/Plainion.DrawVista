@@ -4,18 +4,15 @@ namespace Plainion.DrawVista.Tests;
 
 internal class FakeDocumentStore : IDocumentStore
 {
-    private readonly List<RawDocument> myDocuments = [];
+    private readonly List<ProcessedDocument> myDocuments = [];
 
-    public RawDocument GetPage(string pageName) =>
+    public ProcessedDocument GetPage(string pageName) =>
         myDocuments.Single(x => x.Name == pageName);
 
     public IReadOnlyCollection<string> GetPageNames() =>
         myDocuments.Select(x => x.Name).ToList();
 
     public void Save(ProcessedDocument document) =>
-        Save(new RawDocument(document.Name, document.Content.ToString()));
-
-    public void Save(RawDocument document) =>
         myDocuments.Add(document);
 
     public void Clear() => 

@@ -15,7 +15,7 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
     {
         var existingDocuments = myStore.GetPageNames()
             .Where(x => !documents.Any(y => y.Name.Equals(x, StringComparison.OrdinalIgnoreCase)))
-            .Select(myStore.GetPage)
+            .Select(x => ParsedDocument.Create(myParser, myStore.GetPage(x)))
             .ToList();
 
         var knownPageNames = documents.Select(x => x.Name)
@@ -23,8 +23,8 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
             .ToList();
 
         var parsedDocuments = documents
-            .Concat(existingDocuments)
-            .Select(x => ParsedDocument.Create(myParser, x));
+            .Select(x => ParsedDocument.Create(myParser, x))
+            .Concat(existingDocuments);
 
         foreach (var doc in parsedDocuments)
         {
@@ -37,6 +37,13 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
     private record ParsedDocument(string Name, XElement Content, IReadOnlyCollection<Caption> Captions)
     {
         public static ParsedDocument Create(ISvgCaptionParser parser, RawDocument document)
+        {
+            var xml = XElement.Parse(document.Content);
+            var captions = parser.Parse(xml);
+            return new(document.Name, xml, captions);
+        }
+
+        public static ParsedDocument Create(ISvgCaptionParser parser, ProcessedDocument document)
         {
             var xml = XElement.Parse(document.Content);
             var captions = parser.Parse(xml);

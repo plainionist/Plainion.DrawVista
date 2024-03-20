@@ -9,6 +9,7 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="MetadataExtractor" Version="2.8.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <Target Name="VueBuild" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' == 'Release'">
     <!-- even if the build was successful npm/node returns -1 for unclear reason -->

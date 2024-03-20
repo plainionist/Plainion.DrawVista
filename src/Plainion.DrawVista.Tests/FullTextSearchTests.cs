@@ -13,7 +13,7 @@ public class FullTextSearchTests
         store.Save(DocumentBuilder.Create("Page-1", "UserService", "User", "Database"));
         store.Save(DocumentBuilder.Create("Page-2", "ReservationService", "Reservation", "Database"));
 
-        var search = new FullTextSearch(store, new SvgCaptionParser());
+        var search = new FullTextSearch(store);
         var results = search.Search("UserService");
 
         var expected = new[] { new SearchResult("Page-1", ["UserService"]) };
@@ -27,7 +27,7 @@ public class FullTextSearchTests
         store.Save(DocumentBuilder.Create("Page-1", "UserService", "User", "Database"));
         store.Save(DocumentBuilder.Create("Page-2", "ReservationService", "Reservation", "Database"));
 
-        var search = new FullTextSearch(store, new SvgCaptionParser());
+        var search = new FullTextSearch(store);
         var results = search.Search("base");
 
         var expected = new[] {
@@ -44,7 +44,7 @@ public class FullTextSearchTests
         store.Save(DocumentBuilder.Create("Page-1", "UserService", "User", "Database"));
         store.Save(DocumentBuilder.Create("Page-2", "ReservationService", "Reservation", "Database"));
 
-        var search = new FullTextSearch(store, new SvgCaptionParser());
+        var search = new FullTextSearch(store);
         var results = search.Search("reserv");
 
         var expected = new[] { new SearchResult("Page-2", ["ReservationService", "Reservation"]) };
@@ -57,7 +57,7 @@ public class FullTextSearchTests
         var store = new FakeDocumentStore();
         store.Save(DocumentBuilder.Create("Page-1", "UserService", "RegistrationService", "userservice"));
 
-        var search = new FullTextSearch(store, new SvgCaptionParser());
+        var search = new FullTextSearch(store);
         var results = search.Search("user");
 
         var expected = new[] { new SearchResult("Page-1", ["UserService"]) };
@@ -71,7 +71,7 @@ public class FullTextSearchTests
         store.Save(DocumentBuilder.Create("Page-1", "UserService", "User", "Database"));
         store.Save(DocumentBuilder.Create("Page-2", "ReservationService", "Reservation", "Database"));
 
-        var search = new FullTextSearch(store, new SvgCaptionParser());
+        var search = new FullTextSearch(store);
         var results = search.Search("EventBroker");
 
         Assert.That(results, Is.Empty);
