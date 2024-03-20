@@ -2,16 +2,18 @@ using System.Xml.Linq;
 
 namespace Plainion.DrawVista.UseCases;
 
+public record SearchResult(string PageName, IReadOnlyCollection<string> Captions);
+
 public class FullTextSearch(IDocumentStore store, ISvgCaptionParser parser)
 {
     private readonly IDocumentStore myStore = store;
     private readonly ISvgCaptionParser myParser = parser;
 
-    public IReadOnlyCollection<string> Search(string text) =>
+    public IReadOnlyCollection<SearchResult> Search(string text) =>
         myStore.GetPageNames()
             .Select(myStore.GetPage)
             .Where(x => ContainsMatchingCaption(x, text))
-            .Select(x => x.Name)
+            .Select(x => new SearchResult(x.Name, []))
             .ToList();
 
     private bool ContainsMatchingCaption(RawDocument document, string text)

@@ -28,9 +28,9 @@
     <div v-if="searchResults.length > 0" class="search-results-container">
       <span
         v-for="item in searchResults"
-        v-bind:key="item"
+        v-bind:key="item.pageName"
         class="search-results-item"
-        ><a href="#" @click="onSearchResultSelected(item)">{{ item }}</a></span
+        ><a href="#" @click="onSearchResultSelected(item.pageName)">{{ item.pageName }}</a></span
       >
     </div>
     <div class="svg-container box content" ref="svgContainer">

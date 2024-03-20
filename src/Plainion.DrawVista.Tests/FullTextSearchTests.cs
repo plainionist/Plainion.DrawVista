@@ -16,7 +16,7 @@ public class FullTextSearchTests
         var search = new FullTextSearch(store, new SvgCaptionParser());
         var results = search.Search("UserService");
 
-        Assert.That(results, Is.EquivalentTo(new[] { "Page-1" }));
+        Assert.That(results.Select(x => x.PageName), Is.EquivalentTo(new[] { "Page-1" }));
     }
 
     [Test]
@@ -29,7 +29,7 @@ public class FullTextSearchTests
         var search = new FullTextSearch(store, new SvgCaptionParser());
         var results = search.Search("base");
 
-        Assert.That(results, Is.EquivalentTo(new[] { "Page-1", "Page-2" }));
+        Assert.That(results.Select(x => x.PageName), Is.EquivalentTo(new[] { "Page-1", "Page-2" }));
     }
 
     [Test]
@@ -42,7 +42,7 @@ public class FullTextSearchTests
         var search = new FullTextSearch(store, new SvgCaptionParser());
         var results = search.Search("reserv");
 
-        Assert.That(results, Is.EquivalentTo(new[] { "Page-2" }));
+        Assert.That(results.Select(x => x.PageName), Is.EquivalentTo(new[] { "Page-2" }));
     }
 
     [Test]
