@@ -12,7 +12,7 @@ public class SvgProcessorTests
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="204px" height="464px" viewBox="-0.5 -0.5 204 464">
         <defs />
         <g>
-            <a xlink:href="https://sdn.siemens-healthineers.com/Release/Products.Entrylevel/8.0.2107.2901/Modules.CIP/DOC/Features/Infrastructure/ApplicationFramework/PatternsAndPractices/Introduction.md" target="_blank">
+            <a xlink:href="https://docs.server.org/Comonent/Introduction.md" target="_blank">
                 <rect x="380" y="345" width="100" height="20" fill="none" stroke="none" pointer-events="all" />
                 <g transform="translate(-0.5 -0.5)">
                     <switch>
