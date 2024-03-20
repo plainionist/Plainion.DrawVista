@@ -2,18 +2,11 @@ using System.Xml.Linq;
 
 namespace Plainion.DrawVista.UseCases;
 
-public class SvgProcessor
+public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter formatter, IDocumentStore store)
 {
-    private readonly ISvgCaptionParser myParser;
-    private readonly ISvgHyperlinkFormatter myFormatter;
-    private readonly IDocumentStore myStore;
-
-    public SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter formatter, IDocumentStore store)
-    {
-        myParser = parser;
-        myFormatter = formatter;
-        myStore = store;
-    }
+    private readonly ISvgCaptionParser myParser = parser;
+    private readonly ISvgHyperlinkFormatter myFormatter = formatter;
+    private readonly IDocumentStore myStore = store;
 
     /// <summary>
     /// Processes existing and newly uploaded documents.

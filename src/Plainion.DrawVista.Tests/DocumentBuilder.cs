@@ -16,7 +16,7 @@ internal class DocumentBuilder
 
     private static string CreateElement(string caption) =>
         $"""
-        <rect x="10" y="10" width="100" height=100" />
+        <rect x="10" y="10" width="100" height="100" />
         <g transform="translate(-0.5 -0.5)">
             <switch>
                 <foreignObject requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
