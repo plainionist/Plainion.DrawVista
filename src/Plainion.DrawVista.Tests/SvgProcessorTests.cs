@@ -80,26 +80,17 @@ public class SvgProcessorTests
         </svg>
     """;
 
-    private Mock<IDocumentStore> myStore;
-
-    [SetUp]
-    public void SetUp()
-    {
-        myStore = new Mock<IDocumentStore> { DefaultValue = DefaultValue.Mock };
-        myStore.Setup(x => x.GetPageNames()).Returns([]);
-    }
-
     [Test]
     public void LinksShouldBeAddedForExistingPage()
     {
-        var systemPage = new SvgDocument("System", XElement.Parse(SvgDocument));
-        var parserPage = new SvgDocument("Parser", new XElement("doc", new XAttribute("width", "100%")));
+        var store = new FakeDocumentStore();
+        var systemPage = new RawDocument("System", SvgDocument);
+        var parserPage = new RawDocument("Parser", new XElement("doc", new XAttribute("width", "100%")).ToString());
 
-        var svgProcessor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), myStore.Object);
-
+        var svgProcessor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), store);
         svgProcessor.Process([systemPage, parserPage]);
 
-        var parserElement = systemPage.Content.Descendants()
+        var parserElement = XElement.Parse(store.GetPage("System").Content).Descendants()
             .Single(x => x.Elements().Count() == 0 && x.Name.LocalName == "div" && x.Value == "Parser");
         Assert.That(parserElement.Attribute("onclick"), Is.Not.Null);
     }
@@ -107,13 +98,13 @@ public class SvgProcessorTests
     [Test]
     public void ExistingLinksShouldBeStyled()
     {
-        var systemPage = new SvgDocument("System", XElement.Parse(SvgDocument));
+        var store = new FakeDocumentStore();
+        var systemPage = new RawDocument("System", SvgDocument);
 
-        var svgProcessor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), myStore.Object);
-
+        var svgProcessor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), store);
         svgProcessor.Process([systemPage]);
 
-        var linkElement = systemPage.Content.Descendants()
+        var linkElement = XElement.Parse(store.GetPage("System").Content).Descendants()
             .Single(x => x.Name.LocalName == "a" &&
                 x.Attributes().Single(x => x.Name.LocalName == "href").Value.Contains("docs.server.org") == true)
             .Descendants()

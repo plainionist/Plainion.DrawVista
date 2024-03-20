@@ -11,18 +11,22 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
     /// <summary>
     /// Processes existing and newly uploaded documents.
     /// </summary>
-    public void Process(IReadOnlyCollection<SvgDocument> documents)
+    public void Process(IReadOnlyCollection<RawDocument> documents)
     {
-        var existingFiles = myStore.GetPageNames()
+        var existingDocuments = myStore.GetPageNames()
             .Where(x => !documents.Any(y => y.Name.Equals(x, StringComparison.OrdinalIgnoreCase)))
-            .Select(x => SvgDocument.Create(myStore.GetPage(x)))
+            .Select(myStore.GetPage)
             .ToList();
 
         var knownPageNames = documents.Select(x => x.Name)
-            .Concat(existingFiles.Select(x => x.Name))
+            .Concat(existingDocuments.Select(x => x.Name))
             .ToList();
 
-        foreach (var doc in documents.Concat(existingFiles))
+        var svgDocuments = documents
+            .Concat(existingDocuments)
+            .Select(SvgDocument.Create);
+
+        foreach (var doc in svgDocuments)
         {
             AddLinks(knownPageNames, doc);
             ApplyStyleToExistingLinks(doc);

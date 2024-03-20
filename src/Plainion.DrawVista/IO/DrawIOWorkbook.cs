@@ -1,11 +1,10 @@
-using System.Xml.Linq;
 using Plainion.DrawVista.UseCases;
 
 namespace Plainion.DrawVista.IO;
 
 public class DrawIOWorkbook(string RootFolder, string Name) : IDrawingWorkbook
 {
-    public IReadOnlyCollection<SvgDocument> Load(Stream stream)
+    public IReadOnlyCollection<RawDocument> Load(Stream stream)
     {
         Console.WriteLine($"DrawIOWorkbook.Load({Name})");
 
@@ -24,12 +23,12 @@ public class DrawIOWorkbook(string RootFolder, string Name) : IDrawingWorkbook
         return new DrawIOModel(reader.ReadToEnd());
     }
 
-    private SvgDocument ExportSvg(DrawIOApp app, int idx, string name)
+    private RawDocument ExportSvg(DrawIOApp app, int idx, string name)
     {
         var svgFile = Path.Combine(RootFolder, name + ".svg");
 
         app.ExtractSvg(idx, svgFile);
 
-        return new SvgDocument(name, XElement.Load(svgFile));
+        return new RawDocument(name, File.ReadAllText(svgFile));
     }
 }

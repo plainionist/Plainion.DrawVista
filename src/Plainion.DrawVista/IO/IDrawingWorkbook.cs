@@ -4,5 +4,5 @@ namespace Plainion.DrawVista.IO;
 
 public interface IDrawingWorkbook
 {
-    IReadOnlyCollection<SvgDocument> Load(Stream stream);
+    IReadOnlyCollection<RawDocument> Load(Stream stream);
 }

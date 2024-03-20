@@ -59,7 +59,7 @@ app.UseCors(builder =>
 
 app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, IFormFileCollection files) =>
 {
-    var allDocuments = new List<SvgDocument>();
+    var allDocuments = new List<RawDocument>();
 
     foreach (var file in files)
     {

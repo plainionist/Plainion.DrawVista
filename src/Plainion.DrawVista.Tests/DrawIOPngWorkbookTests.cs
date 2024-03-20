@@ -26,7 +26,7 @@ public class DrawIOPngWorkbookTests
     [Test]
     public void ExtractAllPages()
     {
-        var documents = new List<SvgDocument>();
+        var documents = new List<RawDocument>();
 
         using (var stream = File.OpenRead("../../../../../samples/Simple/Index.drawio.png"))
         {
