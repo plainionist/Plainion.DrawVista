@@ -115,7 +115,7 @@ public class SvgProcessorTests
 
         var linkElement = systemPage.Content.Descendants()
             .Single(x => x.Name.LocalName == "a" &&
-                x.Attributes().Single(x => x.Name.LocalName == "href").Value.Contains("sdn.siemens-healthineers.com") == true)
+                x.Attributes().Single(x => x.Name.LocalName == "href").Value.Contains("docs.server.org") == true)
             .Descendants()
             .SingleOrDefault(x =>  x.Elements().Count() == 0 && x.Name.LocalName == "div");
         Assert.That(linkElement.Attribute("style"), Is.Not.Null);
