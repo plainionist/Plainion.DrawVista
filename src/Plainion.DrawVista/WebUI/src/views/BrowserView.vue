@@ -113,9 +113,11 @@ export default {
         (x) => x.toLowerCase() === id.toLowerCase()
       )
 
-      this.updateBrowserHistory(this.selectedPage)
+      if (this.selectedPage) {
+        this.updateBrowserHistory(this.selectedPage)
 
-      this.updateSvg()
+        this.updateSvg()
+      }
     },
     updateBrowserHistory(pageName) {
       history.pushState(
