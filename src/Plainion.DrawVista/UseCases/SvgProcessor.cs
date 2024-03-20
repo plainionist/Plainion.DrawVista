@@ -22,24 +22,37 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
             .Concat(existingDocuments.Select(x => x.Name))
             .ToList();
 
-        var svgDocuments = documents
+        var parsedDocuments = documents
             .Concat(existingDocuments)
-            .Select(SvgDocument.Create);
+            .Select(x => ParsedDocument.Create(myParser, x));
 
-        foreach (var doc in svgDocuments)
+        foreach (var doc in parsedDocuments)
         {
             AddLinks(knownPageNames, doc);
             ApplyStyleToExistingLinks(doc);
-            myStore.Save(doc);
+            myStore.Save(doc.ToSvgDocument());
         }
     }
 
-    private void AddLinks(IReadOnlyCollection<string> pages, SvgDocument document)
+    private record ParsedDocument(string Name, XElement Content, IReadOnlyCollection<Caption> Captions)
+    {
+        public static ParsedDocument Create(ISvgCaptionParser parser, RawDocument document)
+        {
+            var xml = XElement.Parse(document.Content);
+            var captions = parser.Parse(xml);
+            return new(document.Name, xml, captions);
+        }
+
+        public SvgDocument ToSvgDocument() =>
+            new(Name, Content, Captions.Select(x => x.DisplayText).ToList());
+    }
+
+    private void AddLinks(IReadOnlyCollection<string> pages, ParsedDocument document)
     {
         bool IsPageReference(string name) =>
            pages.Any(p => p.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-        var elementsReferencingPages = myParser.Parse(document.Content)
+        var elementsReferencingPages = document.Captions
             .Where(x => IsPageReference(x.DisplayText))
             // skip self-references
             .Where(x => !x.DisplayText.Equals(document.Name, StringComparison.OrdinalIgnoreCase))
@@ -57,7 +70,7 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
             }
             onClickAttr.Value = $"window.hook.navigate('{caption.DisplayText}')";
 
-            myFormatter.ApplyStyle(caption.Element, isExternal:false);
+            myFormatter.ApplyStyle(caption.Element, isExternal: false);
         }
 
         document.Content.Attribute("width").Value = "100%";
@@ -65,9 +78,9 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
 
     // In DrawIO external links can be provided but those are neither in draw.io
     // nor in SVG visualized as links (e.g. blue and underlined) - so let's apply some style
-    private void ApplyStyleToExistingLinks(SvgDocument doc)
+    private void ApplyStyleToExistingLinks(ParsedDocument document)
     {
-        var existingLinks = doc.Content
+        var existingLinks = document.Content
             .Descendants()
             .Where(x => x.EqualsTagName("a"))
             .SelectMany(x => x.Descendants()
@@ -76,7 +89,7 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
 
         foreach (var link in existingLinks)
         {
-            myFormatter.ApplyStyle(link, isExternal:true);
+            myFormatter.ApplyStyle(link, isExternal: true);
         }
     }
 }
