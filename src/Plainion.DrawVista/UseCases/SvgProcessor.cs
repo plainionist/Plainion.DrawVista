@@ -30,7 +30,6 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
         }
     }
 
-
     private void AddLinks(IReadOnlyCollection<string> pages, SvgDocument document)
     {
         bool IsPageReference(string name) =>
@@ -64,14 +63,11 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
     // nor in SVG visualized as links (e.g. blue and underlined) - so let's apply some style
     private void ApplyStyleToExistingLinks(SvgDocument doc)
     {
-        static bool EqualsTagName(XElement element, string name) =>
-            element.Name.LocalName.Equals(name, StringComparison.OrdinalIgnoreCase);
-        
         var existingLinks = doc.Content
             .Descendants()
-            .Where(x => EqualsTagName(x, "a"))
+            .Where(x => x.EqualsTagName("a"))
             .SelectMany(x => x.Descendants()
-                .Where(x => EqualsTagName(x, "div") && !x.Elements().Any(x => EqualsTagName(x, "div"))))
+                .Where(x => x.IsMostInnerDiv()))
            .ToList();
 
         foreach (var link in existingLinks)
