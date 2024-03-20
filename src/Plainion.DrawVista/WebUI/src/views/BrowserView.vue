@@ -26,12 +26,19 @@
     </div>
 
     <div v-if="searchResults.length > 0" class="search-results-container">
-      <span
+      <div
         v-for="item in searchResults"
         v-bind:key="item.pageName"
         class="search-results-item"
-        ><a href="#" @click="onSearchResultSelected(item.pageName)">{{ item.pageName }}</a></span
       >
+        <a href="#" @click="onSearchResultSelected(item.pageName)">
+          {{ item.pageName }}
+        </a>
+        &#8680;
+        <span v-for="caption in item.captions" v-bind:key="caption">
+          "{{ caption }}"
+        </span>
+      </div>
     </div>
     <div class="svg-container box content" ref="svgContainer">
       <transition name="scale" mode="out-in">
