@@ -37,6 +37,7 @@ builder.Services.AddSingleton(new DrawingWorkbookFactory(inputFolder));
 builder.Services.AddSingleton<ISvgCaptionParser, SvgCaptionParser>();
 builder.Services.AddSingleton<ISvgHyperlinkFormatter, SvgHyperlinkFormatter>();
 builder.Services.AddSingleton<SvgProcessor>();
+builder.Services.AddSingleton<FullTextSearch>();
 
 var app = builder.Build();
 app.Environment.ContentRootPath = Path.GetDirectoryName(typeof(SvgProcessor).Assembly.Location);
@@ -92,6 +93,11 @@ app.MapGet("/svg", (HttpContext context, IDocumentStore store, string pageName) 
 app.MapGet("/pageNames", (IDocumentStore store) =>
 {
     return store.GetPageNames();
+});
+
+app.MapGet("/search", (FullTextSearch search, string text) =>
+{
+    return search.Search(text);
 });
 
 app.MapPost("/clear", (IDocumentStore store) =>

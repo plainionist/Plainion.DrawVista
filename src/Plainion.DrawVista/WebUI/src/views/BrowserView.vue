@@ -1,17 +1,38 @@
 <template>
   <div class="box">
     <div style="text-align: center">
-      <select
-        @change="onPageSelected"
-        v-model="selectedPage"
-        class="page-selection"
-      >
-        <option v-for="page in pageNames" :key="page" :value="page">
-          {{ page }}
-        </option>
-      </select>
+      <span>
+        <label>Pages</label>
+        <select
+          @change="onPageSelected"
+          v-model="selectedPage"
+          class="page-selection"
+        >
+          <option v-for="page in pageNames" :key="page" :value="page">
+            {{ page }}
+          </option>
+        </select>
+      </span>
+
+      <span style="margin-left: 30px">
+        <label>Search</label>
+        <input
+          type="text"
+          v-model="searchText"
+          v-on:keyup.enter="onSearchEnter"
+          class="search-input"
+        />
+      </span>
     </div>
 
+    <div v-if="searchResults.length > 0" class="search-results-container">
+      <span
+        v-for="item in searchResults"
+        v-bind:key="item"
+        class="search-results-item"
+        ><a href="#" @click="onSearchResultSelected(item)">{{ item }}</a></span
+      >
+    </div>
     <div class="svg-container box content" ref="svgContainer">
       <transition name="scale" mode="out-in">
         <SvgPanZoom
@@ -41,12 +62,23 @@ export default {
     return {
       selectedPage: null,
       pageNames: null,
-      svg: null
+      svg: null,
+      searchText: null,
+      searchResults: []
     }
   },
   methods: {
     onPageSelected() {
       this.navigate(this.selectedPage)
+    },
+    async onSearchEnter() {
+      const response = await API.get(`/search?text=${this.searchText}`)
+      this.searchResults = response.data
+    },
+    onSearchResultSelected(page) {
+      this.navigate(page)
+      this.searchText = null
+      this.searchResults = []
     },
     async updateSvg() {
       const current = this.getUrlQueryParams().find(
@@ -135,8 +167,29 @@ export default {
   opacity: 0;
   transform: scale(0.9);
 }
+
 .page-selection {
   font-size: medium;
   min-width: 300px;
+}
+
+.search-input {
+  font-size: medium;
+  min-width: 300px;
+}
+
+label {
+  font-weight: bold;
+  padding-right: 5px;
+}
+
+.search-results-container {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid black;
+}
+
+.search-results-item {
+  margin: 10px;
 }
 </style>
