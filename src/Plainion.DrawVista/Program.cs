@@ -32,7 +32,7 @@ if (!Directory.Exists(outputFolder))
     Directory.CreateDirectory(outputFolder);
 }
 
-builder.Services.AddSingleton<IDocumentStore>(new DocumentStore(outputFolder));
+builder.Services.AddSingleton<IDocumentStore>(new DocumentStoreCachingDecorator(new DocumentStore(outputFolder)));
 builder.Services.AddSingleton(new DrawingWorkbookFactory(inputFolder));
 builder.Services.AddSingleton<ISvgCaptionParser, SvgCaptionParser>();
 builder.Services.AddSingleton<ISvgHyperlinkFormatter, SvgHyperlinkFormatter>();
