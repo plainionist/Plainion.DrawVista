@@ -28,6 +28,7 @@ public class FullTextSearch(IDocumentStore store, ISvgCaptionParser parser)
 
         var matchingCaptions = captions
             .Where(x => x.Contains(text, StringComparison.OrdinalIgnoreCase))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
         return matchingCaptions.Any() ? new(document.Name, matchingCaptions) : null;

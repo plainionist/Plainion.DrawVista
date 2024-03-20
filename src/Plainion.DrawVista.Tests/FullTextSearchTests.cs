@@ -52,6 +52,19 @@ public class FullTextSearchTests
     }
 
     [Test]
+    public void RemoveDuplicateCaptions()
+    {
+        var store = new FakeDocumentStore();
+        store.Save(DocumentBuilder.Create("Page-1", "UserService", "RegistrationService", "userservice"));
+
+        var search = new FullTextSearch(store, new SvgCaptionParser());
+        var results = search.Search("user");
+
+        var expected = new[] { new SearchResult("Page-1", ["UserService"]) };
+        Assert.That(results.ToJson(), Is.EqualTo(expected.ToJson()));
+    }
+
+    [Test]
     public void NoMatch()
     {
         var store = new FakeDocumentStore();
