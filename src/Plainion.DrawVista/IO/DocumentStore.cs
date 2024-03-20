@@ -24,12 +24,12 @@ public class DocumentStore(string RootFolder) : IDocumentStore
         }
     }
 
-    public void Save(SvgDocument document)
+    public void Save(ProcessedDocument document)
     {
         lock (myLock)
         {
             var svgFile = Path.Combine(RootFolder, document.Name + ".svg");
-            File.WriteAllText(svgFile, document.Content.ToString());
+            File.WriteAllText(svgFile, document.Content);
         }
     }
 

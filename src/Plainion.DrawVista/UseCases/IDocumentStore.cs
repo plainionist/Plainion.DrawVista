@@ -4,8 +4,6 @@ public interface IDocumentStore
 {
     IReadOnlyCollection<string> GetPageNames();
     RawDocument GetPage(string pageName);
-    void Save(SvgDocument document);
+    void Save(ProcessedDocument document);
     void Clear();
 }
-
-public record RawDocument(string Name, string Content);

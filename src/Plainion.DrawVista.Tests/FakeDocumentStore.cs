@@ -12,7 +12,7 @@ internal class FakeDocumentStore : IDocumentStore
     public IReadOnlyCollection<string> GetPageNames() =>
         myDocuments.Select(x => x.Name).ToList();
 
-    public void Save(SvgDocument document) =>
+    public void Save(ProcessedDocument document) =>
         Save(new RawDocument(document.Name, document.Content.ToString()));
 
     public void Save(RawDocument document) =>

@@ -30,7 +30,7 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
         {
             AddLinks(knownPageNames, doc);
             ApplyStyleToExistingLinks(doc);
-            myStore.Save(doc.ToSvgDocument());
+            myStore.Save(doc.ToProcessedDocument());
         }
     }
 
@@ -43,8 +43,8 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
             return new(document.Name, xml, captions);
         }
 
-        public SvgDocument ToSvgDocument() =>
-            new(Name, Content, Captions.Select(x => x.DisplayText).ToList());
+        public ProcessedDocument ToProcessedDocument() =>
+            new(Name, Content.ToString(), Captions.Select(x => x.DisplayText).ToList());
     }
 
     private void AddLinks(IReadOnlyCollection<string> pages, ParsedDocument document)
