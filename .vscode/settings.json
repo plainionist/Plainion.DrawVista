@@ -1,5 +1,13 @@
 {
-  "cSpell.words": [
-    "Plainion"
-  ]
+  "cSpell.words": ["Plainion"],
+  "workbench.colorCustomizations": {
+    "diffEditor.insertedTextBackground": "#1e1e1e00", // previous
+    "diffEditor.removedTextBackground": "#1e1e1e00", // previous
+
+    "diffEditor.insertedLineBackground": "#4e4e4e55",
+    "diffEditor.removedLineBackground": "#4e4e4e55",
+
+    "diffEditorGutter.insertedLineBackground": "#00ff0055",
+    "diffEditorGutter.removedLineBackground": "#ff000055"
+  }
 }
