@@ -3,9 +3,12 @@ Browser for interactive diagrams based on Draw.IO
 
 ## Idea
 
-Similar to a Wiki where pages are automatically linked based on page names,
-Plainion.DrawVista automatically links diagrams to allow easy navigation between different
-layers or components of your architecture.
+Just as wiki pages are automatically linked to each other when one page mentions another by name,
+Plainion.DrawVista automatically creates links between diagrams when the name of one diagram
+is mentioned within another.
+
+This way related diagrams are easily connected and accessible, allowing convenient navigation
+between different components and layers of your designs and architecture.
 
 ## Installation
 
