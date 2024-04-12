@@ -56,18 +56,22 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
 
     private void AddLinks(IReadOnlyCollection<string> pages, ParsedDocument document)
     {
-        bool IsPageReference(string name) =>
-           pages.Any(p => p.Equals(name, StringComparison.OrdinalIgnoreCase));
+        string GetPageReference(string name) =>
+            pages.FirstOrDefault(p => p.Replace(" ", "").Equals(name, StringComparison.OrdinalIgnoreCase));
 
-        var elementsReferencingPages = document.Captions
-            .Where(x => IsPageReference(x.DisplayText))
-            // skip self-references
-            .Where(x => !x.DisplayText.Equals(document.Name, StringComparison.OrdinalIgnoreCase))
-            .ToList();
+        bool IsSelfReference(string name) =>
+            name.Replace(" ", "").Equals(document.Name, StringComparison.OrdinalIgnoreCase);
 
-        foreach (var caption in elementsReferencingPages)
+        foreach (var caption in document.Captions)
         {
-            Console.WriteLine($"Creating link for: {caption.DisplayText}");
+            var reference = GetPageReference(caption.DisplayText);
+
+            if (reference is null || IsSelfReference(caption.DisplayText))
+            {
+                continue;
+            }
+
+            Console.WriteLine($"Creating link for: {reference}");
 
             var onClickAttr = caption.Element.Attribute("onclick");
             if (onClickAttr == null)
@@ -75,7 +79,7 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
                 onClickAttr = new XAttribute("onclick", string.Empty);
                 caption.Element.Add(onClickAttr);
             }
-            onClickAttr.Value = $"window.hook.navigate('{caption.DisplayText}')";
+            onClickAttr.Value = $"window.hook.navigate('{reference}')";
 
             myFormatter.ApplyStyle(caption.Element, isExternal: false);
         }
