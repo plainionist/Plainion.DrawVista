@@ -16,7 +16,7 @@ internal class DrawIOApp(DrawIOModel Model) : IDisposable
 
         // Console.WriteLine($"draw.io.exe -x {myFile} -o {svgFile} -p {pageIndex}");
 
-        Process.Start(Executable, $"-x {myFile} -o {svgFile} -p {pageIndex}")
+        Process.Start(Executable, $"-x {myFile} -o \"{svgFile}\" -p {pageIndex}")
             .WaitForExit();
     }
 

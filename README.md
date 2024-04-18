@@ -10,6 +10,10 @@ is mentioned within another.
 This way related diagrams are easily connected and accessible, allowing convenient navigation
 between different components and layers of your designs and architecture.
 
+![](</doc/Index Page.png>)
+![](</doc/Programming Languages Page.png>)
+![](</doc/Structured Programming Page.png>)
+
 ## Installation
 
 - pre-requisite: install DrawIO (the desktop app)
