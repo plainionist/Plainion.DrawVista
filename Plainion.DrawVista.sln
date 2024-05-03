@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{79C18B61-6AB6-4454-8E44-E5C85EBB092C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainion.DrawVista", "src\Plainion.DrawVista\Plainion.DrawVista.csproj", "{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plainion.DrawVista", "src\Plainion.DrawVista\Plainion.DrawVista.csproj", "{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plainion.DrawVista.Tests", "src\Plainion.DrawVista.Tests\Plainion.DrawVista.Tests.csproj", "{4DA066DA-7EDB-4E06-97F1-01BCF7376D65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainion.DrawVista.Tests", "src\Plainion.DrawVista.Tests\Plainion.DrawVista.Tests.csproj", "{4DA066DA-7EDB-4E06-97F1-01BCF7376D65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,10 +24,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{7C36B9C8-00AA-4CF6-BDDC-A34B7E9CFDA6} = {79C18B61-6AB6-4454-8E44-E5C85EBB092C}
-		{4DA066DA-7EDB-4E06-97F1-01BCF7376D65} = {79C18B61-6AB6-4454-8E44-E5C85EBB092C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F03FE0BB-4F29-40B7-BD91-7974644BF852}
