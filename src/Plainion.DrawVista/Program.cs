@@ -26,13 +26,10 @@ if (!Directory.Exists(inputFolder))
     Directory.CreateDirectory(inputFolder);
 }
 
-var outputFolder = Path.Combine(appData, "store");
-if (!Directory.Exists(outputFolder))
-{
-    Directory.CreateDirectory(outputFolder);
-}
+var store = new FileSystemDocumentStore(appData);
+store.Init();
 
-builder.Services.AddSingleton<IDocumentStore>(new DocumentStoreCachingDecorator(new FileSystemDocumentStore(outputFolder)));
+builder.Services.AddSingleton<IDocumentStore>(new DocumentStoreCachingDecorator(store));
 builder.Services.AddSingleton(new DrawingWorkbookFactory(inputFolder));
 builder.Services.AddSingleton<ISvgCaptionParser, SvgCaptionParser>();
 builder.Services.AddSingleton<ISvgHyperlinkFormatter, SvgHyperlinkFormatter>();

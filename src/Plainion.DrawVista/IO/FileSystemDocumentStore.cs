@@ -3,15 +3,16 @@ using Plainion.DrawVista.UseCases;
 
 namespace Plainion.DrawVista.IO;
 
-public class FileSystemDocumentStore(string RootFolder) : IDocumentStore
+public class FileSystemDocumentStore(string appHome) : IDocumentStore
 {
+    private readonly string myRootFolder = Path.Combine(appHome,"store");
     private readonly object myLock = new();
 
     public IReadOnlyCollection<string> GetPageNames()
     {
         lock (myLock)
         {
-            return Directory.GetFiles(RootFolder, "*.svg")
+            return Directory.GetFiles(myRootFolder, "*.svg")
                 .Select(Path.GetFileNameWithoutExtension)
                 .ToList();
         }
@@ -29,8 +30,8 @@ public class FileSystemDocumentStore(string RootFolder) : IDocumentStore
 
     private record MetaContent(List<string> Captions);
 
-    private string MetaFile(string pageName) => Path.Combine(RootFolder, pageName + ".svg.meta");
-    private string ContentFile(string pageName) => Path.Combine(RootFolder, pageName + ".svg");
+    private string MetaFile(string pageName) => Path.Combine(myRootFolder, pageName + ".svg.meta");
+    private string ContentFile(string pageName) => Path.Combine(myRootFolder, pageName + ".svg");
 
     public void Save(ProcessedDocument document)
     {
@@ -46,10 +47,18 @@ public class FileSystemDocumentStore(string RootFolder) : IDocumentStore
     {
         lock (myLock)
         {
-            foreach (var file in Directory.GetFiles(RootFolder))
+            foreach (var file in Directory.GetFiles(myRootFolder))
             {
                 File.Delete(file);
             }
+        }
+    }
+
+    public void Init()
+    {
+        if (!Directory.Exists(myRootFolder))
+        {
+            Directory.CreateDirectory(myRootFolder);
         }
     }
 }
