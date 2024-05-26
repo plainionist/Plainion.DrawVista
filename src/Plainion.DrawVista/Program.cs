@@ -26,8 +26,16 @@ if (!Directory.Exists(inputFolder))
     Directory.CreateDirectory(inputFolder);
 }
 
-var store = new FileSystemDocumentStore(appData);
+var store = new SqliteDocumentStore(appData);
 store.Init();
+
+var oldStore = new FileSystemDocumentStore(appData);
+foreach (var name in oldStore.GetPageNames())
+{
+    var page = oldStore.GetPage(name);
+    store.Save(page);
+}
+oldStore.Clear();
 
 builder.Services.AddSingleton<IDocumentStore>(new DocumentStoreCachingDecorator(store));
 builder.Services.AddSingleton(new DrawingWorkbookFactory(inputFolder));
