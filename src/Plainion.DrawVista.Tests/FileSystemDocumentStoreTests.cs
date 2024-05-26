@@ -4,7 +4,7 @@ using Plainion.DrawVista.UseCases;
 namespace Plainion.DrawVista.Tests;
 
 [TestFixture]
-public class DocumentStoreTests
+public class FileSystemDocumentStoreTests
 {
     private readonly string myRootFolder = Path.Combine(Path.GetTempPath(), "DrawVista.Store");
 
@@ -26,7 +26,7 @@ public class DocumentStoreTests
     [Test]
     public void StoreAndLoad()
     {
-        var store = new DocumentStore(myRootFolder);
+        var store = new FileSystemDocumentStore(myRootFolder);
 
         store.Save(new ProcessedDocument("Page-1", "Some dummy content", ["caption-1", "caption-2"]));
         var document = store.GetPage("Page-1");

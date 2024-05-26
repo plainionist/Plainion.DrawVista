@@ -3,9 +3,9 @@ using Plainion.DrawVista.UseCases;
 
 namespace Plainion.DrawVista.IO;
 
-public class DocumentStore(string RootFolder) : IDocumentStore
+public class FileSystemDocumentStore(string RootFolder) : IDocumentStore
 {
-    private readonly object myLock = new object();
+    private readonly object myLock = new();
 
     public IReadOnlyCollection<string> GetPageNames()
     {
