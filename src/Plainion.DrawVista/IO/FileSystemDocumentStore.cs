@@ -5,7 +5,7 @@ namespace Plainion.DrawVista.IO;
 
 public class FileSystemDocumentStore(string appHome) : IDocumentStore
 {
-    private readonly string myRootFolder = Path.Combine(appHome,"store");
+    private readonly string myRootFolder = Path.Combine(appHome, GlobalConst.StoreDirName);
     private readonly object myLock = new();
 
     public IReadOnlyCollection<string> GetPageNames()
