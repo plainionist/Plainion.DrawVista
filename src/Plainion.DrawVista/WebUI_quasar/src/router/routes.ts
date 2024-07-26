@@ -1,18 +1,29 @@
 import { RouteRecordRaw } from 'vue-router';
 
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    name: 'browse',
+    component: () => import('../views/BrowserView.vue')
   },
-
-  // Always leave this as last one,
-  // but you can also remove it
   {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
+    path: '/upload',
+    name: 'upload',
+    component: () => import('../views/UploadView.vue')
   },
+  {
+    path: '/clear',
+    name: 'clear',
+    component: () => import('../views/ClearView.vue')
+  }
 ];
 
-export default routes;
+const allRoutes: RouteRecordRaw[] = routes.concat([
+  {
+    path: '/:catchAll(.*)*',
+    component: () => import('../views/ErrorNotFound.vue'),
+  },
+]);
+
+export {routes, allRoutes};
