@@ -17,7 +17,7 @@ const $q = useQuasar();
 const { t } = useI18n();
 const router = useRouter();
 
-let requestInProgress: Ref<boolean> = ref(false);
+const requestInProgress: Ref<boolean> = ref(false);
 
 function clear() {
   requestInProgress.value = true;

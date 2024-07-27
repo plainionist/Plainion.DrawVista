@@ -4,6 +4,12 @@ export default {
   upload: 'Upload',
   clear: 'Clear',
 
+  //Browse view
+  SEARCH: 'Search',
+  SELECT_PAGE: 'Selelct page',
+  LOADING_PAGES_FAILED: 'Loading of pages failed.',
+  LOADING_PAGE_FAILED: 'Loading of page failed.',
+
   //Clear view
   CLEAR_BTN: 'Delete all uploaded files',
   CLEAR_SUCCESS: 'Cleared files succeessfully',

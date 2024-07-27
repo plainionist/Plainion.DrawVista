@@ -23,8 +23,8 @@ const $q = useQuasar();
 const { t } = useI18n();
 const router = useRouter();
 
-let requestInProgress: Ref<boolean> = ref(false);
-let filesToUpload: Ref<File[]> = ref([]);
+const requestInProgress: Ref<boolean> = ref(false);
+const filesToUpload: Ref<File[]> = ref([]);
 
 function submit() {
   requestInProgress.value = true;

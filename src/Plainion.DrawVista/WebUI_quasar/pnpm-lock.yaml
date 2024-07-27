@@ -23,6 +23,9 @@ dependencies:
   vue-router:
     specifier: ^4.0.12
     version: 4.4.0(vue@3.4.34)
+  vue-svg-pan-zoom:
+    specifier: ^2.1.0
+    version: 2.1.0
 
 devDependencies:
   '@intlify/vite-plugin-vue-i18n':
@@ -3216,6 +3219,10 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
+  /svg-pan-zoom@3.6.0:
+    resolution: {integrity: sha512-ZBEL2z/n/W2fLLFzn3NTQgd+7QEfbrKvKmu29U3qvMflmJgLaWkwKbOzWJYESFidTiGYMHkijAKmY6m64moyYg==}
+    dev: false
+
   /table@6.8.2:
     resolution: {integrity: sha512-w2sfv80nrAh2VCbqR5AK27wswXhqcck2AhfnNW76beQXskGZ1V12GwS//yYVa3d3fcvAip2OUnbDAjW2k3v9fA==}
     engines: {node: '>=10.0.0'}
@@ -3526,6 +3533,12 @@ packages:
     dependencies:
       '@vue/devtools-api': 6.6.3
       vue: 3.4.34(typescript@4.9.5)
+
+  /vue-svg-pan-zoom@2.1.0:
+    resolution: {integrity: sha512-S7xCfNVs+Bt0xMxA0ZYI3o80WFJssdMDlb0kLfk+1L6HQr/JOQBM6E48EjITckoq0/jfOZUp6iVUN/4+L6+Kvg==}
+    dependencies:
+      svg-pan-zoom: 3.6.0
+    dev: false
 
   /vue-template-compiler@2.7.16:
     resolution: {integrity: sha512-AYbUWAJHLGGQM7+cNTELw+KsOG9nl2CnSv467WobS5Cv9uk3wFcnr1Etsz2sEIHEZvw1U+o9mRlEO6QbZvUPGQ==}
