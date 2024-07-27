@@ -14,5 +14,4 @@
 
 <script setup lang="ts">
 import { routes } from 'src/router/routes';
-
 </script>
