@@ -1,7 +1,7 @@
 <template>
   <q-page class="window-width justify-center row q-pa-xl">
     <div>
-      <q-btn @click="clear()" :disable="requestInProgress" class="q-pa-xl">{{$t('CLEAR_BTN')}}</q-btn>
+      <q-btn @click="clear" :disable="requestInProgress" class="q-pa-xl">{{$t('CLEAR_BTN')}}</q-btn>
     </div>
   </q-page>
 </template>
@@ -25,16 +25,22 @@ function clear() {
   api.post('/clear')
     .then(() => {
       requestInProgress.value = false;
+      $q.notify({
+        color: 'positive',
+        position: 'top',
+        message: t('CLEAR_SUCCESS'),
+        icon: 'check'
+      });
       router.push('/');
     })
     .catch(() => {
+      requestInProgress.value = false;
       $q.notify({
         color: 'negative',
         position: 'top',
         message: t('CLEAR_FAILED'),
         icon: 'report_problem'
       });
-      requestInProgress.value = false;
      })
 }
 </script>
