@@ -31,3 +31,12 @@ between different components and layers of your designs and architecture.
 - upload the files using the "upload" page
 - the upload will take a few seconds/minutes
 - navigate to the "home" page and start browsing your diagrams
+
+## Quasar WebUI <=> "vanilla" VueJs WebUI
+
+By default the new Quasar-based WebUI is enabled. For switching to the "vanilla" VueJs WebUI change comment in [build-release.cmd](./build/build-release.cmd) / [build-debug.cmd](./build/build-debug.cmd) to:
+
+    :: use for VueJS with vanilla JS (legacy)
+    cd WebUI
+    :: use for VueJS + Quasar + TS
+    :: cd WebUI_quasar
