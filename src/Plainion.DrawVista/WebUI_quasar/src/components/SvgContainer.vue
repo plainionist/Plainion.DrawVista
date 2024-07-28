@@ -19,12 +19,14 @@
 <script setup lang="ts">
 import { SvgPanZoom } from 'vue-svg-pan-zoom';
 import { onMounted, Ref, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { api } from 'src/boot/axios';
 
 const $q = useQuasar();
 const { t } = useI18n();
+const router = useRouter();
 
 const svg: Ref<string> = ref('');
 const svgContainer = ref();
@@ -91,7 +93,15 @@ function setSvg(pageContent: string, startPage: boolean): void {
     );
   }
 
-  svg.value = svgElement.outerHTML;
+  svg.value = TransformToLinks(svgElement.outerHTML);
+}
+
+function TransformToLinks(svgWithLegacyUiLinks: string): string
+{
+  const replacement = `<a href="${router.resolve('/').href}?page=$2">$1 style=""display: inline-block;font-size: 12px;font-family: Helvetica;fill: blue;line-height: 1.2;pointer-events: all;white-space: normal;overflow-wrap: normal;text-decoration: underline;cursor: pointer"">$2$3</a>`;
+  const pattern = /(<text.*).*window\.hook\.navigate\('(.*)'\).*(<\/text>)/g;
+  const result: string = svgWithLegacyUiLinks.replace(pattern, replacement);
+  return result;
 }
 </script>
 
