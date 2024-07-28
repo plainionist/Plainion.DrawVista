@@ -3,10 +3,20 @@ using Plainion.DrawVista.UseCases;
 
 namespace Plainion.DrawVista.IO;
 
-public class FileSystemDocumentStore(string appHome) : IDocumentStore
+public class FileSystemDocumentStore : IDocumentStore
 {
-    private readonly string myRootFolder = Path.Combine(appHome, GlobalConst.StoreDirName);
+    private readonly string myRootFolder;
     private readonly object myLock = new();
+
+    public event EventHandler DocumentsChanged;
+
+    public FileSystemDocumentStore(string appData) {
+        myRootFolder = Path.Combine(appData, GlobalConst.StoreDirName);
+        if (!Directory.Exists(myRootFolder))
+        {
+            Directory.CreateDirectory(myRootFolder);
+        }
+    }
 
     public IReadOnlyCollection<string> GetPageNames()
     {
@@ -41,6 +51,8 @@ public class FileSystemDocumentStore(string appHome) : IDocumentStore
             var meta = new MetaContent(document.Captions.ToList());
             File.WriteAllText(MetaFile(document.Name), JsonConvert.SerializeObject(meta));
         }
+
+        DocumentsChanged?.Invoke(this, null);
     }
 
     public void Clear()

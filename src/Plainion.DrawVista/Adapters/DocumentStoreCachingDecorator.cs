@@ -9,6 +9,8 @@ public class DocumentStoreCachingDecorator(IDocumentStore impl) : IDocumentStore
         .Select(impl.GetPage)
         .ToDictionary(x => x.Name);
 
+    public event EventHandler DocumentsChanged;
+
     public void Clear()
     {
         myCache.Clear();

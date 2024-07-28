@@ -9,6 +9,7 @@
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.5" />
+    <PackageReference Include="Rubjerg.Graphviz" Version="2.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="MetadataExtractor" Version="2.8.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
