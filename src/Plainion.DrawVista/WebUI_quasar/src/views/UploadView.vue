@@ -5,7 +5,7 @@
       :label="$t('CLICK_OR_DROP_TO_UPLOAD')"
       filled
       multiple
-      class="full-width full-height row"
+      class="full-width full-height row filedrop"
     >
     </q-file>
     <q-btn @click="submit" :disable="requestInProgress" class="q-mt-md full-width">{{$t('UPLOAD_BTN')}}</q-btn>
@@ -58,10 +58,10 @@ function submit() {
 </script>
 
 <style>
-.q-field__inner {
+.filedrop .q-field__inner {
   height: 500px; 
 }
-.q-field__control {
+.filedrop .q-field__control {
   height: 100% !important; 
 }
 </style>
