@@ -24,18 +24,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
-var appData = Path.Combine(Environment.GetEnvironmentVariable("ALLUSERSPROFILE"), "Plainion.DrawVista");
+var appData = Path.Combine(Environment.GetEnvironmentVariable("ALLUSERSPROFILE"), GlobalConst.AppFolder);
 
 var inputFolder = Path.Combine(appData, GlobalConst.InputDirName);
 if (!Directory.Exists(inputFolder))
 {
     Directory.CreateDirectory(inputFolder);
-}
-
-var storeFolder = Path.Combine(appData, GlobalConst.StoreDirName);
-if (!Directory.Exists(storeFolder))
-{
-    Directory.CreateDirectory(storeFolder);
 }
 
 var store = new SqliteDocumentStore(appData);

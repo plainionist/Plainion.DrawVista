@@ -10,6 +10,8 @@ public class SqliteDocumentStore : IDocumentStore
 {
     private readonly string myConnectionString;
 
+    public event EventHandler DocumentsChanged;
+
     public SqliteDocumentStore(string appHome)
     {
         myConnectionString = $"Data Source={appHome}\\store.db";
@@ -61,7 +63,12 @@ public class SqliteDocumentStore : IDocumentStore
             Captions = excluded.Captions
         """;
 
-        connection.Execute(sql, document);
+        int affectedRows = connection.Execute(sql, document);
+
+        if (affectedRows > 0)
+        {
+            DocumentsChanged?.Invoke(this, null);
+        }
     }
 
     public void Clear()
