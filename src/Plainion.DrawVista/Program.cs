@@ -49,6 +49,7 @@ builder.Services.AddSingleton<ISvgCaptionParser, SvgCaptionParser>();
 builder.Services.AddSingleton<ISvgHyperlinkFormatter, SvgHyperlinkFormatter>();
 builder.Services.AddSingleton<SvgProcessor>();
 builder.Services.AddSingleton<FullTextSearch>();
+builder.Services.AddSingleton<StartPage>();
 
 var app = builder.Build();
 app.Environment.ContentRootPath = Path.GetDirectoryName(typeof(SvgProcessor).Assembly.Location);
@@ -90,6 +91,13 @@ app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, 
 })
 .DisableAntiforgery();
 
+app.MapGet("/startPage", (HttpContext context, IDocumentStore store, string pageName) =>
+{
+    StartPage startPage = app.Services.GetService<StartPage>();
+    
+    context.Response.ContentType = "image/svg+xml";
+    return startPage.Svg;
+});
 app.MapGet("/svg", (HttpContext context, IDocumentStore store, string pageName) =>
 {
     if (string.IsNullOrEmpty(pageName))

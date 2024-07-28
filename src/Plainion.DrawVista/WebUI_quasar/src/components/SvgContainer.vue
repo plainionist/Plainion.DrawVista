@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { SvgPanZoom } from 'vue-svg-pan-zoom';
-import { Ref, ref, watch } from 'vue';
+import { onMounted, Ref, ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { api } from 'src/boot/axios';
@@ -40,26 +40,31 @@ watch(() => props.page, (newPage, oldPage) => {
   updateSvg(newPage);
 });
 
+onMounted(() => {
+  updateSvg(undefined);
+});
+
 function updateSvg(page: string | undefined) {
   if (!page)
   {
-      //TODO: load startpage here later on   
+    api.get('/startPage')
+    .then((response) => {
+      setSvg(response.data);
+    })
+    .catch(() => {
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        message: t('LOADING_PAGE_FAILED'),
+        icon: 'report_problem'
+      });
+      })
       return;
   }
 
   api.get(`/svg?pageName=${page}`)
   .then((response) => {
-    const pageContent = response.data;
-
-    const parser = new DOMParser();
-    const svgDoc = parser.parseFromString(pageContent, 'image/svg+xml');
-    const svgElement = svgDoc.documentElement;
-    svgElement.setAttribute(
-      'height',
-      svgContainer.value.offsetHeight - 30 + ''
-    );
-
-    svg.value = svgElement.outerHTML;
+    setSvg(response.data);
   })
   .catch(() => {
     $q.notify({
@@ -69,6 +74,18 @@ function updateSvg(page: string | undefined) {
       icon: 'report_problem'
     });
     })
+}
+
+function setSvg(pageContent: string): void {
+  const parser = new DOMParser();
+  const svgDoc = parser.parseFromString(pageContent, 'image/svg+xml');
+  const svgElement = svgDoc.documentElement;
+  svgElement.setAttribute(
+    'height',
+    svgContainer.value.offsetHeight - 30 + ''
+  );
+
+  svg.value = svgElement.outerHTML;
 }
 </script>
 
