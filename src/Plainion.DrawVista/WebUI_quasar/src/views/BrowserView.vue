@@ -4,6 +4,7 @@
       <q-select filled class="col q-ma-md" v-model="selectedPage" :options="pages" :label="$t('SELECT_PAGE')" />
       <q-input filled class="col q-ma-md" v-model="searchFor" :label="$t('SEARCH')" />
     </div>
+    <SearchResults :search-string="searchFor" />
     <SvgContainer :page="selectedPage" />
   </q-page>
 </template>
@@ -14,6 +15,7 @@ import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { api } from 'src/boot/axios';
+import SearchResults from 'src/components/SearchResults.vue';
 import SvgContainer from 'src/components/SvgContainer.vue';
 
 const $q = useQuasar();
@@ -54,13 +56,3 @@ onMounted(() => {
      })
 });
 </script>
-
-<style>
-.svg-container {
-  margin-top: 10px;
-  padding: 10px;
-
-  border: 1px solid black;
-  background-color: white;
-}
-</style>
