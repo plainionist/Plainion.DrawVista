@@ -56,7 +56,7 @@ public class SqliteDocumentStoreTests
 
         store.Save(new ProcessedDocument("Page-1", "Some dummy content", ["caption-1", "caption-2"]));
         var documents = store.GetPageNames();
-        Assert.That(1, Is.EqualTo(documents.Count));
+        Assert.That(documents.Count, Is.EqualTo(1));
 
         //Act
         store.Clear();
