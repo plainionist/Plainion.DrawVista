@@ -49,7 +49,7 @@ function updateSvg(page: string | undefined) {
   {
     api.get('/startPage')
     .then((response) => {
-      setSvg(response.data);
+      setSvg(response.data, true);
     })
     .catch(() => {
       $q.notify({
@@ -64,7 +64,7 @@ function updateSvg(page: string | undefined) {
 
   api.get(`/svg?pageName=${page}`)
   .then((response) => {
-    setSvg(response.data);
+    setSvg(response.data, false);
   })
   .catch(() => {
     $q.notify({
@@ -76,7 +76,7 @@ function updateSvg(page: string | undefined) {
     })
 }
 
-function setSvg(pageContent: string): void {
+function setSvg(pageContent: string, startPage: boolean): void {
   const parser = new DOMParser();
   const svgDoc = parser.parseFromString(pageContent, 'image/svg+xml');
   const svgElement = svgDoc.documentElement;
@@ -84,6 +84,12 @@ function setSvg(pageContent: string): void {
     'height',
     svgContainer.value.offsetHeight - 30 + ''
   );
+  if(startPage) {
+    svgElement.setAttribute(
+      'width',
+      svgContainer.value.offsetWidth - 30 + ''
+    );
+  }
 
   svg.value = svgElement.outerHTML;
 }
