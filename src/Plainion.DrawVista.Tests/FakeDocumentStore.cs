@@ -6,6 +6,8 @@ internal class FakeDocumentStore : IDocumentStore
 {
     private readonly List<ProcessedDocument> myDocuments = [];
 
+    public event EventHandler DocumentsChanged;
+
     public ProcessedDocument GetPage(string pageName) =>
         myDocuments.Single(x => x.Name == pageName);
 

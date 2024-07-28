@@ -24,7 +24,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
-var appData = Path.Combine(Environment.GetEnvironmentVariable("ALLUSERSPROFILE"), "Plainion.DrawVista");
+var appData = Path.Combine(Environment.GetEnvironmentVariable("ALLUSERSPROFILE"), GlobalConst.AppFolder);
 
 var inputFolder = Path.Combine(appData, GlobalConst.InputDirName);
 if (!Directory.Exists(inputFolder))
@@ -32,13 +32,7 @@ if (!Directory.Exists(inputFolder))
     Directory.CreateDirectory(inputFolder);
 }
 
-var storeFolder = Path.Combine(appData, GlobalConst.StoreDirName);
-if (!Directory.Exists(storeFolder))
-{
-    Directory.CreateDirectory(storeFolder);
-}
-
-var store = new SqliteDocumentStore(appData);
+var store = new SqliteDocumentStore($"Data Source={appData}\\store.db");
 store.Init();
 
 var oldStore = new FileSystemDocumentStore(appData);
@@ -55,6 +49,7 @@ builder.Services.AddSingleton<ISvgCaptionParser, SvgCaptionParser>();
 builder.Services.AddSingleton<ISvgHyperlinkFormatter, SvgHyperlinkFormatter>();
 builder.Services.AddSingleton<SvgProcessor>();
 builder.Services.AddSingleton<FullTextSearch>();
+builder.Services.AddSingleton<StartPage>();
 
 var app = builder.Build();
 app.Environment.ContentRootPath = Path.GetDirectoryName(typeof(SvgProcessor).Assembly.Location);
@@ -96,6 +91,13 @@ app.MapPost("/upload", (DrawingWorkbookFactory factory, SvgProcessor processor, 
 })
 .DisableAntiforgery();
 
+app.MapGet("/startPage", (HttpContext context, IDocumentStore store, string pageName) =>
+{
+    StartPage startPage = app.Services.GetService<StartPage>();
+    
+    context.Response.ContentType = "image/svg+xml";
+    return startPage.Svg;
+});
 app.MapGet("/svg", (HttpContext context, IDocumentStore store, string pageName) =>
 {
     if (string.IsNullOrEmpty(pageName))
