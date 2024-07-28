@@ -32,7 +32,7 @@ if (!Directory.Exists(inputFolder))
     Directory.CreateDirectory(inputFolder);
 }
 
-var store = new SqliteDocumentStore(appData);
+var store = new SqliteDocumentStore($"Data Source={appData}\\store.db");
 store.Init();
 
 var oldStore = new FileSystemDocumentStore(appData);

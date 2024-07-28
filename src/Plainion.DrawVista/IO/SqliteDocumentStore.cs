@@ -12,9 +12,9 @@ public class SqliteDocumentStore : IDocumentStore
 
     public event EventHandler DocumentsChanged;
 
-    public SqliteDocumentStore(string appHome)
+    public SqliteDocumentStore(string connectionString)
     {
-        myConnectionString = $"Data Source={appHome}\\store.db";
+        myConnectionString = connectionString;
 
         SqlMapper.AddTypeHandler(new StringCollectionHandler());
     }
