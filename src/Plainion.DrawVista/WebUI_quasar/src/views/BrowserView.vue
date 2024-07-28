@@ -54,5 +54,6 @@ onMounted(() => {
         icon: 'report_problem'
       });
      })
+  selectedPage.value = route.query.page?.toString();
 });
 </script>
