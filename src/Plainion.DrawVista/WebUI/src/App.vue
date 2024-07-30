@@ -1,58 +1,11 @@
 <template>
-  <nav class="row header">
-    <router-link to="/">Browse</router-link> |
-    <router-link to="/upload">Upload</router-link> |
-    <router-link to="/clear">Clear</router-link>
-  </nav>
-  <div style="padding: 10px" class="row content">
-    <router-view />
-  </div>
+  <MainLayout />
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script setup lang="ts">
+import MainLayout from 'layouts/MainLayout.vue';
 
-nav {
-  padding-top: 20px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-
-html,
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0px;
-}
-
-.box {
-  display: flex;
-  flex-flow: column;
-  height: 100%;
-}
-
-.box .row.header {
-  flex: 0 1 auto;
-}
-
-.box .row.content {
-  flex: 1 1 auto;
-}
-
-.box .row.footer {
-  flex: 0 1 40px;
-}
-</style>
+defineOptions({
+  name: 'App'
+});
+</script>

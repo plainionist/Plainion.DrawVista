@@ -4,10 +4,7 @@ cd %~d0%~p0..
 cd src\Plainion.DrawVista
 call pnpm install
 
-:: use for VueJS with vanilla JS (legacy)
-:: cd WebUI
-:: use for VueJS + Quasar + TS
-cd WebUI_quasar
+cd WebUI
 
 call pnpm install
 call pnpm build

@@ -1,49 +1,67 @@
 <template>
-  <div>
-    <button @click="submit" :disabled="uploading">Upload</button>
-    <br />
-    <br />
-    <div class="center">
-      <drop-items @itemsSelected="onItemsSelected" />
-    </div>
-  </div>
+  <q-page class="window-width justify-center content-start row q-pa-xl">
+    <q-file
+      v-model="filesToUpload"
+      :label="$t('CLICK_OR_DROP_TO_UPLOAD')"
+      filled
+      multiple
+      class="full-width full-height row filedrop"
+    >
+    </q-file>
+    <q-btn @click="submit" :disable="requestInProgress" class="q-mt-md full-width">{{$t('UPLOAD_BTN')}}</q-btn>
+  </q-page>
 </template>
 
-<script>
-import API from '@/api'
-import DropItems from './DropItems.vue'
-export default {
-  name: 'UploadView',
-  components: { DropItems },
-  data() {
-    return {
-      uploading: false
-    }
-  },
-  methods: {
-    onItemsSelected(items) {
-      this.items = items
-    },
-    async submit() {
-      this.uploading = true
+<script setup lang="ts">
+import { Ref, ref } from 'vue';
+import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { api } from 'src/boot/axios';
 
-      const formData = new FormData()
-      this.items.forEach((item) => formData.append(item.name, item))
-      const headers = { 'Content-Type': 'multipart/form-data' }
+const $q = useQuasar();
+const { t } = useI18n();
+const router = useRouter();
 
-      await API.post('/upload', formData, { headers })
+const requestInProgress: Ref<boolean> = ref(false);
+const filesToUpload: Ref<File[]> = ref([]);
 
-      this.uploading = false
+function submit() {
+  requestInProgress.value = true;
 
-      this.$router.push('/')
-    }
-  }
+  const formData = new FormData();
+  filesToUpload.value.forEach((item) => formData.append(item.name, item));
+
+  const headers = { 'Content-Type': 'multipart/form-data' }
+  
+  api.post('/upload', formData, { headers })
+    .then(() => {
+      requestInProgress.value = false;
+      $q.notify({
+        color: 'positive',
+        position: 'top',
+        message: t('UPLOAD_SUCCESS'),
+        icon: 'check'
+      });
+      router.push('/');
+    })
+    .catch(() => {
+      requestInProgress.value = false;
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        message: t('UPLOAD_FAILED'),
+        icon: 'report_problem'
+      });
+     })
 }
 </script>
 
-<style scoped>
-.center {
-  margin: auto;
-  width: 50%;
+<style>
+.filedrop .q-field__inner {
+  height: 500px; 
+}
+.filedrop .q-field__control {
+  height: 100% !important; 
 }
 </style>

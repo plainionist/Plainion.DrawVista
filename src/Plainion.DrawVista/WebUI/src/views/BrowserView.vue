@@ -1,217 +1,59 @@
 <template>
-  <div class="box">
-    <div style="text-align: center">
-      <span>
-        <label>Pages</label>
-        <select
-          @change="onPageSelected"
-          v-model="selectedPage"
-          class="page-selection"
-        >
-          <option v-for="page in pageNames" :key="page" :value="page">
-            {{ page }}
-          </option>
-        </select>
-      </span>
-
-      <span style="margin-left: 30px">
-        <label>Search</label>
-        <input
-          type="text"
-          v-model="searchText"
-          @keyup.enter="onSearchEnter"
-          @input="onSearchTextChanged($event.target.value)"
-          class="search-input"
-        />
-      </span>
+  <q-page class="window-height window-width justify-center content-start row q-pa-md">
+    <div class="row full-width">
+      <q-select filled class="col q-ma-md" v-model="selectedPage" :options="pages" :label="$t('SELECT_PAGE')" />
+      <q-input filled class="col q-ma-md" v-model="searchFor" :label="$t('SEARCH')" />
     </div>
-
-    <div v-if="searchResults.length > 0" class="search-results-container">
-      <div
-        v-for="item in searchResults"
-        v-bind:key="item.pageName"
-        class="search-results-item"
-      >
-        <a href="#" @click="onSearchResultSelected(item.pageName)">
-          {{ item.pageName }}
-        </a>
-        &#8680;
-        <span v-for="caption in item.captions" v-bind:key="caption">
-          "{{ caption }}"
-        </span>
-      </div>
-    </div>
-    <div class="svg-container box content" ref="svgContainer">
-      <transition name="scale" mode="out-in">
-        <SvgPanZoom
-          :key="svg"
-          style="width: 100%; height: 100%"
-          :zoomEnabled="true"
-          :controlIconsEnabled="false"
-          :fit="true"
-          :center="true"
-          :minZoom="0.25"
-        >
-          <div v-html="svg"></div>
-        </SvgPanZoom>
-      </transition>
-    </div>
-  </div>
+    <SearchResults :search-string="searchFor" />
+    <SvgContainer :page="selectedPage" />
+  </q-page>
 </template>
 
-<script>
-import { SvgPanZoom } from 'vue-svg-pan-zoom'
-import API from '@/api'
+<script setup lang="ts">
+import { onMounted, Ref, ref, watch } from 'vue';
+import { useQuasar } from 'quasar';
+import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { api } from 'src/boot/axios';
+import SearchResults from 'src/components/SearchResults.vue';
+import SvgContainer from 'src/components/SvgContainer.vue';
 
-export default {
-  name: 'BrowserView',
-  components: { SvgPanZoom },
-  data() {
-    return {
-      selectedPage: null,
-      pageNames: null,
-      svg: null,
-      searchText: null,
-      searchResults: []
-    }
-  },
-  methods: {
-    onPageSelected() {
-      this.navigate(this.selectedPage)
-    },
-    async onSearchEnter() {
-      if (this.searchText && this.searchText !== '') {
-        const response = await API.get(`/search?text=${this.searchText}`)
-        this.searchResults = response.data
-      } else {
-        this.searchResults = []
-      }
-    },
-    onSearchTextChanged(value) {
-      const enteredValue = value
-      setTimeout(() => {
-        if (this.searchText === enteredValue) {
-          this.onSearchEnter()
-        }
-      }, 250)
-    },
-    onSearchResultSelected(page) {
-      this.navigate(page)
-      this.searchText = null
-      this.searchResults = []
-    },
-    async updateSvg() {
-      const current = this.getUrlQueryParams().find(
-        (obj) => obj.name === 'page'
-      )?.value
-      if (!current) {
-        return
-      }
+const $q = useQuasar();
+const { t } = useI18n();
+const router = useRouter();
+const route = useRoute();
 
-      const response = await API.get(`/svg?pageName=${current}`)
-      const pageContent = response.data
+const pages: Ref<string[]> = ref([]);
+const selectedPage: Ref<string | undefined> = ref('');
+const searchFor: Ref<string> = ref('');
 
-      const parser = new DOMParser()
-      const svgDoc = parser.parseFromString(pageContent, 'image/svg+xml')
-      const svgElement = svgDoc.documentElement
-      svgElement.setAttribute(
-        'height',
-        this.$refs.svgContainer.offsetHeight - 30
-      )
-
-      this.svg = svgElement.outerHTML
-    },
-    navigate(id) {
-      this.selectedPage = this.pageNames.find(
-        (x) => x.toLowerCase() === id.toLowerCase()
-      )
-
-      if (this.selectedPage) {
-        this.updateBrowserHistory(this.selectedPage)
-
-        this.updateSvg()
-      }
-    },
-    updateBrowserHistory(pageName) {
-      history.pushState(
-        {
-          page: pageName
-        },
-        null,
-        `${window.location.pathname}?page=${pageName}`
-      )
-    },
-    getUrlQueryParams() {
-      return window.location.search
-        .replace('?', '')
-        .split('&')
-        .filter((v) => v)
-        .map((s) => {
-          s = s.replace('+', '%20')
-          s = s.split('=').map((s) => decodeURIComponent(s))
-          return {
-            name: s[0],
-            value: s[1]
-          }
-        })
-    }
-  },
-  mounted() {
-    window.hook = this
-    window.onpopstate = (e) => {
-      this.updateSvg()
-    }
-    this.updateSvg()
-  },
-  async created() {
-    const response = await API.get('/pageNames')
-    this.pageNames = response.data
-
-    this.navigate('index')
+watch(selectedPage, async (newSelection) => {
+  if (!newSelection) {
+    return;
   }
-}
+  router.push({
+    path: '/',
+    query: { page: newSelection}
+  })
+})
+
+watch(route, async (newRoute) => {
+  selectedPage.value = newRoute.query.page?.toString();
+})
+
+onMounted(() => {
+  api.get('/pageNames')
+    .then((response) => {
+      pages.value = response.data;
+    })
+    .catch(() => {
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        message: t('LOADING_PAGES_FAILED'),
+        icon: 'report_problem'
+      });
+     })
+  selectedPage.value = route.query.page?.toString();
+});
 </script>
-
-<style>
-.svg-container {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid black;
-}
-
-.scale-enter-active,
-.scale-leave-active {
-  transition: all 0.25s ease;
-}
-
-.scale-enter-from,
-.scale-leave-to {
-  opacity: 0;
-  transform: scale(0.9);
-}
-
-.page-selection {
-  font-size: medium;
-  min-width: 300px;
-}
-
-.search-input {
-  font-size: medium;
-  min-width: 300px;
-}
-
-label {
-  font-weight: bold;
-  padding-right: 5px;
-}
-
-.search-results-container {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid black;
-}
-
-.search-results-item {
-  margin: 10px;
-}
-</style>
