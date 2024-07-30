@@ -27,7 +27,7 @@ const pages: Ref<string[]> = ref([]);
 const selectedPage: Ref<string | undefined> = ref('');
 const searchFor: Ref<string> = ref('');
 
-watch(selectedPage, async (newSelection) => {
+watch(selectedPage, (newSelection) => {
   if (!newSelection) {
     return;
   }
@@ -37,7 +37,7 @@ watch(selectedPage, async (newSelection) => {
   })
 })
 
-watch(route, async (newRoute) => {
+watch(route, (newRoute) => {
   selectedPage.value = newRoute.query.page?.toString();
 })
 
