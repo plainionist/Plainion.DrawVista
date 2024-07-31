@@ -98,8 +98,8 @@ function setSvg(pageContent: string, startPage: boolean): void {
 
 function TransformToLinks(svgWithLegacyUiLinks: string): string
 {
-  const replacement = `<a href="${router.resolve('/').href}?page=$2">$1 style=""display: inline-block;font-size: 12px;font-family: Helvetica;fill: blue;line-height: 1.2;pointer-events: all;white-space: normal;overflow-wrap: normal;text-decoration: underline;cursor: pointer"">$2$3</a>`;
-  const pattern = /(<text.*).*window\.hook\.navigate\('(.*)'\).*(<\/text>)/g;
+  const replacement = `<a href="${router.resolve('/').href}?page=$3"><$1 $2 $4>$5$6</a>`;
+  const pattern = /<(.+) (.*) onclick="window\.hook\.navigate\('(.*)'\)" ?(.*)>(.*)(<\/\1>)/g;
   const result: string = svgWithLegacyUiLinks.replace(pattern, replacement);
   return result;
 }
