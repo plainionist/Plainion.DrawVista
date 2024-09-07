@@ -28,6 +28,7 @@ const selectedPage: Ref<string | undefined> = ref('');
 const searchFor: Ref<string> = ref('');
 
 watch(selectedPage, (newSelection) => {
+  searchFor.value = '';
   if (!newSelection) {
     return;
   }
@@ -57,3 +58,9 @@ onMounted(() => {
   selectedPage.value = route.query.page?.toString();
 });
 </script>
+
+<style>
+.q-item--active {
+  color: black;
+}
+</style>
