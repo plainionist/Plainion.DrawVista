@@ -5,7 +5,7 @@
         v-bind:key="item.pageName"
         class="search-results-item"
       >
-        <router-link :to="{ path: '/', query: { page: item.pageName }}">{{ item.pageName }}</router-link>
+        <router-link :to="{ path: '/', query: { page: item.pageName }}" @click="clearSearch">{{ item.pageName }}</router-link>
         &#8680;
         <span v-for="caption in item.captions" v-bind:key="caption">
           "{{ caption }}"
@@ -18,6 +18,12 @@
 import { onMounted, Ref, ref } from 'vue';
 import { api } from 'src/boot/axios';
 import { onUnmounted } from 'vue';
+import { AxiosResponse } from 'axios';
+import { useQuasar } from 'quasar';
+import { useI18n } from 'vue-i18n';
+
+const $q = useQuasar();
+const { t } = useI18n();
 
 let interval: NodeJS.Timeout;
 let lastSearchString: string | undefined;
@@ -42,14 +48,31 @@ onMounted(() => {
       searchResults.value = [];
       return;
     }
-    api.get(`/search?text=${props.searchString}`)
-    .then((response) => {
-      searchResults.value = response.data;
-    });
+    retrieveSearchResults();
   }, 250);
 });
 
 onUnmounted(() => clearInterval(interval));
+
+async function retrieveSearchResults(): Promise<void> {
+  try {
+    const response: AxiosResponse = await api.get(`/search?text=${props.searchString}`);
+    searchResults.value = response.data;
+  }
+  catch {
+    $q.notify({
+      color: 'negative',
+      position: 'top',
+      message: t('LOADING_EARCH_RESULTS_FAILED'),
+      icon: 'report_problem'
+    });
+  }
+}
+
+function clearSearch(): void {
+  lastSearchString = '';
+  searchResults.value = [];
+}
 </script>
 
 <style>

@@ -9,6 +9,7 @@ export default {
   SELECT_PAGE: 'Selelct page',
   LOADING_PAGES_FAILED: 'Loading of pages failed.',
   LOADING_PAGE_FAILED: 'Loading of page failed.',
+  LOADING_EARCH_RESULTS_FAILED: 'Loading of search results failed.',
 
   //Clear view
   CLEAR_BTN: 'Delete all uploaded files',
