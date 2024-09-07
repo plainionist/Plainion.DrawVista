@@ -1,5 +1,5 @@
 <template>
-  <div class="svg-container full-width full-height" ref="svgContainer">
+  <div class="svg-container full-width" ref="svgContainer">
     <transition name="scale" mode="out-in">
       <SvgPanZoom
         :key="svg"
@@ -23,6 +23,7 @@ import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { api } from 'src/boot/axios';
+import { AxiosResponse } from 'axios';
 
 const $q = useQuasar();
 const { t } = useI18n();
@@ -46,50 +47,51 @@ onMounted(() => {
   updateSvg(undefined);
 });
 
-function updateSvg(page: string | undefined) {
+async function updateSvg(page: string | undefined) {
   if (!page)
   {
-    api.get('/startPage')
-    .then((response) => {
+    try {
+      const response: AxiosResponse = await api.get('/startPage');
       setSvg(response.data, true);
-    })
-    .catch(() => {
+    }
+    catch {
       $q.notify({
         color: 'negative',
         position: 'top',
         message: t('LOADING_PAGE_FAILED'),
         icon: 'report_problem'
       });
-      })
-      return;
+    }
+    return;
   }
 
-  api.get(`/svg?pageName=${page}`)
-  .then((response) => {
+  try {
+    const response: AxiosResponse = await api.get(`/svg?pageName=${page}`);
     setSvg(response.data, false);
-  })
-  .catch(() => {
+  }
+  catch {
     $q.notify({
       color: 'negative',
       position: 'top',
       message: t('LOADING_PAGE_FAILED'),
       icon: 'report_problem'
     });
-    })
+  }
 }
 
 function setSvg(pageContent: string, startPage: boolean): void {
   const parser = new DOMParser();
   const svgDoc = parser.parseFromString(pageContent, 'image/svg+xml');
   const svgElement = svgDoc.documentElement;
+  const borderpixels = 2;
   svgElement.setAttribute(
     'height',
-    svgContainer.value.offsetHeight - 30 + ''
+    svgContainer.value.offsetHeight - borderpixels + ''
   );
   if(startPage) {
     svgElement.setAttribute(
       'width',
-      svgContainer.value.offsetWidth - 30 + ''
+      svgContainer.value.offsetWidth - borderpixels + ''
     );
   }
 
@@ -100,7 +102,7 @@ function TransformToLinks(svgWithLegacyUiLinks: string): string
 {
   const replacement = `<a href="${router.resolve('/').href}?page=$3"><$1 $2 $4>$5$6</a>`;
   const pattern = /<(.+) (.*) onclick="window\.hook\.navigate\('(.*)'\)" ?(.*)>(.*)(<\/\1>)/g;
-  const result: string = svgWithLegacyUiLinks.replace(pattern, replacement);
+  var result: string = svgWithLegacyUiLinks.replace(pattern, replacement);
   return result;
 }
 </script>
@@ -108,7 +110,7 @@ function TransformToLinks(svgWithLegacyUiLinks: string): string
 <style>
 .svg-container {
   margin-top: 10px;
-  padding: 10px;
+  height: calc(100vh - 186px);
 
   border: 1px solid black;
   background-color: white;

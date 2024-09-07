@@ -1,5 +1,5 @@
 <template>
-  <q-page class="window-height window-width justify-center content-start row q-pa-md">
+  <q-page class="window-width justify-center content-start row q-pa-md">
     <div class="row full-width">
       <q-select filled class="col q-ma-md" v-model="selectedPage" :options="pages" :label="$t('SELECT_PAGE')" />
       <q-input filled class="col q-ma-md" v-model="searchFor" :label="$t('SEARCH')" />
