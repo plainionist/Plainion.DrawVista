@@ -30,11 +30,11 @@ public class SqliteDocumentStoreTests
     [TearDown]
     public void TearDown()
     {
-        connection.CloseAsync().ContinueWith((Task task) => {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            File.Delete("test.db");
-        });
+        connection.Dispose();
+        SqliteConnection.ClearAllPools();
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        File.Delete("test.db");
     }
 
     [Test]
