@@ -19,7 +19,7 @@ between different components and layers of your designs and architecture.
 - pre-requisite: install DrawIO (the desktop app)
 - clone this repository
 - run 'build\build-release.cmd'
-- copy 'src\Plainion.DrawVista\bin\Release\net8.0\*' to a location of your choice or run the application from this location
+- copy 'src\Plainion.DrawVista\bin\Release\net10.0\*' to a location of your choice or run the application from this location
   
 ## Usage
 

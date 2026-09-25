@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Plainion.DrawVista/bin/Debug/net8.0/Plainion.DrawVista.dll",
+            "program": "${workspaceFolder}/src/Plainion.DrawVista/bin/Debug/net10.0/Plainion.DrawVista.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Plainion.DrawVista",
             "stopAtEntry": false,
