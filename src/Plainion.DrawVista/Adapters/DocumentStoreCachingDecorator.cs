@@ -13,8 +13,9 @@ public class DocumentStoreCachingDecorator(IDocumentStore impl) : IDocumentStore
 
     public void Clear()
     {
-        myCache.Clear();
         impl.Clear();
+        myCache.Clear();
+        DocumentsChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public ProcessedDocument GetPage(string pageName) =>
@@ -27,5 +28,6 @@ public class DocumentStoreCachingDecorator(IDocumentStore impl) : IDocumentStore
     {
         impl.Save(document);
         myCache[document.Name] = document;
+        DocumentsChanged?.Invoke(this, EventArgs.Empty);
     }
 }

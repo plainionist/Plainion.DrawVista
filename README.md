@@ -31,6 +31,7 @@ between different components and layers of your designs and architecture.
   - for ".drawio.png" files: make sure that the filename without the file extension matches the names of your diagram elements
 - upload the files using the "upload" page
 - the upload will take a few seconds/minutes
+- the home/index diagram is automatically regenerated when diagrams are uploaded or deleted; no restart is needed
 - navigate to the "home" page and start browsing your diagrams
 
 ## Multiple instances and storage
