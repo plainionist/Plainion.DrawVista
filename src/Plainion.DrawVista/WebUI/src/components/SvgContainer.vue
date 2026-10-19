@@ -9,6 +9,7 @@
         :fit="true"
         :center="true"
         :minZoom="0.25"
+        @created="panZoom = $event"
       >
         <div v-html="svg"></div>
       </SvgPanZoom>
@@ -18,7 +19,7 @@
 
 <script setup lang="ts">
 import { SvgPanZoom } from 'vue-svg-pan-zoom';
-import { onMounted, Ref, ref, watch } from 'vue';
+import { onMounted, onUnmounted, Ref, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
@@ -30,7 +31,9 @@ const { t } = useI18n();
 const router = useRouter();
 
 const svg: Ref<string> = ref('');
-const svgContainer = ref();
+const svgContainer = ref<HTMLElement>();
+let panZoom: { resize(): void; fit(): void; center(): void } | undefined;
+let resizeObserver: ResizeObserver | undefined;
     
 const props =  defineProps({
   page: String,
@@ -44,15 +47,31 @@ watch(() => props.page, (newPage, oldPage) => {
 });
 
 onMounted(() => {
+  const container = svgContainer.value;
+  if (!container) {
+    throw new Error('Diagram canvas is not mounted');
+  }
+  resizeObserver = new ResizeObserver(() => {
+    const svgElement = svgContainer.value?.querySelector('svg');
+    if (svgElement) {
+      sizeSvg(svgElement);
+      panZoom?.resize();
+      panZoom?.fit();
+      panZoom?.center();
+    }
+  });
+  resizeObserver.observe(container);
   updateSvg(undefined);
 });
+
+onUnmounted(() => resizeObserver?.disconnect());
 
 async function updateSvg(page: string | undefined) {
   if (!page)
   {
     try {
       const response: AxiosResponse = await api.get('/startPage');
-      setSvg(response.data, true);
+      setSvg(response.data);
     }
     catch {
       $q.notify({
@@ -67,7 +86,7 @@ async function updateSvg(page: string | undefined) {
 
   try {
     const response: AxiosResponse = await api.get(`/svg?pageName=${page}`);
-    setSvg(response.data, false);
+    setSvg(response.data);
   }
   catch {
     $q.notify({
@@ -79,23 +98,22 @@ async function updateSvg(page: string | undefined) {
   }
 }
 
-function setSvg(pageContent: string, startPage: boolean): void {
+function setSvg(pageContent: string): void {
   const parser = new DOMParser();
   const svgDoc = parser.parseFromString(pageContent, 'image/svg+xml');
   const svgElement = svgDoc.documentElement;
-  const borderpixels = 2;
-  svgElement.setAttribute(
-    'height',
-    svgContainer.value.offsetHeight - borderpixels + ''
-  );
-  if(startPage) {
-    svgElement.setAttribute(
-      'width',
-      svgContainer.value.offsetWidth - borderpixels + ''
-    );
-  }
+  sizeSvg(svgElement);
 
   svg.value = TransformToLinks(svgElement.outerHTML);
+}
+
+function sizeSvg(svgElement: Element): void {
+  const container = svgContainer.value;
+  if (!container) {
+    throw new Error('Diagram canvas is not mounted');
+  }
+  svgElement.setAttribute('height', `${container.clientHeight}`);
+  svgElement.setAttribute('width', `${container.clientWidth}`);
 }
 
 function TransformToLinks(svgWithLegacyUiLinks: string): string
@@ -109,10 +127,14 @@ function TransformToLinks(svgWithLegacyUiLinks: string): string
 
 <style>
 .svg-container {
-  margin-top: 10px;
-  height: calc(100vh - 186px);
+  flex: 1;
+  min-height: 0;
 
   border: 1px solid black;
   background-color: white;
+}
+
+.svg-container svg {
+  display: block;
 }
 </style>

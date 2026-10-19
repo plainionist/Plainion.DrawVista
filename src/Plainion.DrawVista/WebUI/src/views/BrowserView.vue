@@ -1,9 +1,27 @@
 <template>
-  <q-page class="window-width justify-center content-start row q-pa-md">
-    <div class="row full-width">
-      <q-select filled class="col q-ma-md" v-model="selectedPage" :options="pages" :label="$t('SELECT_PAGE')" />
-      <q-input filled class="col q-ma-md" v-model="searchFor" :label="$t('SEARCH')" />
-    </div>
+  <q-page class="browser-page" :style-fn="pageStyle">
+    <Teleport to="#browser-tools">
+      <q-select
+        filled
+        dense
+        options-dense
+        hide-bottom-space
+        class="bg-white rounded-borders"
+        v-model="selectedPage"
+        :options="pages"
+        :display-value="selectedPage || $t('SELECT_PAGE')"
+        :aria-label="$t('SELECT_PAGE')"
+      />
+      <q-input
+        filled
+        dense
+        hide-bottom-space
+        class="bg-white rounded-borders"
+        v-model="searchFor"
+        :placeholder="$t('SEARCH')"
+        :aria-label="$t('SEARCH')"
+      />
+    </Teleport>
     <SearchResults :search-string="searchFor" />
     <SvgContainer :page="selectedPage" />
   </q-page>
@@ -26,6 +44,10 @@ const route = useRoute();
 const pages: Ref<string[]> = ref([]);
 const selectedPage: Ref<string | undefined> = ref('');
 const searchFor: Ref<string> = ref('');
+
+function pageStyle(offset: number, height: number) {
+  return { height: `${height - offset}px` };
+}
 
 watch(selectedPage, (newSelection) => {
   searchFor.value = '';
@@ -60,6 +82,21 @@ onMounted(() => {
 </script>
 
 <style>
+.browser-page {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 3px;
+}
+
+.browser-page > .search-results-container {
+  flex-shrink: 0;
+  max-height: 30%;
+  overflow: auto;
+  margin: 0;
+  padding: 3px;
+}
+
 .q-item--active {
   color: black;
 }
