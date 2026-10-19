@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/src/Plainion.DrawVista/bin/Debug/net10.0/Plainion.DrawVista.dll",
-            "args": [],
+            "args": ["-name", "development"],
             "cwd": "${workspaceFolder}/src/Plainion.DrawVista",
             "stopAtEntry": false,
             "serverReadyAction": {

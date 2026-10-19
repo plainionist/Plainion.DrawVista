@@ -1,20 +1,26 @@
-﻿using Plainion.DrawVista.Adapters;
+﻿using Microsoft.Data.Sqlite;
+using Plainion.DrawVista;
+using Plainion.DrawVista.Adapters;
 using Plainion.DrawVista.IO;
 using Plainion.DrawVista.UseCases;
 
-var port = -1;
-if (args.Length > 0)
+InstanceOptions options;
+try
 {
-    if (args[0] == "-p")
-    {
-        port = Convert.ToInt32(args[1]);
-    }
+    options = InstanceOptions.Parse(args);
+}
+catch (ArgumentException ex)
+{
+    Console.Error.WriteLine(ex.Message);
+    Console.Error.WriteLine("Usage: Plainion.DrawVista.exe -name <name> [-p <port>]");
+    Environment.ExitCode = 1;
+    return;
 }
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(options.HostArguments);
 
 var uriBuilder = new UriBuilder(builder.Configuration["HostUri"]);
-if (port > -1)
+if (options.Port is int port)
 {
     uriBuilder.Port = port;
 }
@@ -24,15 +30,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
-var appData = Path.Combine(Environment.GetEnvironmentVariable("ALLUSERSPROFILE"), GlobalConst.AppFolder);
+var appData = options.DataFolder;
 
-var inputFolder = Path.Combine(appData, GlobalConst.InputDirName);
+var inputFolder = options.InputFolder;
 if (!Directory.Exists(inputFolder))
 {
     Directory.CreateDirectory(inputFolder);
 }
 
-var store = new SqliteDocumentStore($"Data Source={appData}\\store.db");
+var connectionString = new SqliteConnectionStringBuilder
+{
+    DataSource = Path.Combine(appData, "store.db")
+}.ToString();
+var store = new SqliteDocumentStore(connectionString);
 store.Init();
 
 var oldStore = new FileSystemDocumentStore(appData);
@@ -43,6 +53,7 @@ foreach (var name in oldStore.GetPageNames())
 }
 oldStore.Clear();
 
+builder.Services.AddSingleton(options);
 builder.Services.AddSingleton<IDocumentStore>(new DocumentStoreCachingDecorator(store));
 builder.Services.AddSingleton(new DrawingWorkbookFactory(inputFolder));
 builder.Services.AddSingleton<ISvgCaptionParser, SvgCaptionParser>();

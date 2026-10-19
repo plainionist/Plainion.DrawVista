@@ -10,7 +10,7 @@ public class DrawIOWorkbook(string RootFolder, string Name) : IDrawingWorkbook
 
         var model = ExtractModel(stream);
 
-        using var app = new DrawIOApp(model);
+        using var app = new DrawIOApp(model, RootFolder);
 
         return model.GetPageNames()
             .Select((name, idx) => ExportSvg(app, idx, name))

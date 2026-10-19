@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Plainion.DrawVista;
 using Plainion.DrawVista.UseCases;
 using Rubjerg.Graphviz;
 
@@ -13,10 +14,9 @@ public class StartPage {
 
     public string Svg { get; private set; }
 
-    public StartPage(IDocumentStore store, ISvgCaptionParser captionParser)
+    public StartPage(IDocumentStore store, ISvgCaptionParser captionParser, InstanceOptions options)
     {
-        var appData = Path.Combine(Environment.GetEnvironmentVariable("ALLUSERSPROFILE"), GlobalConst.AppFolder);
-        myStartPageDir = Path.Combine(appData, GlobalConst.InputDirName, "StartPage");
+        myStartPageDir = Path.Combine(options.InputFolder, "StartPage");
         myCaptionParser = captionParser;
         myStore = store;
         store.DocumentsChanged += OnDocumentsChanged;

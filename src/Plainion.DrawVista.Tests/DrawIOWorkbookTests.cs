@@ -5,7 +5,7 @@ namespace Plainion.DrawVista.Tests;
 [TestFixture]
 public class DrawIOWorkbookTests
 {
-    private readonly string myRootFolder = Path.Combine(Path.GetTempPath(), "DrawIOWorkbookTests");
+    private readonly string myRootFolder = Path.Combine(Path.GetTempPath(), "DrawIOWorkbookTests with spaces");
 
     [SetUp]
     public void SetUp()
@@ -32,5 +32,6 @@ public class DrawIOWorkbookTests
 
         Assert.That(documents.Select(x => x.Name), Is.EquivalentTo(
             new string[] { "index", "orchestrator", "TestFailureAnalyzer", "ReadinessChecker" }));
+        Assert.That(Directory.GetFiles(myRootFolder, "*.drawio"), Is.Empty);
     }
 }

@@ -42,7 +42,7 @@ public class DrawIOPngWorkbook(string RootFolder, string Name) : IDrawingWorkboo
             pageIndex = 0;
         }
 
-        using var app = new DrawIOApp(model);
+        using var app = new DrawIOApp(model, RootFolder);
         app.ExtractSvg(pageIndex, svgFile);
 
         return new RawDocument(pageName, File.ReadAllText(svgFile));

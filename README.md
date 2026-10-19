@@ -24,7 +24,7 @@ between different components and layers of your designs and architecture.
   
 ## Usage
 
-- run "Plainion.DrawVista.exe" from command prompt
+- run `Plainion.DrawVista.exe -name my-diagrams` from command prompt
 - open a browser at the port printed on the command prompt
 - create one or multiple Draw.IO files or PNGs with the Draw.IO model embedded
   - for ".drawio" files: make sure the names of the "tabs" match the names of your diagram elements
@@ -32,3 +32,26 @@ between different components and layers of your designs and architecture.
 - upload the files using the "upload" page
 - the upload will take a few seconds/minutes
 - navigate to the "home" page and start browsing your diagrams
+
+## Multiple instances and storage
+
+`-name` is mandatory and must be a valid single Windows folder name. Quote names containing spaces.
+To run independent instances on the same machine, use different names and ports:
+
+```cmd
+Plainion.DrawVista.exe -name team-a -p 5236
+Plainion.DrawVista.exe -name team-b -p 5237
+```
+
+Each instance stores its data under `%ALLUSERSPROFILE%\Plainion.DrawVista\<name>`
+(normally `C:\ProgramData\Plainion.DrawVista\<name>`):
+
+- `store.db`: the diagram database
+- `input`: generated SVGs and temporary Draw.io models
+- `input\StartPage`: generated start-page files
+- `store`: legacy filesystem storage, imported into this instance's database on startup
+
+Existing shared data is not moved automatically. To retain it, stop the application, create the
+named subfolder, and move the existing `store.db`, `input`, and (if present) `store` directory
+from `%ALLUSERSPROFILE%\Plainion.DrawVista` into that subfolder before starting the named instance.
+Do not overwrite data belonging to an existing named instance.

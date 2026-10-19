@@ -11,6 +11,7 @@
   "profiles": {
     "http": {
       "commandName": "Project",
+      "commandLineArgs": "-name development",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
@@ -21,6 +22,7 @@
     },
     "https": {
       "commandName": "Project",
+      "commandLineArgs": "-name development",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
@@ -31,6 +33,7 @@
     },
     "IIS Express": {
       "commandName": "IISExpress",
+      "commandLineArgs": "-name development",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {

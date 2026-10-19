@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Plainion.DrawVista.IO;
 
-internal class DrawIOApp(DrawIOModel Model) : IDisposable
+internal class DrawIOApp(DrawIOModel Model, string RootFolder) : IDisposable
 {
     private static readonly string Executable = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
@@ -16,7 +16,7 @@ internal class DrawIOApp(DrawIOModel Model) : IDisposable
 
         // Console.WriteLine($"draw.io.exe -x {myFile} -o {svgFile} -p {pageIndex}");
 
-        Process.Start(Executable, $"-x {myFile} -o \"{svgFile}\" -p {pageIndex}")
+        Process.Start(Executable, $"-x \"{myFile}\" -o \"{svgFile}\" -p {pageIndex}")
             .WaitForExit();
     }
 
@@ -28,7 +28,7 @@ internal class DrawIOApp(DrawIOModel Model) : IDisposable
         }
 
         // extension ".drawio" is important so that draw.io.exe detects file contents properly
-        myFile = Path.GetTempFileName() + ".drawio";
+        myFile = Path.Combine(RootFolder, $"{Guid.NewGuid():N}.drawio");
         
         Model.WriteTo(myFile);
     }
