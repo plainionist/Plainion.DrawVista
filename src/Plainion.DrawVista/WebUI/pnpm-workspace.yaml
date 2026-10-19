@@ -1,0 +1,16 @@
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  rolldown: true
+  unrs-resolver: true
+
+strictPeerDependencies: true
+resolutionMode: highest
+
+overrides:
+  'archiver-utils>glob': ^13.0.6
+minimumReleaseAgeExclude:
+  - '@intlify/bundle-utils@11.2.7'
+  - '@intlify/unplugin-vue-i18n@11.2.7'
+patchedDependencies:
+  vue-svg-pan-zoom@2.1.0: patches/vue-svg-pan-zoom@2.1.0.patch

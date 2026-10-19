@@ -17,6 +17,7 @@ between different components and layers of your designs and architecture.
 ## Installation
 
 - pre-requisite: install DrawIO (the desktop app)
+- pre-requisites for building: .NET 10 SDK, Node.js 22.13+ in a supported even-numbered release, and pnpm 11+
 - clone this repository
 - run 'build\build-release.cmd'
 - copy 'src\Plainion.DrawVista\bin\Release\net10.0\*' to a location of your choice or run the application from this location

@@ -15,10 +15,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, Ref, ref } from 'vue';
+import { onMounted, type Ref, ref } from 'vue';
 import { api } from 'src/boot/axios';
 import { onUnmounted } from 'vue';
-import { AxiosResponse } from 'axios';
+import type { AxiosResponse } from 'axios';
 import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 

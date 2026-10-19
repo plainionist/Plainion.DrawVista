@@ -19,12 +19,12 @@
 
 <script setup lang="ts">
 import { SvgPanZoom } from 'vue-svg-pan-zoom';
-import { onMounted, onUnmounted, Ref, ref, watch } from 'vue';
+import { onMounted, onUnmounted, type Ref, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { api } from 'src/boot/axios';
-import { AxiosResponse } from 'axios';
+import type { AxiosResponse } from 'axios';
 
 const $q = useQuasar();
 const { t } = useI18n();
@@ -120,8 +120,7 @@ function TransformToLinks(svgWithLegacyUiLinks: string): string
 {
   const replacement = `<a href="${router.resolve('/').href}?page=$3"><$1 $2 $4>$5$6</a>`;
   const pattern = /<(.+) (.*) onclick="window\.hook\.navigate\('(.*)'\)" ?(.*)>(.*)(<\/\1>)/g;
-  var result: string = svgWithLegacyUiLinks.replace(pattern, replacement);
-  return result;
+  return svgWithLegacyUiLinks.replace(pattern, replacement);
 }
 </script>
 

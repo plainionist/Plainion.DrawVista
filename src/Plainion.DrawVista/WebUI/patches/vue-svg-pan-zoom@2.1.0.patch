@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 817de56b3f88e4b044c8e0e6fb6693f7c11dcd09..5d8fd9bac6f9e9da27b032e268a7a8b37c42d6fe 100644
+--- a/package.json
++++ b/package.json
+@@ -7,6 +7,7 @@
+   "types": "dist/types/index.d.ts",
+   "exports": {
+     ".": {
++      "types": "./dist/types/index.d.ts",
+       "import": "./dist/vue-svg-pan-zoom.es.js",
+       "require": "./dist/vue-svg-pan-zoom.umd.js"
+     }

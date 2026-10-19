@@ -1,5 +1,5 @@
 {
 	"dependencies": {
-		"@quasar/cli": "^2.4.1"
+		"@quasar/cli": "^5.0.9"
 	}
 }
