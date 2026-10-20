@@ -56,6 +56,7 @@ function confirmDelete() {
   $q.dialog({
     title: t('DELETE_TITLE'),
     message: t('DELETE_CONFIRMATION', { pageName }),
+    color: 'dark',
     cancel: true,
     persistent: true
   }).onOk(() => {
