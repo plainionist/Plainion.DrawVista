@@ -16,6 +16,9 @@ public class SvgStyleAttribute(string value)
         set { myValues[key] = value; }
     }
 
+    public void Remove(string key) =>
+        myValues.Remove(key);
+
     public override string ToString() =>
         string.Join(";", myValues.Select(x => x.Key + ": " + x.Value));
 }

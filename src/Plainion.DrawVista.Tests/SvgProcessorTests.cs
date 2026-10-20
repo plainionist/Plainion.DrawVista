@@ -116,4 +116,143 @@ public class SvgProcessorTests
         Assert.That(attr["color"], Is.EqualTo("blue"));
         Assert.That(attr["text-decoration"], Is.EqualTo("underline"));
     }
+
+    [Test]
+    public void DeletingPageRemovesGeneratedLinkAndRestoresOriginalStyle()
+    {
+        var store = new FakeDocumentStore();
+        var processor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), store);
+        var originalCaption = GetCaption(SvgDocument, "Parser");
+        processor.Process([new RawDocument("System", SvgDocument), CreatePage("Parser")]);
+
+        processor.Delete("Parser");
+
+        var caption = GetCaption(store.GetPage("System").Content, "Parser");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(store.GetPageNames(), Is.EquivalentTo(new[] { "System" }));
+            Assert.That(caption.Attribute("onclick"), Is.Null);
+            Assert.That(caption.Attribute("style")?.Value, Is.EqualTo(originalCaption.Attribute("style")?.Value));
+            Assert.That(caption.Attribute("data-drawvista-original-style"), Is.Null);
+        }
+    }
+
+    [Test]
+    public void DeletingPageKeepsLinksToRemainingPages()
+    {
+        var store = new FakeDocumentStore();
+        var processor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), store);
+        processor.Process([new RawDocument("System", SvgDocument), CreatePage("Parser"), CreatePage("Processor")]);
+
+        processor.Delete("Parser");
+
+        var captions = XElement.Parse(store.GetPage("System").Content).Descendants()
+            .Where(x => x.Name.LocalName == "div" && !x.HasElements && x.Value == "Processor")
+            .ToList();
+        Assert.That(captions, Has.Count.EqualTo(2));
+        Assert.That(captions.Select(x => x.Attribute("onclick")?.Value),
+            Is.All.EqualTo("window.hook.navigate('Processor')"));
+    }
+
+    [Test]
+    public void DeletingPagePreservesExplicitExternalLink()
+    {
+        var store = new FakeDocumentStore();
+        var processor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), store);
+        processor.Process([new RawDocument("System", SvgDocument), CreatePage("EventBroker")]);
+
+        processor.Delete("EventBroker");
+
+        var caption = GetCaption(store.GetPage("System").Content, "EventBroker");
+        var style = new SvgStyleAttribute(caption.Attribute("style").Value);
+        var link = caption.Ancestors().Single(x => x.Name.LocalName == "a");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(caption.Attribute("onclick"), Is.Null);
+            Assert.That(link.Attributes().Single(x => x.Name.LocalName == "href").Value,
+                Is.EqualTo("https://docs.server.org/Comonent/Introduction.md"));
+            Assert.That(style["color"], Is.EqualTo("blue"));
+            Assert.That(style["text-decoration"], Is.EqualTo("underline"));
+            Assert.That(style["text-decoration-style"], Is.EqualTo("dotted"));
+        }
+    }
+
+    [Test]
+    public void DeletingPageRemovesLegacyGeneratedLinkWithoutOriginalStyleMetadata()
+    {
+        var store = new FakeDocumentStore();
+        var processor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), store);
+        processor.Process([new RawDocument("System", SvgDocument), CreatePage("Parser")]);
+        var content = XElement.Parse(store.GetPage("System").Content);
+        var legacyCaption = content.Descendants()
+            .Single(x => x.Name.LocalName == "div" && !x.HasElements && x.Value == "Parser");
+        legacyCaption.Attribute("data-drawvista-original-style").Remove();
+        store.Save(store.GetPage("System") with { Content = content.ToString() });
+
+        processor.Delete("Parser");
+
+        var caption = GetCaption(store.GetPage("System").Content, "Parser");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(caption.Attribute("onclick"), Is.Null);
+            Assert.That(caption.Attribute("style").Value, Does.Not.Contain("text-decoration").And.Not.Contain("cursor"));
+            Assert.That(new SvgStyleAttribute(caption.Attribute("style").Value)["font-weight"], Is.EqualTo("bold"));
+        }
+    }
+
+    [Test]
+    public void ReuploadingDeletedPageRecreatesLinks()
+    {
+        var store = new FakeDocumentStore();
+        var processor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), store);
+        processor.Process([new RawDocument("System", SvgDocument), CreatePage("Parser")]);
+        processor.Delete("Parser");
+
+        processor.Process([CreatePage("Parser")]);
+
+        var caption = GetCaption(store.GetPage("System").Content, "Parser");
+        Assert.That(caption.Attribute("onclick")?.Value, Is.EqualTo("window.hook.navigate('Parser')"));
+    }
+
+    [Test]
+    public void DeletingUnknownPageDoesNotReprocessDocuments()
+    {
+        var store = new FakeDocumentStore();
+        var processor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), store);
+        processor.Process([new RawDocument("System", SvgDocument)]);
+        var changes = 0;
+        store.DocumentsChanged += (_, _) => changes++;
+
+        processor.Delete("Unknown");
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(store.GetPageNames(), Is.EquivalentTo(new[] { "System" }));
+            Assert.That(changes, Is.Zero);
+        }
+    }
+
+    [Test]
+    public void DeletingPageRestoresCaptionWithoutInlineStyle()
+    {
+        var store = new FakeDocumentStore();
+        var processor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), store);
+        processor.Process([new RawDocument("System", """<svg width="100%"><div>Parser</div></svg>"""), CreatePage("Parser")]);
+
+        processor.Delete("Parser");
+
+        var caption = GetCaption(store.GetPage("System").Content, "Parser");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(caption.Attribute("onclick"), Is.Null);
+            Assert.That(caption.Attribute("style"), Is.Null);
+        }
+    }
+
+    private static RawDocument CreatePage(string name) =>
+        new(name, """<svg width="100%" />""");
+
+    private static XElement GetCaption(string content, string text) =>
+        XElement.Parse(content).Descendants()
+            .Single(x => x.Name.LocalName == "div" && !x.HasElements && x.Value == text);
 }

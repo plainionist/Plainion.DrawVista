@@ -62,10 +62,13 @@ watch(selectedPage, (newSelection) => {
 
 watch(route, (newRoute) => {
   selectedPage.value = newRoute.query.page?.toString();
+  if (!selectedPage.value) {
+    loadPages();
+  }
 })
 
-onMounted(() => {
-  api.get('/pageNames')
+function loadPages() {
+  api.get<string[]>('/pageNames')
     .then((response) => {
       pages.value = response.data;
     })
@@ -77,6 +80,10 @@ onMounted(() => {
         icon: 'report_problem'
       });
      })
+}
+
+onMounted(() => {
+  loadPages();
   selectedPage.value = route.query.page?.toString();
 });
 </script>

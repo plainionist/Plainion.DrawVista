@@ -2,6 +2,7 @@ export default {
   // Nav
   browse: 'Browse',
   upload: 'Upload',
+  delete: 'Delete',
   clear: 'Clear',
 
   //Browse view
@@ -10,6 +11,11 @@ export default {
   LOADING_PAGES_FAILED: 'Loading of pages failed.',
   LOADING_PAGE_FAILED: 'Loading of page failed.',
   LOADING_EARCH_RESULTS_FAILED: 'Loading of search results failed.',
+
+  DELETE_TITLE: 'Delete page',
+  DELETE_CONFIRMATION: 'Delete "{pageName}"? This cannot be undone.',
+  DELETE_SUCCESS: 'Deleted "{pageName}".',
+  DELETE_FAILED: 'Deleting the page failed.',
 
   //Clear view
   CLEAR_BTN: 'Delete all uploaded files',

@@ -14,9 +14,27 @@ internal class FakeDocumentStore : IDocumentStore
     public IReadOnlyCollection<string> GetPageNames() =>
         myDocuments.Select(x => x.Name).ToList();
 
-    public void Save(ProcessedDocument document) =>
+    public void Save(ProcessedDocument document)
+    {
+        myDocuments.RemoveAll(x => x.Name == document.Name);
         myDocuments.Add(document);
+        DocumentsChanged?.Invoke(this, EventArgs.Empty);
+    }
 
-    public void Clear() => 
+    public bool Delete(string pageName)
+    {
+        if (myDocuments.RemoveAll(x => x.Name == pageName) == 0)
+        {
+            return false;
+        }
+
+        DocumentsChanged?.Invoke(this, EventArgs.Empty);
+        return true;
+    }
+
+    public void Clear()
+    {
         myDocuments.Clear();
+        DocumentsChanged?.Invoke(this, EventArgs.Empty);
+    }
 }

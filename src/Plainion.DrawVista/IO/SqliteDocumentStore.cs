@@ -71,6 +71,20 @@ public class SqliteDocumentStore : IDocumentStore
         }
     }
 
+    public bool Delete(string pageName)
+    {
+        using var connection = new SqliteConnection(myConnectionString);
+
+        var affectedRows = connection.Execute("DELETE FROM Pages WHERE Name = @Name", new { Name = pageName });
+        if (affectedRows == 0)
+        {
+            return false;
+        }
+
+        DocumentsChanged?.Invoke(this, EventArgs.Empty);
+        return true;
+    }
+
     public void Clear()
     {
         using var connection = new SqliteConnection(myConnectionString);

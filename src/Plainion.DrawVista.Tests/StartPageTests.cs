@@ -89,6 +89,30 @@ public class StartPageTests
         Assert.That(GetGraphTitles("node"), Is.Empty);
     }
 
+    [Test]
+    public void DeletingDocumentRemovesPageAndLinksFromIndex()
+    {
+        myProcessor.Process([CreateDocument("Page-1", "Page-2"), CreateDocument("Page-2")]);
+
+        myProcessor.Delete("Page-2");
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(GetGraphTitles("node"), Is.EquivalentTo(new[] { "Page-1" }));
+            Assert.That(GetGraphTitles("edge"), Is.Empty);
+        }
+    }
+
+    [Test]
+    public void DeletingLastDocumentRecreatesEmptyIndex()
+    {
+        myProcessor.Process([CreateDocument("Page-1")]);
+
+        myProcessor.Delete("Page-1");
+
+        Assert.That(GetGraphTitles("node"), Is.Empty);
+    }
+
     private IReadOnlyCollection<string> GetGraphTitles(string elementClass)
     {
         XNamespace ns = "http://www.w3.org/2000/svg";

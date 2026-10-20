@@ -55,6 +55,23 @@ public class FileSystemDocumentStore : IDocumentStore
         DocumentsChanged?.Invoke(this, null);
     }
 
+    public bool Delete(string pageName)
+    {
+        lock (myLock)
+        {
+            if (!File.Exists(ContentFile(pageName)))
+            {
+                return false;
+            }
+
+            File.Delete(ContentFile(pageName));
+            File.Delete(MetaFile(pageName));
+        }
+
+        DocumentsChanged?.Invoke(this, EventArgs.Empty);
+        return true;
+    }
+
     public void Clear()
     {
         lock (myLock)

@@ -83,4 +83,44 @@ public class SqliteDocumentStoreTests
         //Assert
         Assert.That(eventRaised, Is.True);
     }
+
+    [Test]
+    public void DeleteRemovesOnlyNamedPageAndRaisesChangeOnce()
+    {
+        var store = new SqliteDocumentStore("Data Source=test.db");
+        store.Save(DocumentBuilder.Create("Page-1"));
+        store.Save(DocumentBuilder.Create("Page-2"));
+        var changes = 0;
+        store.DocumentsChanged += (_, _) => changes++;
+
+        var deleted = store.Delete("Page-1");
+        var deletedAgain = store.Delete("Page-1");
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(deleted, Is.True);
+            Assert.That(deletedAgain, Is.False);
+            Assert.That(store.GetPage("Page-1"), Is.Null);
+            Assert.That(store.GetPageNames(), Is.EquivalentTo(new[] { "Page-2" }));
+            Assert.That(changes, Is.EqualTo(1));
+        }
+    }
+
+    [Test]
+    public void DeleteUnknownPageLeavesStoreUnchanged()
+    {
+        var store = new SqliteDocumentStore("Data Source=test.db");
+        store.Save(DocumentBuilder.Create("Page-1"));
+        var changes = 0;
+        store.DocumentsChanged += (_, _) => changes++;
+
+        var deleted = store.Delete("Unknown");
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(deleted, Is.False);
+            Assert.That(store.GetPageNames(), Is.EquivalentTo(new[] { "Page-1" }));
+            Assert.That(changes, Is.Zero);
+        }
+    }
 }

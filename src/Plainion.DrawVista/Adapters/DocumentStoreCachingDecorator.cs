@@ -30,4 +30,16 @@ public class DocumentStoreCachingDecorator(IDocumentStore impl) : IDocumentStore
         myCache[document.Name] = document;
         DocumentsChanged?.Invoke(this, EventArgs.Empty);
     }
+
+    public bool Delete(string pageName)
+    {
+        if (!impl.Delete(pageName))
+        {
+            return false;
+        }
+
+        myCache.Remove(pageName);
+        DocumentsChanged?.Invoke(this, EventArgs.Empty);
+        return true;
+    }
 }

@@ -8,6 +8,14 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
     private readonly ISvgHyperlinkFormatter myFormatter = formatter;
     private readonly IDocumentStore myStore = store;
 
+    public void Delete(string pageName)
+    {
+        if (myStore.Delete(pageName))
+        {
+            Process([]);
+        }
+    }
+
     /// <summary>
     /// Processes existing and newly uploaded documents.
     /// </summary>
@@ -64,6 +72,8 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
 
         foreach (var caption in document.Captions)
         {
+            RemoveGeneratedLink(caption.Element);
+
             var reference = GetPageReference(caption.DisplayText);
 
             if (reference is null || IsSelfReference(caption.DisplayText))
@@ -85,6 +95,18 @@ public class SvgProcessor(ISvgCaptionParser parser, ISvgHyperlinkFormatter forma
         }
 
         document.Content.Attribute("width").Value = "100%";
+    }
+
+    private void RemoveGeneratedLink(XElement element)
+    {
+        var onClick = element.Attribute("onclick");
+        if (onClick?.Value.StartsWith("window.hook.navigate(", StringComparison.Ordinal) != true)
+        {
+            return;
+        }
+
+        onClick.Remove();
+        myFormatter.RemoveStyle(element);
     }
 
     // In DrawIO external links can be provided but those are neither in draw.io

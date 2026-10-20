@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Data.Sqlite;
 using Plainion.DrawVista;
 using Plainion.DrawVista.Adapters;
 using Plainion.DrawVista.IO;
@@ -129,6 +130,22 @@ app.MapGet("/search", (FullTextSearch search, string text) =>
 {
     return search.Search(text);
 });
+
+app.MapDelete("/delete", Results<NoContent, ProblemHttpResult> (SvgProcessor processor, string pageName, CancellationToken cancellationToken) =>
+{
+    if (string.IsNullOrWhiteSpace(pageName))
+    {
+        return TypedResults.Problem(
+            statusCode: StatusCodes.Status400BadRequest,
+            detail: "pageName must not be empty.");
+    }
+
+    cancellationToken.ThrowIfCancellationRequested();
+    processor.Delete(pageName);
+    return TypedResults.NoContent();
+})
+.WithSummary("Delete a stored page and update links in the remaining diagrams.")
+.ProducesProblem(StatusCodes.Status400BadRequest);
 
 app.MapPost("/clear", (IDocumentStore store) =>
 {
