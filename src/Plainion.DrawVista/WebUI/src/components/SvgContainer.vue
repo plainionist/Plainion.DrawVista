@@ -9,7 +9,7 @@
         :fit="true"
         :center="true"
         :minZoom="0.25"
-        @created="panZoom = $event"
+        @created="panZoom = $event; fitImage($event)"
       >
         <div v-html="svg"></div>
       </SvgPanZoom>
@@ -32,7 +32,18 @@ const router = useRouter();
 
 const svg: Ref<string> = ref('');
 const svgContainer = ref<HTMLElement>();
-let panZoom: { resize(): void; fit(): void; center(): void } | undefined;
+type PanZoomInstance = {
+  resize(): void;
+  center(): void;
+  zoomBy(scale: number): void;
+  getSizes(): {
+    width: number;
+    height: number;
+    realZoom: number;
+    viewBox: { width: number; height: number };
+  };
+};
+let panZoom: PanZoomInstance | undefined;
 let resizeObserver: ResizeObserver | undefined;
     
 const props =  defineProps({
@@ -55,9 +66,10 @@ onMounted(() => {
     const svgElement = svgContainer.value?.querySelector('svg');
     if (svgElement) {
       sizeSvg(svgElement);
-      panZoom?.resize();
-      panZoom?.fit();
-      panZoom?.center();
+      if (panZoom) {
+        panZoom.resize();
+        fitImage(panZoom);
+      }
     }
   });
   resizeObserver.observe(container);
@@ -117,6 +129,17 @@ function sizeSvg(svgElement: Element): void {
   }
   svgElement.setAttribute('height', `${container.clientHeight}`);
   svgElement.setAttribute('width', `${container.clientWidth}`);
+}
+
+function fitImage(instance: PanZoomInstance): void {
+  const margin = 20;
+  const { width, height, viewBox, realZoom } = instance.getSizes();
+  const scale = Math.min(
+    Math.max(1, width - 2 * margin) / viewBox.width,
+    Math.max(1, height - 2 * margin) / viewBox.height,
+  );
+  instance.zoomBy(scale / realZoom);
+  instance.center();
 }
 
 function TransformToLinks(svgWithLegacyUiLinks: string): string
