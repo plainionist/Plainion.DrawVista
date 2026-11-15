@@ -103,6 +103,9 @@ function setSvg(pageContent: string): void {
   const svgDoc = parser.parseFromString(pageContent, 'image/svg+xml');
   const svgElement = svgDoc.documentElement;
   sizeSvg(svgElement);
+  svgElement.querySelectorAll('a').forEach(link => {
+    link.setAttribute('target', '_blank');
+  });
 
   svg.value = TransformToLinks(svgElement.outerHTML);
 }
