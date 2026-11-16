@@ -224,3 +224,50 @@ new slice identity. Reviewer reviews feature code and independently verifies
 these behaviors, without requiring `discover map` or reopening excluded R1.
 Reviewer acceptance and normal local integration remain required; only Layers
 behavior, compatibility, and its concrete proof determine completion.
+
+### Reviewer findings - slice 2
+
+Reviewed implementation `ee5625145d77f057641e3a10fc6553617451792a` against
+the acceptance criteria and proof-owner amendment
+`494b944bf17b2eea474e9f4b4758642e04491227`. Changes are required; the slice
+is not accepted or integrated. R1 remains excluded and R2 remains resolved.
+
+Reviewed the retained coder output in
+`C:\Users\ssmosett\.copilot\session-state\34c4b3e2-c5c8-48d3-b1d0-221e9f7456be\files\layers-support-checks.txt`:
+the final nine layer tests, five frontend tests with lint/type checking, and
+Release build passed; 26 unchanged impact regressions passed in the initial
+selection. No tests were run by reviewer. All five actual-browser scenarios remain
+unexecuted and operator-owned; the preserved Edge policy failure is not an
+acceptance finding.
+
+**R3 - Medium: the new frontend tests fail on the supported minimum Node version.**
+
+- **Location:** `src\Plainion.DrawVista\WebUI\package.json:12,47` and
+  `tests\layers.test.cjs:20,54,74`.
+- **Violated behavior:** Preserve the documented Node 22.13+ toolchain and the
+  working `pnpm check` runner.
+- **Root cause:** The new tests import `svgLayers.ts` directly, but `node --test`
+  does not enable TypeScript support on Node 22.13-22.17. Type stripping became
+  enabled by default in Node 22.18, so the existing supported minimum fails these
+  imports with `ERR_UNKNOWN_FILE_EXTENSION`. Passing checks on a newer runtime
+  do not cover that compatibility requirement.
+- **Required outcome:** Run the TypeScript-based tests compatibly across the
+  existing supported Node range without raising its minimum. Provide focused
+  minimum-version compatibility evidence with the corrected check command.
+
+**R4 - Medium: browser regressions wait for intentionally hidden content.**
+
+- **Location:** `src\Plainion.DrawVista\WebUI\tests\browser\layers.test.cjs:67-71`,
+  `416-423`, and `477-486`.
+- **Violated behavior:** Keep the operator's browser verification entry points
+  usable for remembered page choices and hidden-caption search.
+- **Root cause:** `selectPage` uses Playwright's default visible-state
+  `waitFor()` on the selected cell. The persistence scenario disables Background,
+  then returns to Layers and waits for `background-box` to become visible.
+  The hidden-caption search scenario makes the same visible-state wait after
+  navigation. Correctly restored choices keep that cell hidden, so both scenarios
+  time out before asserting the required behavior.
+- **Required outcome:** Detect completion of navigation/mounting independently
+  of the chosen layer's visibility, while retaining the assertions that saved
+  hidden choices remain hidden. Correct these waits without executing prohibited
+  launches or treating final operator browser verification as a team gate.
