@@ -68,8 +68,11 @@ Do not generate, repair, or require a design model for implementation or accepta
 Proceed with one end-to-end feature slice, including implementation, coverage,
 and directly affected documentation. No discovery-tool prerequisite remains.
 
-Progress: no feature slice is accepted or implemented yet. Slice 2,
-`layers-support`, is ready for immediate coder assignment.
+Progress: slice 2, `layers-support`, assignment
+`20261116T100315Z_000021_from_architect`, is complete and accepted in code review.
+The accepted implementation is `d9425121d8edca191bfbb3985042bb7ddcd66b08`.
+Final actual-browser verification remains pending with the operator; issue
+retirement belongs to the architect.
 
 ### Accepted baseline and withdrawn prerequisite
 
@@ -225,12 +228,14 @@ these behaviors, without requiring `discover map` or reopening excluded R1.
 Reviewer acceptance and normal local integration remain required; only Layers
 behavior, compatibility, and its concrete proof determine completion.
 
-### Reviewer findings - slice 2
+### Reviewer disposition - slice 2
 
 Reviewed implementation `ee5625145d77f057641e3a10fc6553617451792a` against
-the acceptance criteria and proof-owner amendment
-`494b944bf17b2eea474e9f4b4758642e04491227`. Changes are required; the slice
-is not accepted or integrated. R1 remains excluded and R2 remains resolved.
+every acceptance criterion and reviewed the complete correction through
+`d9425121d8edca191bfbb3985042bb7ddcd66b08`. Under proof-owner amendment
+`494b944bf17b2eea474e9f4b4758642e04491227`, slice 2 is accepted with no
+outstanding findings. R1 remains excluded; R2, R3, and R4 are resolved.
+This is code-review acceptance, not a claim of completed operator browser proof.
 
 Reviewed the retained coder output in
 `C:\Users\ssmosett\.copilot\session-state\34c4b3e2-c5c8-48d3-b1d0-221e9f7456be\files\layers-support-checks.txt`:
@@ -240,7 +245,15 @@ selection. No tests were run by reviewer. All five actual-browser scenarios rema
 unexecuted and operator-owned; the preserved Edge policy failure is not an
 acceptance finding.
 
-**R3 - Medium: the new frontend tests fail on the supported minimum Node version.**
+Correction evidence is retained in the same directory's
+`layers-review-r3-r4-console.txt`, copied from the existing captured tool output,
+with the original invocation/times in `layers-review-r3-r4-checks.txt`.
+Both Node version probes report `v22.13.0`; `pnpm check` passes ESLint,
+Vue/TypeScript checking, and all five tests with exit 0. The corrected source
+matches the accepted implementation. Unchanged backend/build evidence is reused;
+no validation rerun or browser launch was performed to recover the console output.
+
+**R3 - Medium (resolved): frontend tests failed on the supported minimum Node version.**
 
 - **Location:** `src\Plainion.DrawVista\WebUI\package.json:12,47` and
   `tests\layers.test.cjs:20,54,74`.
@@ -254,8 +267,11 @@ acceptance finding.
 - **Required outcome:** Run the TypeScript-based tests compatibly across the
   existing supported Node range without raising its minimum. Provide focused
   minimum-version compatibility evidence with the corrected check command.
+- **Resolution:** The test runner explicitly enables `--experimental-strip-types`;
+  the supported minimum is unchanged and the retained Node 22.13.0 output proves
+  the corrected `pnpm check` command passes.
 
-**R4 - Medium: browser regressions wait for intentionally hidden content.**
+**R4 - Medium (resolved): browser regressions waited for intentionally hidden content.**
 
 - **Location:** `src\Plainion.DrawVista\WebUI\tests\browser\layers.test.cjs:67-71`,
   `416-423`, and `477-486`.
@@ -271,3 +287,8 @@ acceptance finding.
   of the chosen layer's visibility, while retaining the assertions that saved
   hidden choices remain hidden. Correct these waits without executing prohibited
   launches or treating final operator browser verification as a team gate.
+- **Resolution:** Page, SVG, and viewport readiness waits use DOM attachment,
+  independent of selected-layer visibility; hidden-caption navigation also waits
+  for its viewport and settles. The remembered-choice and hidden-content
+  assertions remain unchanged. This correction was independently reviewed and
+  linted, not reported as executed browser verification.
