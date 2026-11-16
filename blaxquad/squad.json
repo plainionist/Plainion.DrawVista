@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 2,
+  "leader": "architect",
+  "gitHistoryCommand": [
+    "TortoiseGitProc.exe",
+    "/command:log"
+  ],
+  "roles": ["architect", "coder", "reviewer"],
+  "members": [
+    {
+      "name": "architect",
+      "role": "architect",
+      "worktree": "master",
+      "agent": {
+        "model": "gpt-6.1-sol",
+        "effort": "max",
+        "permissions": {
+          "additionalPaths": ["%USERPROFILE%\\..\\*\\.nuget\\packages"]
+        }
+      }
+    },
+    {
+      "name": "coder",
+      "role": "coder",
+      "worktree": "coder",
+      "agent": {
+        "model": "gpt-6.1-sol",
+        "effort": "max",
+        "permissions": {
+          "additionalPaths": ["%USERPROFILE%\\..\\*\\.nuget\\packages"]
+        }
+      }
+    },
+    {
+      "name": "reviewer",
+      "role": "reviewer",
+      "worktree": "reviewer",
+      "agent": {
+        "model": "gpt-6.1-sol",
+        "effort": "xhigh",
+        "permissions": {
+          "additionalPaths": ["%USERPROFILE%\\..\\*\\.nuget\\packages"]
+        }
+      }
+    }
+  ]
+}
