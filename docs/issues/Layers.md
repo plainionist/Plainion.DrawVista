@@ -186,7 +186,7 @@ bounded prerequisite, not a reopening of the accepted worker evidence slice.
 #### Reviewer disposition - 2026-11-16
 
 Reviewed `ed9d1cc0df9f20455b93bd35b1f5219e65362941` and the complete correction
-delta through `3726098ef880a30139cb311b0a62da0783edd787`. The retained isolated-asset
+delta through `7d0452d75a9b8aec5375338a3904e8a2b5976cf4`. The retained isolated-asset
 failure, literal-comparison manifests, and same-path control logs support the
 diagnosis and its external recovery boundary. Independently checked the named
 main asset: its byte count, SHA256, and space at UTF-16 offset 60420 match the
