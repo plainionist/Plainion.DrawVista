@@ -269,6 +269,7 @@ Stable plan ID: `layers-current-main-design-evidence`. Depends on accepted
 `layers-current-design-evidence`; blocks `layers-support`. This is a new,
 bounded prerequisite, not a reopening of the accepted worker evidence slice.
 
+- **Status:** Blocked; external generator recovery is pending. Not accepted.
 - **Outcome:** Resolve the reproducible main-checkout generation prerequisite so
   a freshly generated, guarded-readable current-main model is available for
   Layers planning.
@@ -310,6 +311,39 @@ bounded prerequisite, not a reopening of the accepted worker evidence slice.
   insufficient. If application source changes are genuinely necessary, also
   require the smallest affected existing tests and build. Failed current-main
   proof returns to diagnosis/recovery, not feature assignment or acceptance.
+
+#### Reviewer disposition - 2026-11-16
+
+Reviewed `ed9d1cc0df9f20455b93bd35b1f5219e65362941`. The retained isolated-asset
+failure, literal-comparison manifests, and same-path control logs support the
+diagnosis and its external recovery boundary. Independently checked the named
+main asset: its byte count, SHA256, and space at UTF-16 offset 60420 match the
+brief. External-tool implementation was not independently inspected.
+The handed-off change is issue-only; no application tests were run.
+
+**R1 - High / blocking: current-main structural proof is unavailable.**
+
+- **Location:** This issue's Slice 1b **Outcome** and **Prove**; selected checkout
+  `C:\ws\plainionist\Plainion.DrawVista`.
+- **Violated outcome:** No complete, freshly generated and guarded-readable
+  current-main model is available. The reviewer's independent
+  `discover map read --project 'C:\ws\plainionist\Plainion.DrawVista'` exited 1
+  with `MAP Missing` for `.blaxquad\discovery\map\current.json`.
+- **Root cause:** The recorded generated-asset projection fails; isolated valid
+  whitespace-literal inputs reproduce that failure while one-byte letter
+  controls pass. No authorized generator correction or current-main recovery
+  has yet supplied the required publication. Private comparison models cannot
+  substitute for the selected checkout's structural evidence.
+- **Required outcome:** Architect coordinates the authorized generator-owner
+  correction and shared-checkout recovery described above, then supplies fresh
+  current-main generation and guarded overview/element evidence for independent
+  reviewer verification. Preserve literal data, validation safeguards, pending
+  main bytes, and the approved feature scope.
+
+No correction to the diagnostic brief is requested. R1 blocks slice acceptance,
+not delivery of this diagnosis to the external owner. Do not implement Layers
+or edit the external CLI under this assignment. Slice 1b remains incomplete;
+no accepted-result integration is authorized.
 
 ### Slice 2 - Layers support
 
