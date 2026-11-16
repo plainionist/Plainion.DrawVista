@@ -63,215 +63,164 @@ Support viewing and toggling draw.io layers while browsing diagrams.
 
 ## Plan
 
-Progress: 1 of 3 currently planned slices accepted. The current-main prerequisite
-is diagnosed but unaccepted and requires a corrected external tool build. Layer
-support itself is not implemented; slice 2 retains its stable ID and approved
-outcome.
+The operator's decision on 2026-11-16 removes `discover map` from Layers work.
+Do not generate, repair, or require a design model for implementation or acceptance.
+Proceed with one end-to-end feature slice, including implementation, coverage,
+and directly affected documentation. No discovery-tool prerequisite remains.
 
-### Accepted baseline
+Progress: no feature slice is accepted or implemented yet. Slice 2,
+`layers-support`, is ready for immediate coder assignment.
 
-Slice 1, `layers-current-design-evidence`, was accepted without findings in
-`00cd608ad9721c7975441a403d83feea82e4ce37` and is integrated into `main`.
-The coder evidence commit is `1dee493984675435a6d0262f9d0810ca3f4a7e81`.
-Assignment identity: `20261116T065946Z_000001_from_architect`.
+### Accepted baseline and withdrawn prerequisite
 
-Only the issue brief changed. Fresh design generation and bounded reads succeeded
-independently in both worker checkouts without application changes, external tool
-edits, or safeguard bypasses. The original exception did not reproduce; its cause
-remains unverified. The accepted issue revision above retains the full diagnostic,
-artifact references, model selectors, packet counts, confidence, and acceptance
-evidence; the completed brief is retired here.
+Slice 1, `layers-current-design-evidence`, remains accepted in
+`00cd608ad9721c7975441a403d83feea82e4ce37`, with coder evidence
+`1dee493984675435a6d0262f9d0810ca3f4a7e81` and assignment identity
+`20261116T065946Z_000001_from_architect`. It changed documentation only;
+it is not acceptance of Layers behavior. Historical models are not current-source
+authority and need not be consumed.
 
-The accepted overview reports 91 places and 423 occurrences: total 514, shown 20,
-omitted 494 on page 1. Reviewer generation `7742d8f0af9b495a9b02adbecfc20529`
-and its source fingerprint
-`EB7C608791906A2B8406565410D94930EE8ABD96768A81187FDF3F10FA3BFD87`
-are historical references, not current-main structural authority.
+Slice 1b, `layers-current-main-design-evidence`, assignment identity
+`20261116T073037Z_000002_from_architect`, is withdrawn, not accepted.
+The operator explicitly excludes **R1**, unavailable current-main model proof,
+from Layers acceptance. The generator failure is not claimed fixed. **R2**
+remains independently resolved in coder revision
+`3726098ef880a30139cb311b0a62da0783edd787` and reviewer disposition
+`dd64163993d4b0be02c5d045615c98f49a871d0e`.
 
-### Current-main generation evidence
-
-The shared checkout cannot publish a current design model:
-`squad discover map` fails with `Invalid authored contract`, and guarded reading
-reports `MAP Missing`. Coder isolated a valid whitespace-literal case in the
-ignored generated input
-`src\Plainion.DrawVista\wwwroot\assets\runtime-core.esm-bundler-CyXb5kU7.js`,
-absent in the original worker checkout. Its byte-exact cold single-file copy
-reproduces the same exception: 64833 bytes, SHA256
-`413ca7c7e3f0b212f964c9e74b3e7ebbec85e10e338d209dbb579bc757e38db3`.
-The literal is at line 1, UTF-16 column 60421.
-
-Minimal ``function sample(separator = ` `) {}`` passes `node --check` but fails
-cold map generation. Replacing only the space with `x` passes generation.
-Quoted-string whitespace controls reproduce the rejection. All 55 historical
-comparison paths copied from current main bytes pass cold generation, but that
-selected diagnostic set omits the failing generated asset and is not
-current-main authority.
-
-Decisive logs, manifests, asset bisection and four literal controls are retained
-at `C:\ws\plainionist\Plainion.DrawVista\.worktrees\coder\.blaxquad\diagnostics\layers-current-main-design-evidence`.
-Read `template-default-comparison.json`, `default-parameter-comparison.json`,
-`generated-asset-bisection.json` and their named generation logs. The behaviour is
-isolated; the tool's implementation mechanism and a successful main recovery
-remain unverified.
-
-Scope-corrected coder diagnostic commit
-`3726098ef880a30139cb311b0a62da0783edd787` retains the complete diagnosis and
-reproduction observations. Its same-path control changes only byte 29 of a
-37-byte fixture: `x` passes, restoring the space fails, and syntax checks and
-newline bytes remain unchanged. This also isolates the literal distinction from
-fixture paths and warm-cache success. Temporary fixture models were removed
-before handoff; logs and manifests remain. This diagnostic commit contains no
-successful current-main publication and does not accept slice 1b.
-
-The affected current-main command is:
-
-```powershell
-& 'C:\ws\plainionist\BlaXquad\bin\squad.exe' discover map --project 'C:\ws\plainionist\Plainion.DrawVista'
-```
-
-The former report is retained historically in
-`6ed4dc75431d8417462441bced4f4c51b1c40562`; its removal in
-`b8cfd061fe9ee917d366017bf9b437f083f861ae` is preserved. No report is recreated.
-Original source bytes are intact; the six protected newline representations
-remain unstaged and must be excluded from planning commits. Accepted worker and
-diagnostic models do not close this current-main prerequisite.
-
-### Slice 1b - Restore current-main design evidence
-
-Stable plan ID: `layers-current-main-design-evidence`. Depends on accepted
-`layers-current-design-evidence`; blocks `layers-support`. This is a new,
-bounded prerequisite, not a reopening of the accepted worker evidence slice.
-
-- **Status:** Blocked; external generator recovery is pending. Not accepted.
-- **Outcome:** Resolve the reproducible main-checkout generation prerequisite so
-  a freshly generated, guarded-readable current-main model is available for
-  Layers planning.
-- **Start:** This issue, accepted baseline `00cd608ad9721c7975441a403d83feea82e4ce37`,
-  the decisive diagnostic references above, and the explicit CLI and selected
-  checkout in the command. Current-main source selection includes the isolated
-  generated asset; do not substitute the successful 55-input diagnostic model.
-- **Change:** Supported input diagnosis is complete. The required external
-  prerequisite is a corrected `squad` build from its owner, preserving meaningful
-  whitespace string/template literal data and validation. This Layers assignment
-  does not authorize tool-source inspection or repair. Do not repeat failed
-  cache/newline experiments or rewrite, move or omit generated assets as a
-  workaround. Coder preserves existing evidence; architect owns subsequent
-  current-main generation and guarded reads when the corrected build is supplied.
-  Any needed private-checkout preparation uses
-  `squad sync-to-base --merge <handed-off-commit>` once from the owner's clean,
-  exclusively owned checkout, preserving unrelated work.
-- **Recovery ownership:** Architect executes any justified shared-checkout
-  recovery; coder must not synchronize or edit shared source. Keep source and
-  generated-state recovery reversible and preserve unrelated work. No external
-  CLI source inspection or edits, safeguard weakening, copied historical model,
-  or unsupported publication are authorized. No tool repair is assigned here.
-  The deleted report remains deleted; retain the diagnosis in this brief and
-  existing diagnostics instead.
-- **Evidence:** Preserve existing commands/output, manifests, protected-input
-  checks and literal controls. After a corrected build is supplied, record its
-  identity and current-main generation/read evidence in this brief, without
-  duplicating full logs or recreating the removed report. Route an existing
-  qualifying evidence commit; no application implementation is required merely
-  to deliver evidence. Diagnosis alone is not acceptance.
-- **Preserve:** Every acceptance criterion, both stable existing plan IDs, the
-  accepted worker evidence, current application behavior, and original pending
-  source bytes. Keep Layers unavailable. Never stage the six original
-  newline-representation differences merely to obtain a clean handoff.
-- **Prove:** The corrected tool passes the four named literal controls with
-  literal data retained. The explicit current-main generation command above exits
-  0 and publishes a complete immutable pair. Guarded `discover map read --project`
-  succeeds for that selected checkout, with generation, source fingerprint,
-  paths, confidence, and per-packet total/shown/omitted/NEXT retained. Read the
-  overview and bounded import, page/storage, SVG/caption/link/search, viewer and
-  toolbar elements needed by slice 2. Reviewer independently verifies this
-  current-main evidence; successful private-checkout generation alone is
-  insufficient. Failed current-main proof leaves the tool prerequisite unresolved,
-  not feature assignment or acceptance.
-
-#### Reviewer disposition - 2026-11-16
-
-Reviewed `ed9d1cc0df9f20455b93bd35b1f5219e65362941` and the complete correction
-delta through `7d0452d75a9b8aec5375338a3904e8a2b5976cf4`. The retained isolated-asset
-failure, literal-comparison manifests, and same-path control logs support the
-diagnosis and its external recovery boundary. Independently checked the named
-main asset: its byte count, SHA256, and space at UTF-16 offset 60420 match the
-brief. External-tool implementation was not independently inspected.
-The handed-off change is issue-only; no application tests were run.
-
-**R1 - High / blocking: current-main structural proof is unavailable.**
-
-- **Location:** This issue's Slice 1b **Outcome** and **Prove**; selected checkout
-  `C:\ws\plainionist\Plainion.DrawVista`.
-- **Violated outcome:** No complete, freshly generated and guarded-readable
-  current-main model is available. The reviewer's independent
-  `discover map read --project 'C:\ws\plainionist\Plainion.DrawVista'` exited 1
-  with `MAP Missing` for `.blaxquad\discovery\map\current.json`.
-- **Root cause:** The recorded generated-asset projection fails; isolated valid
-  whitespace-literal inputs reproduce that failure while one-byte letter
-  controls pass. No authorized generator correction or current-main recovery
-  has yet supplied the required publication. Private comparison models cannot
-  substitute for the selected checkout's structural evidence.
-- **Required outcome:** Architect coordinates the authorized generator-owner
-  correction and shared-checkout recovery described above, then supplies fresh
-  current-main generation and guarded overview/element evidence for independent
-  reviewer verification. Preserve literal data, validation safeguards, pending
-  main bytes, and the approved feature scope.
-
-R1 blocks slice acceptance, not delivery of this diagnosis to the external
-owner. Do not implement Layers
-or edit the external CLI under this assignment. Slice 1b remains incomplete;
-no accepted-result integration is authorized.
-
-**R2 - Medium: remove implementation-derived diagnostic evidence (resolved).**
-
-- **Location:** Coder diagnosis, the sentence asserting that
-  `DesignReader.ValidatePart` rejects whitespace-only tokens at line 215.
-- **Violated scope:** The coder's subsequent scope-correction handoff excludes
-  external implementation inspection as authorized evidence. CLI exception
-  locations and controlled input observations remain usable.
-- **Root cause:** That sentence was derived from an earlier external source read,
-  rather than the permitted DrawVista inputs and CLI output.
-- **Required outcome:** Coder replaces the implementation-condition assertion
-  with the observed invalid-contract failure and controlled whitespace/letter
-  behavior. Preserve the decisive reproductions and recovery ownership without
-  further external implementation inspection or edits.
-
-Resolved in `3726098ef880a30139cb311b0a62da0783edd787`: the diagnosis now relies
-on CLI failures and controlled inputs, explicitly leaves the internal defect
-unverified, and limits investigation to the authorized DrawVista/CLI boundary.
-The correction changes only this issue. R1 remains open; neither the corrected
-diagnosis nor its private probes satisfies slice 1b's current-main model outcome.
+Existing diagnosis and dispositions remain preserved in those commits and
+`b3fb0b0c4a277dfaa25b99e948b6d36da37abdbf`; full diagnostic artifacts remain at
+`C:\ws\plainionist\Plainion.DrawVista\.worktrees\coder\.blaxquad\diagnostics\layers-current-main-design-evidence`.
+Do not repeat probes, inspect or repair BlaXquad implementation, recreate the
+deleted `SquadDiscoverMap.md`, or issue further diagnostic-document corrections.
+The old tool-build, model-publication, report-migration, and historical preparation
+requests are superseded.
 
 ### Slice 2 - Layers support
 
-Stable plan ID: `layers-support`. Depends on accepted
-`layers-current-design-evidence` and unresolved
-`layers-current-main-design-evidence`. This approved outcome remains unassigned;
-refine its implementation boundaries and concrete proof after the current-main
-prerequisite, before committing its coder brief.
+Stable plan ID: `layers-support`. The accepted baseline is retained, but there is
+no dependency on the withdrawn slice 1b. This is one cohesive importer-to-viewer
+contract: do not split its producer, storage, search, or user-facing consumers into
+partially working deliveries.
 
-- **Outcome:** Fulfill all Layers acceptance criteria above, including both import
-  formats, legacy-page compatibility, rendering and interaction, per-page
-  browser-tab preferences, and search.
-- **Start:** The accepted baseline, `README.md` for product intent and import naming,
-  and `src\Plainion.DrawVista\WebUI\README.md` for frontend tooling. Authored
-  Gherkin discovery completed with zero scenarios and zero feature files; this
-  does not establish absence of other tests. The issue is behavioral authority.
-- **Preparation:** Generate a fresh model in the shared main checkout using
-  `C:\ws\plainionist\BlaXquad\bin\squad.exe`, then consume bounded overview and
-  element packets with counts, confidence, and continuation pages retained.
-  Historical candidate anchors are `DrawingWorkbookFactory`, `DrawIOModel`,
-  `DrawIOApp`, `ProcessedDocument`, `IDocumentStore`, `SqliteDocumentStore`,
-  `SvgProcessor`, `FullTextSearch`, `Program`, `SvgContainer`, `MainLayout`, and
-  `SearchResults`. They do not establish resolved ownership, runtime calls,
-  browser-session lifetime, or test coverage.
-- **Unresolved technical decisions:** Layer extraction and shared framing;
-  backward-compatible persistence/API contracts; composite SVG, captions and
-  links; toolbar and tab-state ownership; and sufficient existing test entry
-  points. Resolve these through current model and documentation evidence before
-  assignment, without substituting implementation scans for architectural
-  structure. Coder inspection and independent reviewer verification remain
-  necessary.
-- **Preserve:** The agreed scope and every acceptance criterion. Technical
-  refinement or cohesive slicing must not change product approval, expose an
-  unfinished path, or defer required compatibility and behavioral proof.
+**Outcome:** Import both supported formats into a backward-compatible,
+layer-aware SVG page and let users independently toggle its layers with correct
+alignment, links, search, and browser-tab preferences.
+
+**Start:** This issue is behavioral authority. `README.md` defines product intent
+and existing import naming; `src\Plainion.DrawVista\WebUI\README.md` defines
+frontend commands and supported dependencies.
+
+Current focused navigation located the following implementation candidates;
+these are reading anchors, not proof of runtime ownership. Coder verifies actual
+contracts in source; reviewer independently verifies the implementation:
+
+- Import: `src\Plainion.DrawVista\IO\DrawingWorkbookFactory.cs`,
+  `DrawIOWorkbook.cs`, `DrawIOPngWorkbook.cs`, `DrawIOModel.cs`, and `DrawIOApp.cs`.
+- Page processing and storage: `src\Plainion.DrawVista\UseCases\Documents.cs`,
+  `SvgProcessor.cs`, `IDocumentStore.cs`, and `IO\SqliteDocumentStore.cs` and
+  `IO\FileSystemDocumentStore.cs`; check the caching decorator and `Program.cs`
+  where their existing contracts are affected.
+- Captions and links: `src\Plainion.DrawVista\Adapters\SvgCaptionParser.cs`,
+  `SvgHyperlinkFormatter.cs`, and `UseCases\FullTextSearch.cs`.
+- Viewer: `src\Plainion.DrawVista\WebUI\src\components\SvgContainer.vue`,
+  `SearchResults.vue`, `views\BrowserView.vue`, and `layouts\MainLayout.vue`.
+- Existing regression anchors: `src\Plainion.DrawVista.Tests\SqliteDocumentStoreTests.cs`
+  and `StartPageTests.cs`; use existing backend and frontend runners.
+
+**Change:**
+
+1. Read page-specific layer identity, name, source order, and saved visibility
+   from the embedded draw.io model, including initially hidden content. Reuse both
+   existing workbook paths and preserve their page naming and selection behavior.
+   The importer owns immutable source layer metadata, not viewer preferences.
+2. Produce one self-describing SVG per page: layer content belongs to distinct
+   SVG groups, ordered as in draw.io, carrying importer-owned layer ID, name, and
+   source-visibility metadata. Embed this metadata in the stored SVG so legacy
+   pages and existing storage/API shapes need no new tables or layer endpoints.
+   All groups share one fixed all-layer coordinate system and viewport. Include
+   hidden content when establishing bounds, never retain a duplicate base image,
+   and ensure merged SVG IDs, definitions, references, and links remain valid.
+   Reuse the existing draw.io exporter. Exact grouping/export mechanics are
+   implementation details: an isolated temporary model or per-layer exports are
+   acceptable if they preserve source bytes and prove the common framing.
+   Clean up temporary files and surface export failures through existing patterns.
+3. Preserve the complete SVG and its layer metadata through caption parsing,
+   generated-link processing, storage round trips, caching, and delivery. Index
+   captions from every layer independent of source visibility. An SVG without
+   importer-owned layer metadata follows the existing legacy rendering path.
+4. Add the checkbox dropdown immediately right of Search, using existing Quasar
+   and localization patterns. Keep it visible and disabled for legacy pages or
+   pages containing only the default layer. The enabled list includes the default
+   layer and follows source order. Toggle group visibility in the existing SVG;
+   do not reload the page, re-export, replace the pan/zoom instance, or recompute
+   framing. Hidden groups must not intercept clicks; all-off leaves no content.
+5. Keep selections in `sessionStorage`, scoped by the existing stable page
+   identity and layer IDs. Apply saved selections when available; otherwise use
+   source visibility. Newly encountered layer IDs use their source visibility.
+   Navigation and refresh restore only that page's choices. No preference writes
+   reach the source files or server. Search navigation uses the same page-state
+   path and must not reveal a matched layer automatically.
+6. Include required regression fixtures, tests, and concise user documentation
+   for toggling, per-tab persistence, and re-uploading legacy pages. Deliver actual
+   feature code and its proof together; no further tool/evidence-only slice.
+
+**Preserve:** Every acceptance criterion and read-only constraint above; both
+import paths, existing stored pages, generated and external links, search result
+navigation, and supported build/tooling behavior. No layer editing, source
+write-back, backfill, external-tool work, or unrelated cleanup. Leave the shared
+checkout's six pre-existing newline-representation differences untouched and
+unstaged; they are not part of the plan commit.
+
+**Prove:** Use a fixture with a default layer, another visible layer, an initially
+hidden layer extending beyond the visible bounds, overlapping content to expose
+stacking mistakes, captions, and both generated and external links. Include a
+second page with different layer settings, plus a legacy stored SVG. Select these
+observable scenarios:
+
+1. Import the `.drawio` and embedded-model `.png` equivalents through their real
+   workbook paths. Assert existing names and selected pages, layer names/order,
+   saved visibility, hidden geometry, and unchanged input bytes. Reload stored
+   pages through both supported stores and confirm SVG metadata and captions
+   survive; legacy pages render unchanged without metadata.
+2. In the viewer, check toolbar placement, disabled legacy/default-only states,
+   source defaults, and independent checkbox changes including the default layer.
+   Enable initially hidden outlying content and confirm it is aligned and
+   unclipped; overlap demonstrates source stacking. Disable everything and
+   confirm an empty, non-clickable canvas without duplicate content.
+3. Establish non-default zoom and pan before toggling. Assert the same SVG
+   viewport and pan/zoom transform afterward, not merely that checkboxes change.
+   Generated and external links work while visible and cannot activate while
+   their layer is disabled.
+4. Choose different selections on the two pages, navigate away and back, and
+   refresh. Assert independent restored choices. A fresh tab/session starts from
+   source visibility, and server/source state is unchanged.
+5. Search for a caption present only in the initially hidden layer, with that
+   layer disabled. Assert it is indexed and navigates to the existing target page
+   without changing remembered/source layer selections.
+
+Add automated import/composition/store/caption and preference-state coverage in
+existing runners. Exercise actual SVG/browser interactions for framing, click
+behavior, and refresh; static checks or mocked checkbox state alone are not proof.
+Run the smallest targeted backend selection covering the change and existing
+link/store/navigation regressions, `pnpm check` from
+`src\Plainion.DrawVista\WebUI`, and a Release build of
+`src\Plainion.DrawVista\Plainion.DrawVista.csproj`.
+Report exact commands, results, and any browser reproduction evidence with the
+implementation handoff; do not cycle through issue-history-only commits.
+
+**Execution:** Coder implements only in its private checkout and prepares once
+with `squad sync-to-base --merge <handed-off-plan-commit>`. Receiving old
+diagnostic notes does not authorize preparation or reopening slice 1b. If this
+new preparation reports a restored content conflict confined to this issue
+brief, the architect authorizes the checkout owner to resolve that content
+conflict against the incoming brief, preserving both histories and diagnostic
+commits. Verify the reported original state before any owner-driven recovery;
+safety refusals or uncertain restoration must not be bypassed. No shared-checkout
+mutation or repeated historical preparation is authorized.
+
+Coder sends a qualifying feature implementation commit to reviewer under the
+new slice identity. Reviewer reviews feature code and independently verifies
+these behaviors, without requiring `discover map` or reopening excluded R1.
+Reviewer acceptance and normal local integration remain required; only Layers
+behavior, compatibility, and its concrete proof determine completion.
