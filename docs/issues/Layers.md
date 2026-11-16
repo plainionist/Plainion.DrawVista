@@ -63,9 +63,10 @@ Support viewing and toggling draw.io layers while browsing diagrams.
 
 ## Plan
 
-Progress: 1 of 3 currently planned slices accepted. The next coder assignment is
-the current-main evidence prerequisite below. Layer support itself is not
-implemented; slice 2 retains its stable ID and approved outcome.
+Progress: 1 of 3 currently planned slices accepted. The current-main prerequisite
+is diagnosed but unaccepted and requires a corrected external tool build. Layer
+support itself is not implemented; slice 2 retains its stable ID and approved
+outcome.
 
 ### Accepted baseline
 
@@ -89,181 +90,46 @@ are historical references, not current-main structural authority.
 
 ### Current-main generation evidence
 
-On 2026-11-16, generation at brief commit `2afa9d2` reproduced
-`System.IO.InvalidDataException: Invalid authored contract.` in
-`DesignReader.ValidatePart` at line 215, followed by three recursive frames at
-line 230. The command was:
+The shared checkout cannot publish a current design model:
+`squad discover map` fails with `Invalid authored contract`, and guarded reading
+reports `MAP Missing`. Coder isolated a valid whitespace-literal case in the
+ignored generated input
+`src\Plainion.DrawVista\wwwroot\assets\runtime-core.esm-bundler-CyXb5kU7.js`,
+absent in the original worker checkout. Its byte-exact cold single-file copy
+reproduces the same exception: 64833 bytes, SHA256
+`413ca7c7e3f0b212f964c9e74b3e7ebbec85e10e338d209dbb579bc757e38db3`.
+The literal is at line 1, UTF-16 column 60421.
+
+Minimal ``function sample(separator = ` `) {}`` passes `node --check` but fails
+cold map generation. Replacing only the space with `x` passes generation.
+Quoted-string whitespace controls reproduce the rejection. All 55 historical
+comparison paths copied from current main bytes pass cold generation, but that
+selected diagnostic set omits the failing generated asset and is not
+current-main authority.
+
+Decisive logs, manifests, asset bisection and four literal controls are retained
+at `C:\ws\plainionist\Plainion.DrawVista\.worktrees\coder\.blaxquad\diagnostics\layers-current-main-design-evidence`.
+Read `template-default-comparison.json`, `default-parameter-comparison.json`,
+`generated-asset-bisection.json` and their named generation logs. The behaviour is
+isolated; the tool's implementation mechanism and a successful main recovery
+remain unverified.
+
+The full coder diagnosis, same-path one-byte control, packet counts and protected
+input checks remain in `3726098ef880a30139cb311b0a62da0783edd787` and the existing
+diagnostics. No diagnostic model is offered as current-main authority.
+
+The affected current-main command is:
 
 ```powershell
 & 'C:\ws\plainionist\BlaXquad\bin\squad.exe' discover map --project 'C:\ws\plainionist\Plainion.DrawVista'
 ```
 
-Generation exited `-532462766`. Guarded reading exited 1 with
-`MAP Missing`: the shared checkout has no `map\current.json`.
-The full common exception stack is also retained in the accepted historical
-issue revision. Current commands, output and input diagnostics are preserved in
-`C:\Users\ssmosett\.copilot\session-state\70018c83-7287-4475-8bf1-7628dcb44d9e\files\layers-main-model-diagnostic.txt`.
-
-Two distinct controlled comparisons failed with the same exception:
-
-- Preserving the closed generated index and regenerating without it did not fix
-  the failure. The old index had 36 declaration inputs and zero design inputs;
-  the new index has zero of each. Cached design reuse is not necessary to
-  reproduce the failure. Both historical worker indexes have 55 design inputs.
-- Read-only input comparison found six main files differing from both successful
-  worker inputs solely by CRLF versus LF, totaling 70 extra CR bytes. A backed-up
-  LF-only comparison required every normalized file to match its committed Git
-  blob exactly. Generation still failed; every original byte buffer was restored.
-  Thus these newline differences are not a sufficient explanation.
-
-The six original inputs are `src\Plainion.DrawVista.Tests\JsonExtensions.cs`,
-`src\Plainion.DrawVista\GlobalConst.cs`,
-`src\Plainion.DrawVista\IO\DrawIOModel.cs`,
-`src\Plainion.DrawVista\IO\DrawingWorkbookFactory.cs`,
-`src\Plainion.DrawVista\UseCases\Documents.cs`, and
-`src\Plainion.DrawVista\UseCases\SvgExtensions.cs`.
-Git now reports their original newline representations as modified after the
-comparison; exclude them from planning commits and do not clean them for handoff.
-Their original bytes remain backed up in the session's
-`files\layers-source-input-before-lf` directory. The old generated index is
-preserved as `files\layers-discovery-index-before-regeneration.sqlite3`.
-
-No application implementation or external tool was changed, and no validation
-safeguard was bypassed. The failing generated input and valid-literal rejection
-are now isolated below. Current-main recovery and publication remain blocked;
-neither the historical worker evidence nor private diagnostic models close this
-prerequisite.
-
-#### Coder diagnosis - 2026-11-16
-
-**Status: diagnosed, not accepted.** The generator rejects meaningful
-whitespace-only JavaScript literal fragments. Main contains generated frontend
-inputs absent from the coder checkout; an isolated copy of one of these inputs
-reproduces the same failure without cached design state.
-
-The verified failing input is
-`src\Plainion.DrawVista\wwwroot\assets\runtime-core.esm-bundler-CyXb5kU7.js`:
-64833 bytes, SHA256
-`413ca7c7e3f0b212f964c9e74b3e7ebbec85e10e338d209dbb579bc757e38db3`.
-Its `Ca` function contains a single-space template literal default.
-The meaningful space is at line 1, UTF-16 column 60421,
-zero-based byte/UTF-16 offset 60420. The exact signature is:
-
-```javascript
-function Ca(e=` `,t=0)
-```
-
-`git check-ignore -v` identifies `.gitignore:2`, `**/wwwroot/**`, for this
-asset. The repository already excludes generated output from Git; changing
-application source or adding another Git ignore rule is not the correction.
-The earlier repository-root glob omitted ignored assets; querying the known
-`wwwroot\assets` directory directly found ten JavaScript files.
-
-All diagnosis writes were confined to the coder's checkout under
-`C:\ws\plainionist\Plainion.DrawVista\.worktrees\coder\.blaxquad\diagnostics\layers-current-main-design-evidence`.
-Main files were read and copied, never edited. Each copy was byte-verified;
-the manifests record source paths, sizes, and SHA256 values.
-
-| Private diagnostic                   | Inputs                                           | Result                                                                                                   |
-| ------------------------------------ | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| Cold DocumentBuilder copy            | 1 current-main source file                       | Generation exits 0; overview total/shown/omitted = 10/10/0, NEXT none                                    |
-| Cold historical comparison inventory | 55 paths, all copied from current-main bytes     | Generation exits 0; 83 places, 423 occurrences; overview page 1 total/shown/omitted = 506/20/486, NEXT 2 |
-| Cold generated assets copy           | 10 current-main JavaScript assets                | Same `Invalid authored contract` exception                                                               |
-| Bisection first group                | 5 generated assets                               | Generation exits 0                                                                                       |
-| Bisection second group               | 3 other generated assets                         | Generation exits 0                                                                                       |
-| Isolated Vue runtime copy            | 1 generated asset, identified above              | Same exception and recursive validation stack; no publication                                            |
-| Single-space quoted default          | 1 minimal JavaScript file                        | `node --check` exits 0; generation fails                                                                 |
-| Letter quoted default                | Same syntax, only space replaced with `x`        | `node --check` and generation exit 0                                                                     |
-| Single-space template default        | 1 minimal JavaScript file                        | `node --check` exits 0; generation fails                                                                 |
-| Letter template default              | Same syntax, only space replaced with `x`        | `node --check` and generation exit 0                                                                     |
-| In-place template control            | Same project and file path; only byte 29 changes | `x` exits 0; restoring the space reproduces the exception; newline bytes unchanged                       |
-
-The 55-path comparison is deliberately incomplete as a checkout model: it
-omits project metadata and the additional generated assets. Its successful
-generation is input-diagnosis evidence, not current-main structural authority.
-One other generated asset was not tested separately; identifying
-one independently failing input was sufficient for this diagnosis.
-
-Minimal failing template input:
-
-```javascript
-function sample(separator = ` `) {}
-```
-
-The quoted form, `function sample(separator = ' ') {}`, also fails.
-For each form, changing only the space to `x` makes generation succeed.
-Run each input in its own new private source directory without generated state:
-
-```powershell
-node --check '<private-fixture>\sample.js'
-& 'C:\ws\plainionist\BlaXquad\bin\squad.exe' discover map --project '<private-fixture>'
-```
-
-The failing generation exits `-532462766` (Node records its unsigned
-representation `3762504530`) with the same common exception stack retained
-above. Both passing controls were consumed with bounded `map read sample`
-packets: total 2, shown 2, omitted 0, NEXT none, relationships 0.
-Their authored contracts expose
-`formal_parameters -> assignment_pattern -> string/template_string -> string_fragment`,
-with the non-space fragment represented as `Tokens: ["x"]`.
-The supported CLI fails for both whitespace-literal inputs with
-`Invalid authored contract`. The controlled one-byte changes isolate valid
-literal text, not missing names, source newline differences, or an invalid
-JavaScript program, as the rejected input distinction. These are CLI and
-syntax observations, not resolved application relationships or ownership
-evidence. The internal extraction/validation defect remains unverified within
-this scope; the diagnosis does not rely on generator implementation claims.
-
-The template control was also toggled in place at the identical project and
-source-file path. The `x` input passed with zero cached design inputs beforehand.
-Restoring only byte 29 from `x` to a space failed again, even with the previous
-`x` input cached. Both JavaScript syntax checks passed; the 37-byte file length
-and every CRLF byte were preserved. This separates the literal-content
-distinction from different fixture paths or warm-cache success.
-
-Full failure output and reproduction manifests are retained in the diagnostic
-directory named above:
-
-- `wwwroot-assets-generation.txt` and `wwwroot-assets-manifest.json`.
-- `assets-bisect-03-generation.txt` and `generated-asset-bisection.json`
-  identify the byte-exact single failing input.
-- `space-default-generation.txt`, `letter-default-generation.txt`,
-  `template-space-default-generation.txt`, and
-  `template-letter-default-generation.txt` retain the syntax and generation
-  results for all four minimal controls.
-- `default-parameter-comparison.json` and `template-default-comparison.json`
-  retain the controlled results and exact failing literal location.
-- `same-root-letter-generation.txt`, `same-root-space-generation.txt`, and
-  `same-root-literal-comparison.json` retain the in-place one-byte comparison.
-- `all-current-main-inputs-generation.txt` and
-  `all-current-main-inputs-manifest.json` retain the cold source comparison.
-
-Experiment-only fixture directories and their generated models are removed
-before handoff; the failure logs, manifests, minimal source above, and recorded
-packet observations remain. No diagnostic model is committed or offered as
-acceptance evidence.
-
-**Required recovery ownership:**
-
-1. Architect forwards the exact asset and minimal controls to the authorized
-   generator owner. Resolve the supported CLI's rejection of valid
-   whitespace-literal defaults without losing literal meaning or weakening
-   structural validation.
-2. Do not rewrite generated JavaScript, alter application behavior, relocate
-   live shared assets merely to make discovery pass, or copy a worker model.
-   No external CLI edit is authorized in this coder slice.
-3. After an authorized supported correction is available, architect executes
-   the explicit current-main generation command and the required guarded
-   overview/element reads. Reviewer independently verifies that current-main
-   evidence before slice 1b can be accepted or Layers can be assigned.
-
-The read-only current-main `discover map read --project` check still exits 1
-with `MAP Missing`; no current-main generation or shared-checkout recovery was
-performed by coder. All six protected main inputs were checked against the
-initial read-only manifest and remain byte-identical. Application tests,
-frontend checks, builds, and the full suite were not run because application,
-build, and test code are unchanged. JavaScript syntax checks and controlled
-generator probes cover the diagnosed input boundary, not Layers behavior.
+The former report is retained historically in
+`6ed4dc75431d8417462441bced4f4c51b1c40562`; its removal in
+`b8cfd061fe9ee917d366017bf9b437f083f861ae` is preserved. No report is recreated.
+Original source bytes are intact; the six protected newline representations
+remain unstaged and must be excluded from planning commits. Accepted worker and
+diagnostic models do not close this current-main prerequisite.
 
 ### Slice 1b - Restore current-main design evidence
 
@@ -276,46 +142,46 @@ bounded prerequisite, not a reopening of the accepted worker evidence slice.
   a freshly generated, guarded-readable current-main model is available for
   Layers planning.
 - **Start:** This issue, accepted baseline `00cd608ad9721c7975441a403d83feea82e4ce37`,
-  the current-main diagnostic above, and the explicit CLI and selected checkout
-  in its command. Historical worker input inventories are diagnostic comparison
-  points only, not architectural authority. The exception does not identify its
-  offending input; do not assume that another successful worker run resolves it.
-- **Change:** Coder prepares their own clean, exclusively owned checkout once
-  with `squad sync-to-base --merge <handed-off-commit>`. Identify the smallest
-  failing input or input/environment distinction using supported CLI behavior,
-  diagnostics, DrawVista input evidence and a faithful private reproduction
-  rather than another blind retry. Any implementation inspection must be limited
-  to DrawVista-authored source and a concrete input question. Do not inspect
-  BlaXquad implementation; exception source paths are diagnostic output, not
-  reading anchors. Do not change application behavior merely to appease the
-  generator.
+  the decisive diagnostic references above, and the explicit CLI and selected
+  checkout in the command. Current-main source selection includes the isolated
+  generated asset; do not substitute the successful 55-input diagnostic model.
+- **Change:** Supported input diagnosis is complete. The required external
+  prerequisite is a corrected `squad` build from its owner, preserving meaningful
+  whitespace string/template literal data and validation. This Layers assignment
+  does not authorize tool-source inspection or repair. Do not repeat failed
+  cache/newline experiments or rewrite, move or omit generated assets as a
+  workaround. Coder preserves existing evidence; architect owns subsequent
+  current-main generation and guarded reads when the corrected build is supplied.
+  Any needed private-checkout preparation uses
+  `squad sync-to-base --merge <handed-off-commit>` once from the owner's clean,
+  exclusively owned checkout, preserving unrelated work.
 - **Recovery ownership:** Architect executes any justified shared-checkout
   recovery; coder must not synchronize or edit shared source. Keep source and
   generated-state recovery reversible and preserve unrelated work. No external
   CLI source inspection or edits, safeguard weakening, copied historical model,
-  or unsupported publication are authorized. If supported diagnostics cannot
-  resolve the failure, report the exact commands/output, established facts,
-  remaining unknowns and required tool prerequisite to architect. Do not expand
-  the investigation into BlaXquad sources.
-- **Evidence:** Commit the decisive diagnosis and minimal recovery instructions
-  in this issue, replacing superseded hypotheses. Preserve full failure output
-  and reproduction references. Include any necessary repository-local correction
-  and its directly affected documentation and proof; exclude Layers feature
-  implementation. A diagnosis or approved experiment alone is not acceptance.
+  or unsupported publication are authorized. No tool repair is assigned here.
+  The deleted report remains deleted; retain the diagnosis in this brief and
+  existing diagnostics instead.
+- **Evidence:** Preserve existing commands/output, manifests, protected-input
+  checks and literal controls. After a corrected build is supplied, record its
+  identity and current-main generation/read evidence in this brief, without
+  duplicating full logs or recreating the removed report. Route an existing
+  qualifying evidence commit; no application implementation is required merely
+  to deliver evidence. Diagnosis alone is not acceptance.
 - **Preserve:** Every acceptance criterion, both stable existing plan IDs, the
   accepted worker evidence, current application behavior, and original pending
   source bytes. Keep Layers unavailable. Never stage the six original
   newline-representation differences merely to obtain a clean handoff.
-- **Prove:** The explicit current-main generation command above exits 0 and
-  publishes a complete immutable pair. Guarded `discover map read --project`
+- **Prove:** The corrected tool passes the four named literal controls with
+  literal data retained. The explicit current-main generation command above exits
+  0 and publishes a complete immutable pair. Guarded `discover map read --project`
   succeeds for that selected checkout, with generation, source fingerprint,
   paths, confidence, and per-packet total/shown/omitted/NEXT retained. Read the
   overview and bounded import, page/storage, SVG/caption/link/search, viewer and
   toolbar elements needed by slice 2. Reviewer independently verifies this
   current-main evidence; successful private-checkout generation alone is
-  insufficient. If application source changes are genuinely necessary, also
-  require the smallest affected existing tests and build. Failed current-main
-  proof returns to diagnosis/recovery, not feature assignment or acceptance.
+  insufficient. Failed current-main proof leaves the tool prerequisite unresolved,
+  not feature assignment or acceptance.
 
 #### Reviewer disposition - 2026-11-16
 
