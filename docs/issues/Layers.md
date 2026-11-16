@@ -206,11 +206,13 @@ packets: total 2, shown 2, omitted 0, NEXT none, relationships 0.
 Their authored contracts expose
 `formal_parameters -> assignment_pattern -> string/template_string -> string_fragment`,
 with the non-space fragment represented as `Tokens: ["x"]`.
-`DesignReader.ValidatePart` rejects whitespace-only tokens at line 215.
-The controlled one-byte changes therefore identify valid literal text, not
-missing names, source newline differences, or an invalid JavaScript program,
-as the failing contract distinction. These are syntax observations, not
-resolved application relationships or ownership evidence.
+The supported CLI fails for both whitespace-literal inputs with
+`Invalid authored contract`. The controlled one-byte changes isolate valid
+literal text, not missing names, source newline differences, or an invalid
+JavaScript program, as the rejected input distinction. These are CLI and
+syntax observations, not resolved application relationships or ownership
+evidence. The internal extraction/validation defect remains unverified within
+this scope; the diagnosis does not rely on generator implementation claims.
 
 The template control was also toggled in place at the identical project and
 source-file path. The `x` input passed with zero cached design inputs beforehand.
@@ -244,9 +246,9 @@ acceptance evidence.
 **Required recovery ownership:**
 
 1. Architect forwards the exact asset and minimal controls to the authorized
-   generator owner. Correct handling of meaningful whitespace string/template
-   fragments must preserve literal data and structural validation; do not
-   globally accept missing tokens or silently discard literal content.
+   generator owner. Resolve the supported CLI's rejection of valid
+   whitespace-literal defaults without losing literal meaning or weakening
+   structural validation.
 2. Do not rewrite generated JavaScript, alter application behavior, relocate
    live shared assets merely to make discovery pass, or copy a worker model.
    No external CLI edit is authorized in this coder slice.
