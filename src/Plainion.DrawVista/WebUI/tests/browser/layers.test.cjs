@@ -59,16 +59,16 @@ async function toggle(page, name, enabled) {
 
 async function showPage(page, baseUrl, name) {
   await page.goto(`${baseUrl}/#/?page=${name}`);
-  await page.locator('.svg-pan-zoom_viewport').waitFor();
-  await page.locator('.svg-container svg').waitFor();
+  await page.locator('.svg-pan-zoom_viewport').waitFor({ state: 'attached' });
+  await page.locator('.svg-container svg').waitFor({ state: 'attached' });
   await settle(page);
 }
 
 async function selectPage(page, name, cell) {
   await page.getByRole('combobox').click();
   await page.getByRole('option', { name, exact: true }).click();
-  await page.locator(`[data-cell-id="${cell}"]`).waitFor();
-  await page.locator('.svg-pan-zoom_viewport').waitFor();
+  await page.locator(`[data-cell-id="${cell}"]`).waitFor({ state: 'attached' });
+  await page.locator('.svg-pan-zoom_viewport').waitFor({ state: 'attached' });
   await settle(page);
 }
 
@@ -379,7 +379,9 @@ test(
           await popup.close();
           await generated.click();
           await page.waitForURL(/page=Second/);
-          await page.locator('[data-cell-id="second-background"]').waitFor();
+          await page
+            .locator('[data-cell-id="second-background"]')
+            .waitFor({ state: 'attached' });
 
           await selectPage(page, 'Layers', 'background-box');
           await toggle(page, 'Hidden', false);
@@ -422,12 +424,16 @@ test(
           await selectPage(page, 'Layers', 'background-box');
           assert.deepEqual(await choices(page), [false, true, true]);
           await page.reload();
-          await page.locator('.svg-pan-zoom_viewport').waitFor();
+          await page
+            .locator('.svg-pan-zoom_viewport')
+            .waitFor({ state: 'attached' });
           assert.deepEqual(await choices(page), [false, true, true]);
           await selectPage(page, 'Second', 'second-background');
           assert.deepEqual(await choices(page), [true, true, false]);
           await page.reload();
-          await page.locator('.svg-pan-zoom_viewport').waitFor();
+          await page
+            .locator('.svg-pan-zoom_viewport')
+            .waitFor({ state: 'attached' });
           assert.deepEqual(await choices(page), [true, true, false]);
           const fresh = await context.newPage();
           await showPage(fresh, baseUrl, 'Layers');
@@ -483,7 +489,13 @@ test(
             .locator('.search-results-container')
             .getByRole('link', { name: 'Layers', exact: true })
             .click();
-          await page.locator('[data-cell-id="background-box"]').waitFor();
+          await page
+            .locator('[data-cell-id="background-box"]')
+            .waitFor({ state: 'attached' });
+          await page
+            .locator('.svg-pan-zoom_viewport')
+            .waitFor({ state: 'attached' });
+          await settle(page);
           assert.deepEqual(await choices(page), [false, true, false]);
           assert.equal(
             await page.locator('[data-cell-id="outlier"] rect').isVisible(),

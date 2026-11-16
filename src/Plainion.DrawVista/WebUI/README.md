@@ -51,6 +51,8 @@ pnpm check
 
 This runs ESLint, Vue/TypeScript checking, and the dependency compatibility tests.
 It also covers per-page layer preference state.
+The test command explicitly enables Node.js TypeScript stripping to support the
+minimum Node.js version.
 
 ### Browser regression tests
 
