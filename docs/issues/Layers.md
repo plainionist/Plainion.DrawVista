@@ -319,7 +319,8 @@ bounded prerequisite, not a reopening of the accepted worker evidence slice.
 
 #### Reviewer disposition - 2026-11-16
 
-Reviewed `ed9d1cc0df9f20455b93bd35b1f5219e65362941`. The retained isolated-asset
+Reviewed `ed9d1cc0df9f20455b93bd35b1f5219e65362941` and the complete correction
+delta through `3726098ef880a30139cb311b0a62da0783edd787`. The retained isolated-asset
 failure, literal-comparison manifests, and same-path control logs support the
 diagnosis and its external recovery boundary. Independently checked the named
 main asset: its byte count, SHA256, and space at UTF-16 offset 60420 match the
@@ -350,7 +351,7 @@ owner. Do not implement Layers
 or edit the external CLI under this assignment. Slice 1b remains incomplete;
 no accepted-result integration is authorized.
 
-**R2 - Medium: remove implementation-derived diagnostic evidence.**
+**R2 - Medium: remove implementation-derived diagnostic evidence (resolved).**
 
 - **Location:** Coder diagnosis, the sentence asserting that
   `DesignReader.ValidatePart` rejects whitespace-only tokens at line 215.
@@ -364,7 +365,11 @@ no accepted-result integration is authorized.
   behavior. Preserve the decisive reproductions and recovery ownership without
   further external implementation inspection or edits.
 
-R1 and R2 remain open.
+Resolved in `3726098ef880a30139cb311b0a62da0783edd787`: the diagnosis now relies
+on CLI failures and controlled inputs, explicitly leaves the internal defect
+unverified, and limits investigation to the authorized DrawVista/CLI boundary.
+The correction changes only this issue. R1 remains open; neither the corrected
+diagnosis nor its private probes satisfies slice 1b's current-main model outcome.
 
 ### Slice 2 - Layers support
 
