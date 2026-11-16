@@ -129,9 +129,139 @@ Their original bytes remain backed up in the session's
 preserved as `files\layers-discovery-index-before-regeneration.sqlite3`.
 
 No application implementation or external tool was changed, and no validation
-safeguard was bypassed. The offending input and underlying cause remain
-unverified. Worker success, cache replacement, and newline normalization do not
-close this current-main prerequisite.
+safeguard was bypassed. The failing generated input and valid-literal rejection
+are now isolated below. Current-main recovery and publication remain blocked;
+neither the historical worker evidence nor private diagnostic models close this
+prerequisite.
+
+#### Coder diagnosis - 2026-11-16
+
+**Status: diagnosed, not accepted.** The generator rejects meaningful
+whitespace-only JavaScript literal fragments. Main contains generated frontend
+inputs absent from the coder checkout; an isolated copy of one of these inputs
+reproduces the same failure without cached design state.
+
+The verified failing input is
+`src\Plainion.DrawVista\wwwroot\assets\runtime-core.esm-bundler-CyXb5kU7.js`:
+64833 bytes, SHA256
+`413ca7c7e3f0b212f964c9e74b3e7ebbec85e10e338d209dbb579bc757e38db3`.
+Its `Ca` function contains a single-space template literal default.
+The meaningful space is at line 1, UTF-16 column 60421,
+zero-based byte/UTF-16 offset 60420. The exact signature is:
+
+```javascript
+function Ca(e=` `,t=0)
+```
+
+`git check-ignore -v` identifies `.gitignore:2`, `**/wwwroot/**`, for this
+asset. The repository already excludes generated output from Git; changing
+application source or adding another Git ignore rule is not the correction.
+The earlier repository-root glob omitted ignored assets; querying the known
+`wwwroot\assets` directory directly found ten JavaScript files.
+
+All diagnosis writes were confined to the coder's checkout under
+`C:\ws\plainionist\Plainion.DrawVista\.worktrees\coder\.blaxquad\diagnostics\layers-current-main-design-evidence`.
+Main files were read and copied, never edited. Each copy was byte-verified;
+the manifests record source paths, sizes, and SHA256 values.
+
+| Private diagnostic                   | Inputs                                           | Result                                                                                                   |
+| ------------------------------------ | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| Cold DocumentBuilder copy            | 1 current-main source file                       | Generation exits 0; overview total/shown/omitted = 10/10/0, NEXT none                                    |
+| Cold historical comparison inventory | 55 paths, all copied from current-main bytes     | Generation exits 0; 83 places, 423 occurrences; overview page 1 total/shown/omitted = 506/20/486, NEXT 2 |
+| Cold generated assets copy           | 10 current-main JavaScript assets                | Same `Invalid authored contract` exception                                                               |
+| Bisection first group                | 5 generated assets                               | Generation exits 0                                                                                       |
+| Bisection second group               | 3 other generated assets                         | Generation exits 0                                                                                       |
+| Isolated Vue runtime copy            | 1 generated asset, identified above              | Same exception and recursive validation stack; no publication                                            |
+| Single-space quoted default          | 1 minimal JavaScript file                        | `node --check` exits 0; generation fails                                                                 |
+| Letter quoted default                | Same syntax, only space replaced with `x`        | `node --check` and generation exit 0                                                                     |
+| Single-space template default        | 1 minimal JavaScript file                        | `node --check` exits 0; generation fails                                                                 |
+| Letter template default              | Same syntax, only space replaced with `x`        | `node --check` and generation exit 0                                                                     |
+| In-place template control            | Same project and file path; only byte 29 changes | `x` exits 0; restoring the space reproduces the exception; newline bytes unchanged                       |
+
+The 55-path comparison is deliberately incomplete as a checkout model: it
+omits project metadata and the additional generated assets. Its successful
+generation is input-diagnosis evidence, not current-main structural authority.
+One other generated asset was not tested separately; identifying
+one independently failing input was sufficient for this diagnosis.
+
+Minimal failing template input:
+
+```javascript
+function sample(separator = ` `) {}
+```
+
+The quoted form, `function sample(separator = ' ') {}`, also fails.
+For each form, changing only the space to `x` makes generation succeed.
+Run each input in its own new private source directory without generated state:
+
+```powershell
+node --check '<private-fixture>\sample.js'
+& 'C:\ws\plainionist\BlaXquad\bin\squad.exe' discover map --project '<private-fixture>'
+```
+
+The failing generation exits `-532462766` (Node records its unsigned
+representation `3762504530`) with the same common exception stack retained
+above. Both passing controls were consumed with bounded `map read sample`
+packets: total 2, shown 2, omitted 0, NEXT none, relationships 0.
+Their authored contracts expose
+`formal_parameters -> assignment_pattern -> string/template_string -> string_fragment`,
+with the non-space fragment represented as `Tokens: ["x"]`.
+`DesignReader.ValidatePart` rejects whitespace-only tokens at line 215.
+The controlled one-byte changes therefore identify valid literal text, not
+missing names, source newline differences, or an invalid JavaScript program,
+as the failing contract distinction. These are syntax observations, not
+resolved application relationships or ownership evidence.
+
+The template control was also toggled in place at the identical project and
+source-file path. The `x` input passed with zero cached design inputs beforehand.
+Restoring only byte 29 from `x` to a space failed again, even with the previous
+`x` input cached. Both JavaScript syntax checks passed; the 37-byte file length
+and every CRLF byte were preserved. This separates the literal-content
+distinction from different fixture paths or warm-cache success.
+
+Full failure output and reproduction manifests are retained in the diagnostic
+directory named above:
+
+- `wwwroot-assets-generation.txt` and `wwwroot-assets-manifest.json`.
+- `assets-bisect-03-generation.txt` and `generated-asset-bisection.json`
+  identify the byte-exact single failing input.
+- `space-default-generation.txt`, `letter-default-generation.txt`,
+  `template-space-default-generation.txt`, and
+  `template-letter-default-generation.txt` retain the syntax and generation
+  results for all four minimal controls.
+- `default-parameter-comparison.json` and `template-default-comparison.json`
+  retain the controlled results and exact failing literal location.
+- `same-root-letter-generation.txt`, `same-root-space-generation.txt`, and
+  `same-root-literal-comparison.json` retain the in-place one-byte comparison.
+- `all-current-main-inputs-generation.txt` and
+  `all-current-main-inputs-manifest.json` retain the cold source comparison.
+
+Experiment-only fixture directories and their generated models are removed
+before handoff; the failure logs, manifests, minimal source above, and recorded
+packet observations remain. No diagnostic model is committed or offered as
+acceptance evidence.
+
+**Required recovery ownership:**
+
+1. Architect forwards the exact asset and minimal controls to the authorized
+   generator owner. Correct handling of meaningful whitespace string/template
+   fragments must preserve literal data and structural validation; do not
+   globally accept missing tokens or silently discard literal content.
+2. Do not rewrite generated JavaScript, alter application behavior, relocate
+   live shared assets merely to make discovery pass, or copy a worker model.
+   No external CLI edit is authorized in this coder slice.
+3. After an authorized supported correction is available, architect executes
+   the explicit current-main generation command and the required guarded
+   overview/element reads. Reviewer independently verifies that current-main
+   evidence before slice 1b can be accepted or Layers can be assigned.
+
+The read-only current-main `discover map read --project` check still exits 1
+with `MAP Missing`; no current-main generation or shared-checkout recovery was
+performed by coder. All six protected main inputs were checked against the
+initial read-only manifest and remain byte-identical. Application tests,
+frontend checks, builds, and the full suite were not run because application,
+build, and test code are unchanged. JavaScript syntax checks and controlled
+generator probes cover the diagnosed input boundary, not Layers behavior.
 
 ### Slice 1b - Restore current-main design evidence
 
