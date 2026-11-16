@@ -68,8 +68,10 @@ Do not generate, repair, or require a design model for implementation or accepta
 Proceed with one end-to-end feature slice, including implementation, coverage,
 and directly affected documentation. No discovery-tool prerequisite remains.
 
-Progress: no feature slice is accepted or implemented yet. Slice 2,
-`layers-support`, is ready for immediate coder assignment.
+Progress: slice 2, `layers-support`, is assigned as
+`20261116T100315Z_000021_from_architect`. The coder reports implementation,
+fixtures, tests, and user documentation written; the implementation is not yet
+committed, reviewed, or accepted.
 
 ### Accepted baseline and withdrawn prerequisite
 
@@ -175,8 +177,18 @@ unstaged; they are not part of the plan commit.
 **Prove:** Use a fixture with a default layer, another visible layer, an initially
 hidden layer extending beyond the visible bounds, overlapping content to expose
 stacking mistakes, captions, and both generated and external links. Include a
-second page with different layer settings, plus a legacy stored SVG. Select these
-observable scenarios:
+second page with different layer settings, plus a legacy stored SVG.
+
+The operator reserves final actual-browser verification. Reviewer checks the
+implementation against every requested behavior and independently runs the
+available automated checks. Execution of the interactive browser scenarios below
+is not a prerequisite for the implementation commit, qualifying reviewer handoff,
+reviewer code acceptance, or local integration. Do not claim those scenarios
+passed when they have not been executed. Edge headless/remote-debugging policy
+must not be bypassed or turned into another team prerequisite.
+
+Use these observable scenarios for automated regression coverage where available
+and the operator's final browser verification:
 
 1. Import the `.drawio` and embedded-model `.png` equivalents through their real
    workbook paths. Assert existing names and selected pages, layer names/order,
@@ -200,27 +212,34 @@ observable scenarios:
    without changing remembered/source layer selections.
 
 Add automated import/composition/store/caption and preference-state coverage in
-existing runners. Exercise actual SVG/browser interactions for framing, click
-behavior, and refresh; static checks or mocked checkbox state alone are not proof.
+existing runners. Keep the fixtures and browser verification entry points usable
+for the operator; mocks and static checks must not be reported as executed browser
+verification.
 Run the smallest targeted backend selection covering the change and existing
 link/store/navigation regressions, `pnpm check` from
 `src\Plainion.DrawVista\WebUI`, and a Release build of
 `src\Plainion.DrawVista\Plainion.DrawVista.csproj`.
-Report exact commands, results, and any browser reproduction evidence with the
-implementation handoff; do not cycle through issue-history-only commits.
+Report exact commands, results, and the explicitly unexecuted browser scenarios
+with the implementation handoff; do not wait for final operator verification or
+cycle through issue-history-only commits.
 
-**Execution:** Coder implements only in its private checkout and prepares once
-with `squad sync-to-base --merge <handed-off-plan-commit>`. Receiving old
-diagnostic notes does not authorize preparation or reopening slice 1b. If this
-new preparation reports a restored content conflict confined to this issue
-brief, the architect authorizes the checkout owner to resolve that content
-conflict against the incoming brief, preserving both histories and diagnostic
-commits. Verify the reported original state before any owner-driven recovery;
-safety refusals or uncertain restoration must not be bypassed. No shared-checkout
-mutation or repeated historical preparation is authorized.
+**Execution:** Coder preparation against
+`33df289321e2bcc44b6a66ac7062db6c9e4faed9` is already complete in merge
+`19890e501f1ace35f99381f31e4ece47d6539f85`. Do not repeat preparation or
+synchronize a dirty checkout for this plan-only amendment; read its committed
+identity without checkout mutation. Preserve all task-owned code and unrelated
+work. No shared-checkout mutation, historical preparation, or reopening of
+slice 1b is authorized.
 
-Coder sends a qualifying feature implementation commit to reviewer under the
-new slice identity. Reviewer reviews feature code and independently verifies
-these behaviors, without requiring `discover map` or reopening excluded R1.
-Reviewer acceptance and normal local integration remain required; only Layers
-behavior, compatibility, and its concrete proof determine completion.
+Coder's next action is to commit the actual feature implementation, fixtures,
+tests, and user documentation and hand that implementation to reviewer under
+the existing slice identity. Ordinary commit and handoff safeguards remain.
+The architect's plan amendment does not itself activate review.
+
+Reviewer prepares its own clean private checkout once with
+`squad sync-to-base --merge <qualifying-implementation-commit>`, then reviews
+feature code against this issue and independently checks the available regression
+evidence. Do not require `discover map`, reopen excluded R1, or block code review
+on operator-owned final browser verification. Reviewer acceptance and normal
+local integration remain required; final browser verification belongs to the
+operator and must not be claimed complete by the team.
