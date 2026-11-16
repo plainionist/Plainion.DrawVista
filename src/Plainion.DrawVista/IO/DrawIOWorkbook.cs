@@ -13,7 +13,7 @@ public class DrawIOWorkbook(string RootFolder, string Name) : IDrawingWorkbook
         using var app = new DrawIOApp(model, RootFolder);
 
         return model.GetPageNames()
-            .Select((name, idx) => ExportSvg(app, idx, name))
+            .Select((name, idx) => new RawDocument(name, app.ExtractSvg(idx)))
             .ToList();
     }
 
@@ -23,12 +23,4 @@ public class DrawIOWorkbook(string RootFolder, string Name) : IDrawingWorkbook
         return new DrawIOModel(reader.ReadToEnd());
     }
 
-    private RawDocument ExportSvg(DrawIOApp app, int idx, string name)
-    {
-        var svgFile = Path.Combine(RootFolder, name + ".svg");
-
-        app.ExtractSvg(idx, svgFile);
-
-        return new RawDocument(name, File.ReadAllText(svgFile));
-    }
 }

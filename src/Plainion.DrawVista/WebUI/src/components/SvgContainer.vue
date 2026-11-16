@@ -9,7 +9,10 @@
         :fit="true"
         :center="true"
         :minZoom="0.25"
-        @created="panZoom = $event; fitImage($event)"
+        @created="
+          panZoom = $event;
+          fitImage($event);
+        "
       >
         <div v-html="svg"></div>
       </SvgPanZoom>
@@ -25,6 +28,13 @@ import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { api } from 'src/boot/axios';
 import type { AxiosResponse } from 'axios';
+import {
+  applyLayerVisibility,
+  readSvgLayers,
+  restoreLayerPreferences,
+  saveLayerPreferences,
+  type DiagramLayer,
+} from './svgLayers';
 
 const $q = useQuasar();
 const { t } = useI18n();
@@ -32,6 +42,10 @@ const router = useRouter();
 
 const svg: Ref<string> = ref('');
 const svgContainer = ref<HTMLElement>();
+const emit = defineEmits<{ layersChanged: [layers: DiagramLayer[]] }>();
+let activeLayers: DiagramLayer[] = [];
+let activePage: string | undefined;
+let loadSequence = 0;
 type PanZoomInstance = {
   resize(): void;
   center(): void;
@@ -45,17 +59,20 @@ type PanZoomInstance = {
 };
 let panZoom: PanZoomInstance | undefined;
 let resizeObserver: ResizeObserver | undefined;
-    
-const props =  defineProps({
+
+const props = defineProps({
   page: String,
 });
 
-watch(() => props.page, (newPage, oldPage) => {
-  if (newPage == oldPage) {
+watch(
+  () => props.page,
+  (newPage, oldPage) => {
+    if (newPage == oldPage) {
       return;
-  }
-  updateSvg(newPage);
-});
+    }
+    void updateSvg(newPage);
+  },
+);
 
 onMounted(() => {
   const container = svgContainer.value;
@@ -73,54 +90,113 @@ onMounted(() => {
     }
   });
   resizeObserver.observe(container);
-  updateSvg(undefined);
+  void updateSvg(props.page);
 });
 
-onUnmounted(() => resizeObserver?.disconnect());
+onUnmounted(() => {
+  resizeObserver?.disconnect();
+  loadSequence++;
+});
 
 async function updateSvg(page: string | undefined) {
-  if (!page)
-  {
-    try {
-      const response: AxiosResponse = await api.get('/startPage');
-      setSvg(response.data);
-    }
-    catch {
-      $q.notify({
-        color: 'negative',
-        position: 'top',
-        message: t('LOADING_PAGE_FAILED'),
-        icon: 'report_problem'
-      });
-    }
-    return;
-  }
-
+  const sequence = ++loadSequence;
+  emit('layersChanged', []);
   try {
-    const response: AxiosResponse = await api.get(`/svg?pageName=${page}`);
-    setSvg(response.data);
-  }
-  catch {
+    const response: AxiosResponse<string> = page
+      ? await api.get('/svg', { params: { pageName: page } })
+      : await api.get('/startPage');
+    if (sequence === loadSequence) {
+      setSvg(response.data, page);
+    }
+  } catch {
+    if (sequence !== loadSequence) {
+      return;
+    }
     $q.notify({
       color: 'negative',
       position: 'top',
       message: t('LOADING_PAGE_FAILED'),
-      icon: 'report_problem'
+      icon: 'report_problem',
     });
   }
 }
 
-function setSvg(pageContent: string): void {
+function setSvg(pageContent: string, page: string | undefined): void {
   const parser = new DOMParser();
   const svgDoc = parser.parseFromString(pageContent, 'image/svg+xml');
   const svgElement = svgDoc.documentElement;
+  if (svgElement.localName !== 'svg' || svgDoc.querySelector('parsererror')) {
+    throw new Error('Invalid diagram SVG');
+  }
+  activeLayers = readSvgLayers(svgElement);
+  activePage = page;
+  if (page && activeLayers.length > 0) {
+    try {
+      activeLayers = restoreLayerPreferences(
+        page,
+        activeLayers,
+        window.sessionStorage,
+      );
+    } catch (error) {
+      notifyPreferenceFailure(error);
+    }
+  }
+  applyLayerVisibility(svgElement, activeLayers);
   sizeSvg(svgElement);
-  svgElement.querySelectorAll('a').forEach(link => {
+  svgElement.querySelectorAll('a').forEach((link) => {
     link.setAttribute('target', '_blank');
   });
 
-  svg.value = TransformToLinks(svgElement.outerHTML);
+  svgElement.querySelectorAll('[onclick]').forEach((element) => {
+    const match = /^window\.hook\.navigate\('(.*)'\)$/.exec(
+      element.getAttribute('onclick') ?? '',
+    );
+    if (!match?.[1]) {
+      return;
+    }
+    const link = svgDoc.createElementNS(element.namespaceURI, 'a');
+    link.setAttribute(
+      'href',
+      router.resolve({ path: '/', query: { page: match[1] } }).href,
+    );
+    element.removeAttribute('onclick');
+    element.replaceWith(link);
+    link.appendChild(element);
+  });
+  svg.value = svgElement.outerHTML;
+  emit('layersChanged', activeLayers);
 }
+
+function setLayerVisibility(id: string, visible: boolean): void {
+  const element = svgContainer.value?.querySelector('svg');
+  if (!element || !activeLayers.some((layer) => layer.id === id)) {
+    throw new Error(`Diagram layer is not mounted: ${id}`);
+  }
+  activeLayers = activeLayers.map((layer) =>
+    layer.id === id ? { ...layer, visible } : layer,
+  );
+  applyLayerVisibility(element, activeLayers);
+  emit('layersChanged', activeLayers);
+  if (activePage) {
+    try {
+      saveLayerPreferences(activePage, activeLayers, window.sessionStorage);
+    } catch (error) {
+      notifyPreferenceFailure(error);
+    }
+  }
+}
+
+function notifyPreferenceFailure(error: unknown): void {
+  console.error('Layer preferences could not be restored or saved', error);
+  $q.notify({
+    color: 'negative',
+    position: 'top',
+    message: t('LAYER_PREFERENCES_FAILED'),
+    icon: 'report_problem',
+  });
+}
+
+defineExpose({ setLayerVisibility });
 
 function sizeSvg(svgElement: Element): void {
   const container = svgContainer.value;
@@ -140,13 +216,6 @@ function fitImage(instance: PanZoomInstance): void {
   );
   instance.zoomBy(scale / realZoom);
   instance.center();
-}
-
-function TransformToLinks(svgWithLegacyUiLinks: string): string
-{
-  const replacement = `<a href="${router.resolve('/').href}?page=$3"><$1 $2 $4>$5$6</a>`;
-  const pattern = /<(.+) (.*) onclick="window\.hook\.navigate\('(.*)'\)" ?(.*)>(.*)(<\/\1>)/g;
-  return svgWithLegacyUiLinks.replace(pattern, replacement);
 }
 </script>
 

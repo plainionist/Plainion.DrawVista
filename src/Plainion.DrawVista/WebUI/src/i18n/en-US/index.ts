@@ -7,6 +7,9 @@ export default {
 
   //Browse view
   SEARCH: 'Search',
+  LAYERS: 'Layers',
+  LAYER_PREFERENCES_FAILED:
+    'Layer choices could not be restored or saved for this tab.',
   SELECT_PAGE: 'Selelct page',
   LOADING_PAGES_FAILED: 'Loading of pages failed.',
   LOADING_PAGE_FAILED: 'Loading of page failed.',
@@ -21,7 +24,7 @@ export default {
   CLEAR_BTN: 'Delete all uploaded files',
   CLEAR_SUCCESS: 'Cleared files succeessfully',
   CLEAR_FAILED: 'Clear operation failed',
-  
+
   //Upload view
   CLICK_OR_DROP_TO_UPLOAD: 'Click or drop files here',
   UPLOAD_BTN: 'Upload',

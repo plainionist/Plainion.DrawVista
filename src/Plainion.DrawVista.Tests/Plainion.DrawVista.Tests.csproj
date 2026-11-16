@@ -17,4 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Plainion.DrawVista\Plainion.DrawVista.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Fixtures\Layers.drawio;Fixtures\Layers.drawio.png" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

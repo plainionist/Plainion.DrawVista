@@ -18,8 +18,9 @@ public class DrawIOPngWorkbook(string RootFolder, string Name) : IDrawingWorkboo
     {
         var tag = MetadataExtractor.ImageMetadataReader.ReadMetadata(stream)
             .SelectMany(x => x.Tags)
-            .Where(x => x.DirectoryName == "PNG-tEXt" && x.Name == "Textual Data")
-            .SingleOrDefault();
+            .SingleOrDefault(x => x.DirectoryName == "PNG-tEXt" && x.Name == "Textual Data"
+                && x.Description.StartsWith("mxfile: ", StringComparison.Ordinal))
+            ?? throw new InvalidDataException("PNG contains no embedded draw.io model.");
 
         var xml = HttpUtility.UrlDecode(tag.Description).Substring("mxfile: ".Length);
         return new DrawIOModel(xml);
@@ -33,8 +34,6 @@ public class DrawIOPngWorkbook(string RootFolder, string Name) : IDrawingWorkboo
             pageName = Path.GetFileNameWithoutExtension(pageName);
         }
 
-        var svgFile = Path.Combine(RootFolder, pageName + ".svg");
-
         var pageIndex = model.GetPageNames().IndexOf(pageName);
         if (pageIndex == -1)
         {
@@ -43,8 +42,6 @@ public class DrawIOPngWorkbook(string RootFolder, string Name) : IDrawingWorkboo
         }
 
         using var app = new DrawIOApp(model, RootFolder);
-        app.ExtractSvg(pageIndex, svgFile);
-
-        return new RawDocument(pageName, File.ReadAllText(svgFile));
+        return new RawDocument(pageName, app.ExtractSvg(pageIndex));
     }
 }
