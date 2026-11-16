@@ -22,17 +22,19 @@
         :aria-label="$t('SEARCH')"
       />
       <q-btn-dropdown
+        flat
         dense
-        no-caps
+        text-color="black"
         class="layers-button"
         :label="$t('LAYERS')"
         :aria-label="$t('LAYERS')"
         :disable="layers.length <= 1"
       >
         <q-list dense>
-          <q-item v-for="layer in layers" :key="layer.id">
+          <q-item v-for="layer in displayLayers" :key="layer.id">
             <q-item-section>
               <q-checkbox
+                color="dark"
                 :model-value="layer.visible"
                 :label="layer.name"
                 @update:model-value="
@@ -54,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, type Ref, ref, watch } from 'vue';
+import { computed, onMounted, type Ref, ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -72,6 +74,7 @@ const pages: Ref<string[]> = ref([]);
 const selectedPage: Ref<string | undefined> = ref('');
 const searchFor: Ref<string> = ref('');
 const layers = ref<DiagramLayer[]>([]);
+const displayLayers = computed(() => [...layers.value].reverse());
 const svgView = ref<InstanceType<typeof SvgContainer>>();
 
 function pageStyle(offset: number, height: number) {
@@ -138,9 +141,13 @@ onMounted(() => {
   color: black;
 }
 
-.layers-button {
+.browser-tools .layers-button {
   flex-shrink: 0;
   min-height: 32px;
+  padding: 0 10px;
   font-size: 12px;
+  background-color: transparent;
+  border-bottom: 2px solid currentColor;
+  border-radius: 0;
 }
 </style>

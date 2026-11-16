@@ -20,6 +20,7 @@ between different components and layers of your designs and architecture.
 - pre-requisites for building: .NET 10 SDK, Node.js 22.13+ in a supported even-numbered release, and pnpm 11+
 - clone this repository
 - run 'build\build-release.cmd'
+- both Debug and Release .NET builds rebuild the WebUI and copy it to the output directory
 - copy 'src\Plainion.DrawVista\bin\Release\net10.0\*' to a location of your choice or run the application from this location
 
 ## Usage
@@ -34,7 +35,7 @@ between different components and layers of your designs and architecture.
 - the home/index diagram is automatically regenerated when diagrams are uploaded or deleted; no restart is needed
 - navigate to the "home" page and start browsing your diagrams
 - use **Layers**, immediately right of Search, to show or hide individual layers
-  - layer order and initial visibility come from draw.io, including initially hidden layers
+  - layers are listed topmost first, as in draw.io; initial visibility comes from draw.io, including initially hidden layers
   - choices are remembered separately for each page in the current browser tab, including refresh, and reset in a new tab/session
   - toggling keeps the diagram's alignment, zoom, and pan; search still includes hidden-layer captions
   - re-upload older diagrams to add layer support; pages without layer metadata or with only the default layer keep a disabled Layers control

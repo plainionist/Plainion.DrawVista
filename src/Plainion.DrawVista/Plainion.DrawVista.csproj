@@ -14,7 +14,7 @@
     <PackageReference Include="MetadataExtractor" Version="2.9.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
-  <Target Name="VueBuild" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="VueBuild" BeforeTargets="BeforeBuild">
     <!-- Quasar replaces hashed assets after MSBuild evaluates its default content glob. -->
     <ItemGroup>
       <Content Remove="wwwroot\**" />
@@ -24,7 +24,7 @@
       <Content Include="wwwroot\**" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" ExcludeFromSingleFile="true" CopyToPublishDirectory="PreserveNewest" />
     </ItemGroup>
   </Target>
-  <Target Name="VueCopyToOutput" AfterTargets="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="VueCopyToOutput" AfterTargets="AfterBuild">
     <ItemGroup>
       <WebUI Include="wwwroot\**" />
     </ItemGroup>

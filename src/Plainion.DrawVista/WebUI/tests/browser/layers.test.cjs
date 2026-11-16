@@ -26,6 +26,29 @@ const program = path.join(
 const legacy =
   '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100" viewBox="0 0 100 100"><rect x="10" y="10" width="80" height="80" fill="orange"/></svg>';
 
+function contrastRatio(foreground, background) {
+  const rgba = (color) => color.match(/[\d.]+/g).map(Number);
+  const front = rgba(foreground);
+  const back = rgba(background);
+  const alpha = front[3] ?? 1;
+  const luminance = (channels) => {
+    const [red, green, blue] = channels.slice(0, 3).map((value) => {
+      const channel = value / 255;
+      return channel <= 0.04045
+        ? channel / 12.92
+        : ((channel + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+  };
+  const text = luminance(
+    front
+      .slice(0, 3)
+      .map((value, index) => value * alpha + back[index] * (1 - alpha)),
+  );
+  const surface = luminance(back);
+  return (Math.max(text, surface) + 0.05) / (Math.min(text, surface) + 0.05);
+}
+
 async function settle(page) {
   await page.evaluate(
     () =>
@@ -212,13 +235,75 @@ test(
           const toolbarBounds = await button.boundingBox();
           assert.ok(toolbarBounds.x >= search.x + search.width);
           assert.equal(await button.isEnabled(), true);
+          const buttonStyle = await button.evaluate((element) => {
+            const style = getComputedStyle(element);
+            return {
+              color: style.color,
+              underlineColor: style.borderBottomColor,
+              underlineWidth: parseFloat(style.borderBottomWidth),
+              background: getComputedStyle(element.closest('.q-header'))
+                .backgroundColor,
+            };
+          });
+          assert.ok(
+            contrastRatio(buttonStyle.color, buttonStyle.background) >= 4.5,
+            'The Layers label must be readable against the toolbar',
+          );
+          assert.ok(
+            buttonStyle.underlineWidth > 0 &&
+              contrastRatio(
+                buttonStyle.underlineColor,
+                buttonStyle.background,
+              ) >= 3,
+            'The Layers button must have a visible underline',
+          );
           await button.click();
           await page.getByRole('checkbox').first().waitFor();
           assert.deepEqual(await page.getByRole('checkbox').allTextContents(), [
-            'Background',
-            'Foreground',
             'Hidden',
+            'Foreground',
+            'Background',
           ]);
+          const checkboxes = await page
+            .getByRole('checkbox')
+            .evaluateAll((elements) =>
+              elements.map((element) => {
+                const box = getComputedStyle(
+                  element.querySelector('.q-checkbox__bg'),
+                );
+                return {
+                  checked: element.getAttribute('aria-checked'),
+                  background: box.backgroundColor,
+                  outline: box.borderColor,
+                  checkmark: getComputedStyle(
+                    element.querySelector('.q-checkbox__truthy'),
+                  ).stroke,
+                  menu: getComputedStyle(element.closest('.q-menu'))
+                    .backgroundColor,
+                };
+              }),
+            );
+          assert.deepEqual(
+            checkboxes.map(({ checked }) => checked),
+            ['false', 'true', 'true'],
+          );
+          for (const checkbox of checkboxes) {
+            assert.ok(
+              contrastRatio(
+                checkbox.checked === 'true'
+                  ? checkbox.background
+                  : checkbox.outline,
+                checkbox.menu,
+              ) >= 3,
+              'Checked and unchecked boxes must be visible against the menu',
+            );
+            if (checkbox.checked === 'true') {
+              assert.ok(
+                contrastRatio(checkbox.checkmark, checkbox.background) >= 3,
+                'Visible layers must have a visible checkmark',
+              );
+            }
+          }
           await page.keyboard.press('Escape');
           await page.getByRole('checkbox').first().waitFor({ state: 'hidden' });
 

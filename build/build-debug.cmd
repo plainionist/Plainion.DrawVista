@@ -11,8 +11,6 @@ cd WebUI
 
 call pnpm install --frozen-lockfile
 if errorlevel 1 exit /b %errorlevel%
-call pnpm build
-if errorlevel 1 exit /b %errorlevel%
 
 cd ..\..\..
 dotnet build
