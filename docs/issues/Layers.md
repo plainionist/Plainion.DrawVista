@@ -206,11 +206,13 @@ packets: total 2, shown 2, omitted 0, NEXT none, relationships 0.
 Their authored contracts expose
 `formal_parameters -> assignment_pattern -> string/template_string -> string_fragment`,
 with the non-space fragment represented as `Tokens: ["x"]`.
-`DesignReader.ValidatePart` rejects whitespace-only tokens at line 215.
-The controlled one-byte changes therefore identify valid literal text, not
-missing names, source newline differences, or an invalid JavaScript program,
-as the failing contract distinction. These are syntax observations, not
-resolved application relationships or ownership evidence.
+The supported CLI fails for both whitespace-literal inputs with
+`Invalid authored contract`. The controlled one-byte changes isolate valid
+literal text, not missing names, source newline differences, or an invalid
+JavaScript program, as the rejected input distinction. These are CLI and
+syntax observations, not resolved application relationships or ownership
+evidence. The internal extraction/validation defect remains unverified within
+this scope; the diagnosis does not rely on generator implementation claims.
 
 The template control was also toggled in place at the identical project and
 source-file path. The `x` input passed with zero cached design inputs beforehand.
@@ -244,9 +246,9 @@ acceptance evidence.
 **Required recovery ownership:**
 
 1. Architect forwards the exact asset and minimal controls to the authorized
-   generator owner. Correct handling of meaningful whitespace string/template
-   fragments must preserve literal data and structural validation; do not
-   globally accept missing tokens or silently discard literal content.
+   generator owner. Resolve the supported CLI's rejection of valid
+   whitespace-literal defaults without losing literal meaning or weakening
+   structural validation.
 2. Do not rewrite generated JavaScript, alter application behavior, relocate
    live shared assets merely to make discovery pass, or copy a worker model.
    No external CLI edit is authorized in this coder slice.
@@ -280,18 +282,21 @@ bounded prerequisite, not a reopening of the accepted worker evidence slice.
   offending input; do not assume that another successful worker run resolves it.
 - **Change:** Coder prepares their own clean, exclusively owned checkout once
   with `squad sync-to-base --merge <handed-off-commit>`. Identify the smallest
-  failing input or input/environment distinction, using supported discovery,
-  bounded diagnostics and a faithful private reproduction rather than another
-  blind retry. Ordinary implementation inspection for diagnosing the failure
-  belongs to coder, not architectural structural inference. Do not change
-  application behavior merely to appease the generator.
+  failing input or input/environment distinction using supported CLI behavior,
+  diagnostics, DrawVista input evidence and a faithful private reproduction
+  rather than another blind retry. Any implementation inspection must be limited
+  to DrawVista-authored source and a concrete input question. Do not inspect
+  BlaXquad implementation; exception source paths are diagnostic output, not
+  reading anchors. Do not change application behavior merely to appease the
+  generator.
 - **Recovery ownership:** Architect executes any justified shared-checkout
   recovery; coder must not synchronize or edit shared source. Keep source and
   generated-state recovery reversible and preserve unrelated work. No external
-  CLI edits, safeguard weakening, copied historical model, or unsupported
-  publication are authorized. If a concrete external-tool correction is required,
-  report the exact failing input, reproduction and required prerequisite to
-  architect before attempting it.
+  CLI source inspection or edits, safeguard weakening, copied historical model,
+  or unsupported publication are authorized. If supported diagnostics cannot
+  resolve the failure, report the exact commands/output, established facts,
+  remaining unknowns and required tool prerequisite to architect. Do not expand
+  the investigation into BlaXquad sources.
 - **Evidence:** Commit the decisive diagnosis and minimal recovery instructions
   in this issue, replacing superseded hypotheses. Preserve full failure output
   and reproduction references. Include any necessary repository-local correction
