@@ -72,11 +72,11 @@ requirements. `squad discover specs --list` completed with zero authored scenari
 and zero feature files; the acceptance criteria above remain the behavioral
 authority. This does not establish the absence of other tests.
 
-Current structural evidence is unavailable: `squad discover map` failed before
-publishing a current design pair. No model-selected implementation owners or
-resolved relationships have been established. Restore this prerequisite before
-planning the feature's implementation boundaries; do not substitute implementation
-scans or an earlier model for current architectural evidence.
+Initial structural evidence was unavailable: `squad discover map` failed before
+publishing a current design pair. Fresh generation and bounded reads now succeed
+in the coder's checkout, as recorded below. Independent reviewer verification is
+still required. The model-selected candidates do not establish implementation
+ownership or resolved calls; implementation boundaries remain unplanned.
 
 ### Slice 1 - Restore current design evidence
 
@@ -111,11 +111,117 @@ Stable plan ID: `layers-current-design-evidence`.
   must independently generate and read a current model in the reviewer's checkout.
   A diagnosed but unresolved generator failure does not satisfy this outcome.
 
+#### Coder evidence - 2026-11-16
+
+The initial failure did not reproduce with the selected executable on the assigned
+checkout at `769b0ded549e14656d3f188f762d2e95698d029f`. No recovery, application
+source change, external tool edit, or safeguard bypass was needed. The cause of
+the historical exception remains unverified; its diagnostic is retained below.
+
+- Executable: `C:\ws\plainionist\BlaXquad\bin\squad.exe`.
+- Selected worktree: `C:\ws\plainionist\Plainion.DrawVista\.worktrees\coder`.
+- Generation: `8e60ad27edc04adfb3c443e19f962b53`.
+- Source fingerprint: `EB7C608791906A2B8406565410D94930EE8ABD96768A81187FDF3F10FA3BFD87`.
+- Immutable JSON: `C:\ws\plainionist\Plainion.DrawVista\.worktrees\coder\.blaxquad\discovery\map\generations\8e60ad27edc04adfb3c443e19f962b53\model.json`.
+- Immutable HTML: `C:\ws\plainionist\Plainion.DrawVista\.worktrees\coder\.blaxquad\discovery\map\generations\8e60ad27edc04adfb3c443e19f962b53\map.html`.
+
+Generation succeeded with exit 0:
+
+```powershell
+& 'C:\ws\plainionist\BlaXquad\bin\squad.exe' discover map --project 'C:\ws\plainionist\Plainion.DrawVista\.worktrees\coder'
+```
+
+All bounded reads below succeeded with exit 0 against that same generation and
+fingerprint. Commands used the same executable and `--project` value, with
+`discover map read`, the listed selector (omitted for overview), and `--page`
+for pages after 1. The overview reports 91 places and 423 occurrences.
+Each packet contains at most 20 items and 16384 UTF-8 bytes. Counts are per
+packet, not cumulative: omitted items include evidence on other pages, even
+when those pages were also read. Unread pages remain available in the complete
+artifacts and must not be treated as absent.
+
+| Element                     | Read selector                                                        | Total | Packets: page = shown / omitted      | Next unread page |
+| --------------------------- | -------------------------------------------------------------------- | ----- | ------------------------------------ | ---------------- |
+| Overview                    | none                                                                 | 514   | 1 = 20 / 494                         | 2                |
+| DrawingWorkbookFactory      | `93723CFC1EA28FD6F5B7F9B4A8BFEA5874C6505EF840F06807CBB431007FF2F4:0` | 6     | 1 = 6 / 0                            | none             |
+| DrawIOModel                 | `79D080091FF1A788186B4BFB918E203E293E3C311716DA305C583ABEDF7CD9AE:0` | 14    | 1 = 10 / 4; 2 = 3 / 11               | 3                |
+| DrawIOApp                   | `E5E31BB22DACE8D749D0D1D4763845A3545D84A87D9601FBA3FF834C18FF5AA8:0` | 15    | 1 = 12 / 3                           | 2                |
+| IDocumentStore              | `02BF4E85E002547056B35D978D2720CC12A7FD24E997426F966A3512D0A7A837:0` | 22    | 1 = 20 / 2; 2 = 2 / 20               | none             |
+| IDocumentStore.GetPage      | `120CBED59E39A4154FB944F07E4671779EB69F628ACFF78212C7850B750DD511:0` | 23    | 1 = 6 / 17                           | 2                |
+| ProcessedDocument           | `ProcessedDocument`                                                  | 29    | 1 = 11 / 18                          | 2                |
+| SqliteDocumentStore         | `831F97A473831A801A78FF5AB2EE684002A1659D4F5A3DF1198C708EF2B92976:0` | 22    | 1 = 7 / 15                           | 2                |
+| Program                     | `src\Plainion.DrawVista\Program.cs`                                  | 76    | 1 = 7 / 69                           | 2                |
+| SvgProcessor                | `D033A84F259ADB87B509D35EFA656E85B85000EFE66BD9FEFD7D563475BCE835:0` | 27    | 1 = 14 / 13; 2 = 2 / 25              | 3                |
+| FullTextSearch              | `AF8D95F2D8CE016B653A07A40BCE9182E38C4BD556F5BEEB80C273BDEEDE9953:0` | 13    | 1 = 9 / 4                            | 2                |
+| SearchResults               | `E19F16A28D1B85D523E0D5CED65CFF263969CDF77FCDAAE3B61343A569F62569:0` | 54    | 1 = 20 / 34                          | 2                |
+| MainLayout                  | `AEB43F99490A0B19E5116D1872D7B79FC190F205E9B139A0267D7CC698CFE2A5:0` | 41    | 1 = 20 / 21; 2 = 20 / 21; 3 = 1 / 40 | none             |
+| Routes file                 | `src\Plainion.DrawVista\WebUI\src\router\routes.ts`                  | 7     | 1 = 7 / 0                            | none             |
+| routes value                | `5D11F3A012EB5D1A59F68CA7B60E38668459C7A2C0A343D286267520EA53F5FF:0` | 10    | 1 = 10 / 0                           | none             |
+| SvgContainer                | `SvgContainer`                                                       | 77    | 1 = 20 / 57                          | 2                |
+| SvgContainer props contract | `2F795BA2A782A19F1F492E4666E4D2DFBEBFC4700028546F513B959F5923B913:0` | 2     | 1 = 2 / 0                            | none             |
+
+Model-selected navigation candidates follow; paths are relative to
+`src\Plainion.DrawVista`. They are not accepted implementation owners.
+
+- **Import/export:** `IO\DrawingWorkbookFactory.cs` declares `TryCreate`;
+  `IO\DrawIOModel.cs` declares `GetPageNames` and `WriteTo`.
+  Its relationships select `IO\DrawIOWorkbook.cs` and
+  `IO\DrawIOPngWorkbook.cs` as model-return/parameter candidates.
+  `IO\DrawIOApp.cs` declares `ExtractSvg` and `SaveModelOnDemand`, with a
+  `DrawIOModel` constructor parameter. Relevant relationships have
+  `candidate` confidence; primitive/external types remain `unresolved`.
+- **Page persistence and API contracts:** `UseCases\IDocumentStore.cs`
+  declares page retrieval, saving, deletion, enumeration, clearing, and
+  `DocumentsChanged`. `GetPage(string pageName)` returns `ProcessedDocument`;
+  `UseCases\Documents.cs` authors
+  `ProcessedDocument(string Name, string Content, IReadOnlyCollection<string> Captions)`.
+  Store relationships select `IO\SqliteDocumentStore.cs`,
+  `IO\FileSystemDocumentStore.cs`, and
+  `Adapters\DocumentStoreCachingDecorator.cs` with `candidate` confidence.
+  `Program.cs` is a composition/API entry candidate selected by the factory's
+  construction relationship, not proof of endpoint routes or response behavior.
+  Its first packet has `ambiguous` and `unresolved` call relationships.
+- **Captions, links, and search:** `UseCases\SvgProcessor.cs` authors
+  `ISvgCaptionParser`, `ISvgHyperlinkFormatter`, and `IDocumentStore`
+  constructor parameters, and declares `Process`, `AddLinks`,
+  `RemoveGeneratedLink`, and `ApplyStyleToExistingLinks`.
+  `UseCases\FullTextSearch.cs` authors an `IDocumentStore` parameter and two
+  `Search` methods; relevant C# relationships have `candidate` confidence.
+  `WebUI\src\components\SearchResults.vue` declares search retrieval and
+  clearing functions. Its module/lifecycle/value references have `literal`,
+  `import-binding`, and `lexical-binding` confidence, not navigation proof.
+- **Viewer composition, toolbar, and tab-state candidates:**
+  `WebUI\src\components\SvgContainer.vue` declares `svg`, `panZoom`,
+  `resizeObserver`, `updateSvg`, `setSvg`, `sizeSvg`, `fitImage`, and
+  `TransformToLinks`; its props contract authors `page: String`.
+  Its `vue-svg-pan-zoom` module reference has `literal` confidence.
+  `WebUI\src\layouts\MainLayout.vue` declares `currentPage`, `route`, and
+  `router`, with `q-toolbar` and `router-view` references marked `unresolved`.
+  `WebUI\src\router\routes.ts` authors `routes: RouteRecordRaw[]`;
+  route exports/references have `lexical-binding` or `import-binding`
+  confidence, while dynamic import calls remain `unresolved`.
+  These are candidates for wiring page-specific viewer preferences; no
+  browser-tab persistence owner or session lifetime has been resolved.
+
+The viewer anchor was narrowed with
+`squad discover find svg-pan-zoom --names-only --project 'C:\ws\plainionist\Plainion.DrawVista\.worktrees\coder'`:
+1 selected of 1 candidate file, 0 selection omissions, and 0 analysis failures.
+Its literal/name-association evidence was followed by the model reads above,
+not an implementation scan.
+
+Only this issue brief changes. Generated artifacts remain local and are not
+committed. Application tests, frontend checks, builds, and the full suite were
+not run because application, build, and test code are unchanged; generation
+and guarded bounded reads are the required proof for this prerequisite.
+Before acceptance, the reviewer must independently generate and read the
+current model in their own checkout, retaining its own identities, counts,
+confidence, and artifact paths rather than reusing this publication.
+
 The remaining Layers behavior is approved by the acceptance criteria above.
 Its implementation slices, dependencies, candidate owners, and concrete behavioral
 proof will be finalized after this prerequisite and before a feature assignment.
 
-### Generation diagnostic
+### Initial generation diagnostic
 
 Command: `squad discover map`
 
