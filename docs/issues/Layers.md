@@ -114,9 +114,14 @@ Read `template-default-comparison.json`, `default-parameter-comparison.json`,
 isolated; the tool's implementation mechanism and a successful main recovery
 remain unverified.
 
-The full coder diagnosis, same-path one-byte control, packet counts and protected
-input checks remain in `3726098ef880a30139cb311b0a62da0783edd787` and the existing
-diagnostics. No diagnostic model is offered as current-main authority.
+Scope-corrected coder diagnostic commit
+`3726098ef880a30139cb311b0a62da0783edd787` retains the complete diagnosis and
+reproduction observations. Its same-path control changes only byte 29 of a
+37-byte fixture: `x` passes, restoring the space fails, and syntax checks and
+newline bytes remain unchanged. This also isolates the literal distinction from
+fixture paths and warm-cache success. Temporary fixture models were removed
+before handoff; logs and manifests remain. This diagnostic commit contains no
+successful current-main publication and does not accept slice 1b.
 
 The affected current-main command is:
 
