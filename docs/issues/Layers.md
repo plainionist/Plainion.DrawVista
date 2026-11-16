@@ -63,9 +63,9 @@ Support viewing and toggling draw.io layers while browsing diagrams.
 
 ## Plan
 
-Progress: 1 of 3 currently planned slices accepted. The next coder assignment is
-the current-main evidence prerequisite below. Layer support itself is not
-implemented; slice 2 retains its stable ID and approved outcome.
+Progress: 1 of 3 currently planned slices accepted. The current-main evidence
+prerequisite below remains unresolved. Layer support itself is not implemented;
+slice 2 retains its stable ID and approved outcome.
 
 ### Accepted baseline
 
@@ -89,49 +89,23 @@ are historical references, not current-main structural authority.
 
 ### Current-main generation evidence
 
-On 2026-11-16, generation at brief commit `2afa9d2` reproduced
-`System.IO.InvalidDataException: Invalid authored contract.` in
-`DesignReader.ValidatePart` at line 215, followed by three recursive frames at
-line 230. The command was:
+The shared checkout cannot publish a current design model:
+`squad discover map` fails with `Invalid authored contract`, and guarded reading
+reports `MAP Missing`. The dedicated [tool-failure report](SquadDiscoverMap.md)
+retains the reproduction, complete failure output, unsuccessful cold-index and
+LF-only comparisons, historical worker contrast, and preserved evidence.
+
+The affected current-main command is:
 
 ```powershell
 & 'C:\ws\plainionist\BlaXquad\bin\squad.exe' discover map --project 'C:\ws\plainionist\Plainion.DrawVista'
 ```
 
-Generation exited `-532462766`. Guarded reading exited 1 with
-`MAP Missing`: the shared checkout has no `map\current.json`.
-The full common exception stack is also retained in the accepted historical
-issue revision. Current commands, output and input diagnostics are preserved in
-`C:\Users\ssmosett\.copilot\session-state\70018c83-7287-4475-8bf1-7628dcb44d9e\files\layers-main-model-diagnostic.txt`.
-
-Two distinct controlled comparisons failed with the same exception:
-
-- Preserving the closed generated index and regenerating without it did not fix
-  the failure. The old index had 36 declaration inputs and zero design inputs;
-  the new index has zero of each. Cached design reuse is not necessary to
-  reproduce the failure. Both historical worker indexes have 55 design inputs.
-- Read-only input comparison found six main files differing from both successful
-  worker inputs solely by CRLF versus LF, totaling 70 extra CR bytes. A backed-up
-  LF-only comparison required every normalized file to match its committed Git
-  blob exactly. Generation still failed; every original byte buffer was restored.
-  Thus these newline differences are not a sufficient explanation.
-
-The six original inputs are `src\Plainion.DrawVista.Tests\JsonExtensions.cs`,
-`src\Plainion.DrawVista\GlobalConst.cs`,
-`src\Plainion.DrawVista\IO\DrawIOModel.cs`,
-`src\Plainion.DrawVista\IO\DrawingWorkbookFactory.cs`,
-`src\Plainion.DrawVista\UseCases\Documents.cs`, and
-`src\Plainion.DrawVista\UseCases\SvgExtensions.cs`.
-Git now reports their original newline representations as modified after the
-comparison; exclude them from planning commits and do not clean them for handoff.
-Their original bytes remain backed up in the session's
-`files\layers-source-input-before-lf` directory. The old generated index is
-preserved as `files\layers-discovery-index-before-regeneration.sqlite3`.
-
-No application implementation or external tool was changed, and no validation
-safeguard was bypassed. The offending input and underlying cause remain
-unverified. Worker success, cache replacement, and newline normalization do not
-close this current-main prerequisite.
+The cause remains unverified. Original source bytes were restored; the six
+original newline differences listed in the report remain unstaged and must be
+excluded from planning commits. The report does not authorize tool-source
+investigation or close the current-main prerequisite. Accepted worker models
+remain historical references only.
 
 ### Slice 1b - Restore current-main design evidence
 
@@ -143,10 +117,11 @@ bounded prerequisite, not a reopening of the accepted worker evidence slice.
   a freshly generated, guarded-readable current-main model is available for
   Layers planning.
 - **Start:** This issue, accepted baseline `00cd608ad9721c7975441a403d83feea82e4ce37`,
-  the current-main diagnostic above, and the explicit CLI and selected checkout
-  in its command. Historical worker input inventories are diagnostic comparison
-  points only, not architectural authority. The exception does not identify its
-  offending input; do not assume that another successful worker run resolves it.
+  the dedicated [tool-failure report](SquadDiscoverMap.md), and the explicit CLI
+  and selected checkout in the command above. Historical worker input inventories
+  are diagnostic comparison points only, not architectural authority. The
+  exception does not identify its offending input; do not assume that another
+  successful worker run resolves it.
 - **Change:** Coder prepares their own clean, exclusively owned checkout once
   with `squad sync-to-base --merge <handed-off-commit>`. Identify the smallest
   failing input or input/environment distinction using supported CLI behavior,
@@ -165,10 +140,11 @@ bounded prerequisite, not a reopening of the accepted worker evidence slice.
   remaining unknowns and required tool prerequisite to architect. Do not expand
   the investigation into BlaXquad sources.
 - **Evidence:** Commit the decisive diagnosis and minimal recovery instructions
-  in this issue, replacing superseded hypotheses. Preserve full failure output
-  and reproduction references. Include any necessary repository-local correction
-  and its directly affected documentation and proof; exclude Layers feature
-  implementation. A diagnosis or approved experiment alone is not acceptance.
+  in the dedicated report; keep this slice brief current instead of duplicating
+  logs. Preserve full failure output and reproduction references. Include any
+  necessary repository-local correction and its directly affected documentation
+  and proof; exclude Layers feature implementation. A diagnosis or approved
+  experiment alone is not acceptance.
 - **Preserve:** Every acceptance criterion, both stable existing plan IDs, the
   accepted worker evidence, current application behavior, and original pending
   source bytes. Keep Layers unavailable. Never stage the six original
