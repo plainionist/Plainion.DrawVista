@@ -74,14 +74,15 @@ authority. This does not establish the absence of other tests.
 
 Initial structural evidence was unavailable: `squad discover map` failed before
 publishing a current design pair. Fresh generation and bounded reads now succeed
-in the coder's checkout, as recorded below. Independent reviewer verification is
-still required. The model-selected candidates do not establish implementation
+in both assigned checkouts, as recorded below. Slice 1 is complete.
+The model-selected candidates do not establish implementation
 ownership or resolved calls; implementation boundaries remain unplanned.
 
 ### Slice 1 - Restore current design evidence
 
 Stable plan ID: `layers-current-design-evidence`.
 
+- **Status:** Complete; accepted on 2026-11-16.
 - **Outcome:** Produce a complete, freshly generated and readable design model of
   the selected checkout so that the Layers implementation can be planned against
   current structure and contracts.
@@ -216,6 +217,58 @@ and guarded bounded reads are the required proof for this prerequisite.
 Before acceptance, the reviewer must independently generate and read the
 current model in their own checkout, retaining its own identities, counts,
 confidence, and artifact paths rather than reusing this publication.
+
+#### Reviewer acceptance - 2026-11-16
+
+Accepted coder commit `1dee493984675435a6d0262f9d0810ca3f4a7e81` with no
+findings. The complete delta from the planning baseline changes only this issue;
+application behavior, acceptance criteria, and implementation scope are unchanged.
+No generated artifacts are committed. The historical generator exception remains
+unexplained, but it did not reproduce during independent current-source generation.
+
+- Executable: `C:\ws\plainionist\BlaXquad\bin\squad.exe`.
+- Selected worktree: `C:\ws\plainionist\Plainion.DrawVista\.worktrees\reviewer`.
+- Source revision: `1dee493984675435a6d0262f9d0810ca3f4a7e81`.
+- Generation: `7742d8f0af9b495a9b02adbecfc20529`.
+- Source fingerprint: `EB7C608791906A2B8406565410D94930EE8ABD96768A81187FDF3F10FA3BFD87`.
+- Immutable JSON: `C:\ws\plainionist\Plainion.DrawVista\.worktrees\reviewer\.blaxquad\discovery\map\generations\7742d8f0af9b495a9b02adbecfc20529\model.json`.
+- Immutable HTML: `C:\ws\plainionist\Plainion.DrawVista\.worktrees\reviewer\.blaxquad\discovery\map\generations\7742d8f0af9b495a9b02adbecfc20529\map.html`.
+
+Independent `discover map --project` generation and all `discover map read`
+packets below exited 0 using that executable and selected worktree. Reads used
+the corresponding selectors in the coder table and `--page` after page 1.
+The guarded overview confirms 91 places and 423 occurrences. Counts below are
+the reviewer's per-packet total/shown/omitted evidence, not cumulative coverage.
+
+| Element                     | Total | Packets: page = shown / omitted      | Next unread page |
+| --------------------------- | ----- | ------------------------------------ | ---------------- |
+| Overview                    | 514   | 1 = 20 / 494                         | 2                |
+| DrawingWorkbookFactory      | 6     | 1 = 6 / 0                            | none             |
+| DrawIOModel                 | 14    | 1 = 10 / 4; 2 = 3 / 11               | 3                |
+| DrawIOApp                   | 15    | 1 = 12 / 3                           | 2                |
+| IDocumentStore              | 22    | 1 = 20 / 2                           | 2                |
+| IDocumentStore.GetPage      | 23    | 1 = 6 / 17                           | 2                |
+| ProcessedDocument           | 29    | 1 = 11 / 18                          | 2                |
+| Program                     | 76    | 1 = 7 / 69                           | 2                |
+| SvgProcessor                | 27    | 1 = 14 / 13                          | 2                |
+| FullTextSearch              | 13    | 1 = 9 / 4                            | 2                |
+| SearchResults               | 54    | 1 = 20 / 34                          | 2                |
+| MainLayout                  | 41    | 1 = 20 / 21; 2 = 20 / 21; 3 = 1 / 40 | none             |
+| routes value                | 10    | 1 = 10 / 0                           | none             |
+| SvgContainer                | 77    | 1 = 20 / 57                          | 2                |
+| SvgContainer props contract | 2     | 1 = 2 / 0                            | none             |
+
+These bounded reads independently support the recorded import/export,
+page-contract and store, caption/link/search, and viewer/layout/router navigation
+candidates. C# relationships remain `candidate`, `ambiguous`, or `unresolved`;
+frontend references retain `literal`, `import-binding`, `lexical-binding`, and
+`unresolved` confidence. Authored contracts are not execution or ownership proof.
+Unread evidence remains available in the complete immutable pair; it is not
+absent. No application tests or builds were run by the reviewer.
+
+This acceptance completes only the current-design-evidence prerequisite.
+Feature slicing, implementation ownership, and behavioral proof remain with the
+architect; the Layers issue stays in planning.
 
 The remaining Layers behavior is approved by the acceptance criteria above.
 Its implementation slices, dependencies, candidate owners, and concrete behavioral
