@@ -124,6 +124,13 @@ distinction from fixture paths and warm-cache success. Temporary fixture models
 were removed before handoff; logs and manifests remain. This diagnostic commit
 contains no successful current-main publication and does not accept slice 1b.
 
+Independent reviewer disposition `dd64163993d4b0be02c5d045615c98f49a871d0e`
+confirms the corrected diagnostic evidence. **R1 - High/blocking** remains open:
+current-main structural proof is unavailable; the independent guarded main read
+exits 1 with `MAP Missing`. **R2 - Medium**, the implementation-derived evidence
+finding, is resolved in `3726098ef880a30139cb311b0a62da0783edd787`.
+That correction does not satisfy R1 or accept this slice.
+
 The affected current-main command is:
 
 ```powershell
@@ -136,6 +143,14 @@ The former report is retained historically in
 Original source bytes are intact; the six protected newline representations
 remain unstaged and must be excluded from planning commits. Accepted worker and
 diagnostic models do not close this current-main prerequisite.
+
+The report-migration amendment at `6ed4dc7` is withdrawn. Worker synchronization
+refusals left coder at `3726098ef880a30139cb311b0a62da0783edd787` and reviewer at
+`dd64163993d4b0be02c5d045615c98f49a871d0e`, with restoration verified and
+diagnostics preserved. Receiving or inspecting diagnostic-only briefs and
+dispositions does not require checkout mutation. Do not retry these superseded
+preparations or bypass their refusals with native recovery; necessary future
+preparation must use the then-current authorized baseline.
 
 ### Slice 1b - Restore current-main design evidence
 
