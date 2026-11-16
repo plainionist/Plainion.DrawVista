@@ -340,10 +340,26 @@ The handed-off change is issue-only; no application tests were run.
   reviewer verification. Preserve literal data, validation safeguards, pending
   main bytes, and the approved feature scope.
 
-No correction to the diagnostic brief is requested. R1 blocks slice acceptance,
-not delivery of this diagnosis to the external owner. Do not implement Layers
+R1 blocks slice acceptance, not delivery of this diagnosis to the external
+owner. Do not implement Layers
 or edit the external CLI under this assignment. Slice 1b remains incomplete;
 no accepted-result integration is authorized.
+
+**R2 - Medium: remove implementation-derived diagnostic evidence.**
+
+- **Location:** Coder diagnosis, the sentence asserting that
+  `DesignReader.ValidatePart` rejects whitespace-only tokens at line 215.
+- **Violated scope:** The coder's subsequent scope-correction handoff excludes
+  external implementation inspection as authorized evidence. CLI exception
+  locations and controlled input observations remain usable.
+- **Root cause:** That sentence was derived from an earlier external source read,
+  rather than the permitted DrawVista inputs and CLI output.
+- **Required outcome:** Coder replaces the implementation-condition assertion
+  with the observed invalid-contract failure and controlled whitespace/letter
+  behavior. Preserve the decisive reproductions and recovery ownership without
+  further external implementation inspection or edits.
+
+R1 and R2 remain open.
 
 ### Slice 2 - Layers support
 
