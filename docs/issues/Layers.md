@@ -114,8 +114,10 @@ Read `template-default-comparison.json`, `default-parameter-comparison.json`,
 isolated; the tool's implementation mechanism and a successful main recovery
 remain unverified.
 
-Coder diagnostic commit `ed9d1cc0df9f20455b93bd35b1f5219e65362941` retains the
-complete diagnosis and reproduction observations. Its same-path control changes
+Corrected coder diagnostic commit `3726098ef880a30139cb311b0a62da0783edd787`
+supersedes `ed9d1cc0df9f20455b93bd35b1f5219e65362941`, removing the
+implementation-derived validator claim. Only independent DrawVista input, syntax
+and supported CLI observations are used as evidence. Its same-path control changes
 only byte 29 of a 37-byte fixture: `x` passes, restoring the space fails, and
 syntax checks and newline bytes remain unchanged. This also isolates the literal
 distinction from fixture paths and warm-cache success. Temporary fixture models
