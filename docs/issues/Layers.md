@@ -279,18 +279,21 @@ bounded prerequisite, not a reopening of the accepted worker evidence slice.
   offending input; do not assume that another successful worker run resolves it.
 - **Change:** Coder prepares their own clean, exclusively owned checkout once
   with `squad sync-to-base --merge <handed-off-commit>`. Identify the smallest
-  failing input or input/environment distinction, using supported discovery,
-  bounded diagnostics and a faithful private reproduction rather than another
-  blind retry. Ordinary implementation inspection for diagnosing the failure
-  belongs to coder, not architectural structural inference. Do not change
-  application behavior merely to appease the generator.
+  failing input or input/environment distinction using supported CLI behavior,
+  diagnostics, DrawVista input evidence and a faithful private reproduction
+  rather than another blind retry. Any implementation inspection must be limited
+  to DrawVista-authored source and a concrete input question. Do not inspect
+  BlaXquad implementation; exception source paths are diagnostic output, not
+  reading anchors. Do not change application behavior merely to appease the
+  generator.
 - **Recovery ownership:** Architect executes any justified shared-checkout
   recovery; coder must not synchronize or edit shared source. Keep source and
   generated-state recovery reversible and preserve unrelated work. No external
-  CLI edits, safeguard weakening, copied historical model, or unsupported
-  publication are authorized. If a concrete external-tool correction is required,
-  report the exact failing input, reproduction and required prerequisite to
-  architect before attempting it.
+  CLI source inspection or edits, safeguard weakening, copied historical model,
+  or unsupported publication are authorized. If supported diagnostics cannot
+  resolve the failure, report the exact commands/output, established facts,
+  remaining unknowns and required tool prerequisite to architect. Do not expand
+  the investigation into BlaXquad sources.
 - **Evidence:** Commit the decisive diagnosis and minimal recovery instructions
   in this issue, replacing superseded hypotheses. Preserve full failure output
   and reproduction references. Include any necessary repository-local correction
