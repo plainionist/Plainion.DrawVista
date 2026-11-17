@@ -18,16 +18,13 @@ internal class DrawIOApp(DrawIOModel Model, string RootFolder) : IDisposable
         var svgFile = Path.Combine(RootFolder, $"{Guid.NewGuid():N}.svg");
         try
         {
-            var startInfo = new ProcessStartInfo(Executable)
+            var fileVersion = FileVersionInfo.GetVersionInfo(Executable);
+            if (fileVersion.FileVersion == null)
             {
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-            foreach (var argument in new[] { "-x", myFile, "-o", svgFile, "-p", pageIndex.ToString(CultureInfo.InvariantCulture) })
-            {
-                startInfo.ArgumentList.Add(argument);
+                throw new InvalidOperationException("Could not determine the installed draw.io version.");
             }
+            var version = new Version(fileVersion.FileMajorPart, fileVersion.FileMinorPart, fileVersion.FileBuildPart);
+            var startInfo = CreateExportStartInfo(myFile, svgFile, pageIndex, version);
 
             using var process = Process.Start(startInfo)
                 ?? throw new InvalidOperationException("Could not start the draw.io exporter.");
@@ -54,6 +51,24 @@ internal class DrawIOApp(DrawIOModel Model, string RootFolder) : IDisposable
                 File.Delete(svgFile);
             }
         }
+    }
+
+    internal static ProcessStartInfo CreateExportStartInfo(
+        string modelFile, string svgFile, int pageIndex, Version exporterVersion)
+    {
+        // draw.io 27.0.2 changed CLI page numbers from zero-based to one-based.
+        var pageNumber = exporterVersion >= new Version(27, 0, 2) ? pageIndex + 1 : pageIndex;
+        var startInfo = new ProcessStartInfo(Executable)
+        {
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true
+        };
+        foreach (var argument in new[] { "-x", modelFile, "-o", svgFile, "-p", pageNumber.ToString(CultureInfo.InvariantCulture) })
+        {
+            startInfo.ArgumentList.Add(argument);
+        }
+        return startInfo;
     }
 
     private void SaveModelOnDemand()

@@ -17,6 +17,7 @@ between different components and layers of your designs and architecture.
 ## Installation
 
 - pre-requisite: install DrawIO (the desktop app)
+  - page selection automatically accounts for the CLI numbering change in draw.io 27.0.2
 - pre-requisites for building: .NET 10 SDK, Node.js 22.13+ in a supported even-numbered release, and pnpm 11+
 - clone this repository
 - run 'build\build-release.cmd'

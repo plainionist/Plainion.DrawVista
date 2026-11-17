@@ -14,6 +14,9 @@
     <PackageReference Include="MetadataExtractor" Version="2.9.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Plainion.DrawVista.Tests" />
+  </ItemGroup>
   <Target Name="VueBuild" BeforeTargets="BeforeBuild">
     <!-- Quasar replaces hashed assets after MSBuild evaluates its default content glob. -->
     <ItemGroup>
