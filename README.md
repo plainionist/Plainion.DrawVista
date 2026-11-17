@@ -10,6 +10,8 @@ is mentioned within another.
 This way related diagrams are easily connected and accessible, allowing convenient navigation
 between different components and layers of your designs and architecture.
 
+Empty or whitespace-only SVG style declarations are ignored when formatting links.
+
 ![](<docs/Index Page.png>)
 ![](<docs/Programming Languages Page.png>)
 ![](<docs/Structured Programming Page.png>)

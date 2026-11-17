@@ -95,6 +95,33 @@ public class SvgProcessorTests
         Assert.That(parserElement.Attribute("onclick"), Is.Not.Null);
     }
 
+    [TestCase(" ")]
+    [TestCase("font-weight: bold; ")]
+    [TestCase(" ; font-weight: bold;\t; color: black; \r\n;")]
+    public void LinksShouldBeAddedWhenStyleContainsWhitespaceOnlyDeclarations(string originalStyle)
+    {
+        var document = new XElement("svg", new XAttribute("width", "100%"),
+            new XElement("div", new XAttribute("style", originalStyle), "Parser"));
+        var store = new FakeDocumentStore();
+        var processor = new SvgProcessor(new SvgCaptionParser(), new SvgHyperlinkFormatter(), store);
+
+        processor.Process([new RawDocument("System", document.ToString()), CreatePage("Parser")]);
+
+        var caption = GetCaption(store.GetPage("System").Content, "Parser");
+        var style = new SvgStyleAttribute(caption.Attribute("style").Value);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(caption.Attribute("onclick")?.Value, Is.EqualTo("window.hook.navigate('Parser')"));
+            Assert.That(style["color"], Is.EqualTo("blue"));
+            Assert.That(style["text-decoration"], Is.EqualTo("underline"));
+        }
+
+        processor.Delete("Parser");
+
+        Assert.That(GetCaption(store.GetPage("System").Content, "Parser").Attribute("style")?.Value,
+            Is.EqualTo(originalStyle));
+    }
+
     [Test]
     public void ExistingLinksShouldBeStyled()
     {

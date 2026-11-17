@@ -4,7 +4,7 @@ public class SvgStyleAttribute(string value)
 {
     private readonly IDictionary<string, string> myValues =
         value == null ? [] : value.Split(";")
-            .Where(x => !string.IsNullOrEmpty(x))
+            .Where(x => !string.IsNullOrWhiteSpace(x))
             .Select(x => x.Split(':')
                 .Select(x => x.Trim())
                 .Where(x => !string.IsNullOrEmpty(x)))
